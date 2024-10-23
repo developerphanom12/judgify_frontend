@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Login } from "./Components/Admin-Creating-New-Event/LoginPages/Login/Login";
+import { Layout } from "./MainLayout/Layout/Layout";
+import { Route, Routes } from "react-router-dom";
+import { Sidebar } from "./MainLayout/Sidebar/Sidebar";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout>
+     
+        <Routes>
+        <Route path="login" element={<Login />}/>
+          <Route path="/sidebar" element={<Sidebar/>}/>
+        </Routes>
+      </Layout>
     </div>
   );
 }
