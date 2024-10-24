@@ -9,7 +9,7 @@ import {
   InputType,
   SelectBorder,
 } from "../../../Global/GlobalFormElement";
-import { GreenBackgroundButton, Redbutton } from "../../../Global/GlobalButton";
+import {  Redbutton } from "../../../Global/GlobalButton";
 
 export const Register = () => {
   return (
@@ -19,7 +19,7 @@ export const Register = () => {
           <img src={logo} alt="logo" />
         </div>
         <div className="register_div">
-          <LoginHeading>Your Awards Management System</LoginHeading>
+          <LoginHeading>Your Awardss Management System</LoginHeading>
           <div className="form_div">
             <LoginSubHeading>Create your account</LoginSubHeading>
             <div className="fields_div">
