@@ -1,0 +1,94 @@
+.dashboard_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .dashboard_white_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    .dash_create_btn {
+      display: flex;
+      flex-direction: flex-start;
+      .plus_content {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+
+    .head_btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dash_event {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      .dash_subevent {
+        background-color: #ffe2e5;
+        //    flex:1;
+        width: 23%;
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        .dash_logo_status {
+          display: flex;
+          justify-content: space-between;
+          .dash_logo_brand {
+            background-color: #fff;
+            border-radius: 50px;
+            padding: 10px;
+            height: 60px;
+            width: 60px;
+            box-shadow: 0px 4px 4px 0px #00000040;
+            img {
+              object-fit: contain;
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .dash_logo_content {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+          }
+        }
+
+        .dash_close_date {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .dashboard_div{
+    padding: 20px 8px;
+    .dashboard_white_bg .dash_event .dash_subevent {
+    width: 100%;
+  }}
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+
+  .dashboard_div .dashboard_white_bg .dash_event .dash_subevent {
+    width: 47%;
+  }
+}

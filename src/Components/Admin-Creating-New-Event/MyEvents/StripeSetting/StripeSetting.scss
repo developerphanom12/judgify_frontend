@@ -1,0 +1,73 @@
+.stripe_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+ 
+  .stripe_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    min-height: 400px;
+    .btn_radio {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #c32728;
+      padding-bottom: 10px;
+
+      .radio_btn {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+    .stripe_img {
+      display: flex;
+      justify-content: flex-start;
+      img {
+        width: 70%;
+      }
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .stripe_div{
+  
+    padding: 20px 8px;
+  
+  
+  .stripe_bg {
+    gap:20px;
+    .btn_radio {
+      display: flex;
+
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stripe_img {
+      img{
+        width:100%;
+      }
+    }
+  }
+
+}
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+  .stripe_div {
+    .stripe_bg {
+      .stripe_img {
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
