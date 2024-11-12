@@ -17,7 +17,8 @@ import * as yup from "yup"; // For validation
 import axios from "axios";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { userCheckAction, userDataAction } from "../../../Redux/Users/action";
 
 // Define the validation schema
 const loginSchema = yup.object().shape({
@@ -34,6 +35,7 @@ const loginSchema = yup.object().shape({
 export const Login = () => {
   const { email, password } = useSelector((state) => state.user || {});
 
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
     email: email || "",
     password: password || "",
@@ -56,25 +58,22 @@ export const Login = () => {
     try {
       await loginSchema.validate(loginData, { abortEarly: false });
 
-      // Send the login request
-      const response = await axios.post(
-        `${EXCHNAGE_URL}/login`,
-        loginData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post(`${EXCHNAGE_URL}/login`, loginData)
 
       if (response.status === 200) {
-        console.log("Login successful", response.data);
+        console.log("Login successful", response.data, response.data.data.token);
+        // Assuming the API response contains the token
+        localStorage.setItem("token", response.data.data.token); // Store token
+        dispatch(userDataAction(response?.data?.data));
+        dispatch(userCheckAction(true));
         toast.success("Logged in successfully");
-        navigate("/dashboard");
+        navigate("/dashboard"); // Navigate to dashboard
+
       } else {
+
         toast.error(response.message || "Failed to login. Please try again.");
+
       }
-      
     } catch (error) {
       if (error.inner) {
         const errors = error.inner.reduce((acc, validationError) => {
@@ -92,6 +91,53 @@ export const Login = () => {
       }
     }
   };
+
+
+  // ------
+
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await loginSchema.validate(loginData, { abortEarly: false });
+
+  //     // Send the login request
+  //     const response = await axios.post(
+  //       `${EXCHNAGE_URL}/login`,
+  //       loginData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log("Login successful", response.data);
+  //       toast.success("Logged in successfully");
+  //       navigate("/dashboard");
+  //     } else {
+  //       toast.error(response.message || "Failed to login. Please try again.");
+  //     }
+
+  //   } catch (error) {
+  //     if (error.inner) {
+  //       const errors = error.inner.reduce((acc, validationError) => {
+  //         acc[validationError.path] = validationError.message;
+  //         return acc;
+  //       }, {});
+  //       setLoginErrors(errors);
+  //     } else {
+  //       if (error.response && error.response.data) {
+  //         toast.error(error.response.data.message || "Failed to login.");
+  //       } else {
+  //         toast.error("Failed to login. Please try again later.");
+  //       }
+  //       console.error("API Error:", error);
+  //     }
+  //   }
+  // };
 
   return (
     <div className="main_bg_color">

@@ -2,8 +2,8 @@ import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import { createStore } from "redux";
 import storage from "redux-persist/lib/storage";
-import rootReducer from "../Reducers/Reducers";
-
+import rootReducer from "../reducer";
+ 
 const persistConfig = {
   key: "root",
   storage,

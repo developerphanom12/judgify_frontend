@@ -21,7 +21,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { useDispatch } from "react-redux";
-import { setUserCredentials } from "../../../Redux/Users/Action";
+import { setUserCredentials } from "../../../Redux/Users/action";
 
 // Define the validation schema
 const hirePortSchema = yup.object().shape({
@@ -80,7 +80,7 @@ export const Register = () => {
         // Dispatch email and password to Redux
         dispatch(setUserCredentials(portData.email, portData.password));
 
-        navigate("/dashboard");
+        navigate("/login");
       } else {
         toast.error(
           response.message || "Failed to submit form. Please try again later."

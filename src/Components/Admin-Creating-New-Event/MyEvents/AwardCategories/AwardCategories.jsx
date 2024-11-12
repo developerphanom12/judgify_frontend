@@ -72,7 +72,7 @@ export const AwardCategories = () => {
         <div className="award_cate_div">
           <CreateButton className="award_content" onClick={handleShow}>
             <IoMdAddCircleOutline />
-            Create new Event
+            Create Award Category 
           </CreateButton>
 
           <div className="desc_div">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TitleBar } from "../../Global/TitleBar/TitleBar";
 import "./Dashboard.scss";
 import {
@@ -13,8 +13,12 @@ import { CreateButton, ViewMoreButton } from "../../Global/GlobalButton";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import retail from "../../../Assets/ret.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { EXCHNAGE_URL, IMAGES_URL } from "../../../Url/Url";
 
 export const Dashboard = () => {
+  const [dashboard, setDashboard] = useState([]);
+
   // Sample data for events
   const navigate = useNavigate();
 
@@ -31,6 +35,35 @@ export const Dashboard = () => {
 
   // Array of background colors
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
+
+  const getApi = async () => {
+    try {
+      const response = await axios.get(`${EXCHNAGE_URL}/dashboardEvents`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+
+      });
+
+      if (response.status === 200) {
+        setDashboard(response.data.data);
+        console.log("setData", response.data.data);
+      }
+
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      //     // Optionally handle the error, e.g., show an alert or redirect to login
+    }
+  }
+
+
+  useEffect(() => {
+    getApi();
+  }, []);
+
+
+
 
   return (
     <div>
@@ -66,18 +99,21 @@ export const Dashboard = () => {
           </div>
 
           <div className="dash_event">
-            {events.map((event, index) => (
+            {dashboard.map((event, index) => (
               <div
                 className="dash_subevent"
                 key={event.id}
                 style={{
-                  backgroundColor:
-                    backgroundColors[index % backgroundColors.length],
+                  backgroundColor: backgroundColors[index % backgroundColors.length],
                 }}
               >
                 <div className="dash_logo_status">
                   <div className="dash_logo_brand">
-                    <img src={retail} alt="Retail Logo" />
+                    {/* <img
+                      src={`${IMAGES_URL}/${event.event_logo}`}
+
+                    /> */}
+                              <img src={retail} alt="Retail Logo" />
                   </div>
 
                   <div className="dash_logo_content">
@@ -86,13 +122,14 @@ export const Dashboard = () => {
                   </div>
                 </div>
                 <div className="dash_close_date">
-                  <RedMainHeading>{event.title}</RedMainHeading>
+                  <RedMainHeading>{event.event_name}</RedMainHeading>
                   <ClosingDateContent>
-                    Closing Date: {event.closingDate}
+                    Closing Date: {new Date(event.closing_date).toLocaleDateString()}
                   </ClosingDateContent>
                 </div>
               </div>
             ))}
+
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ function App() {
     <div className="App">
       <Layout>
         <Routes>
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/otp" element={<Otp />} />
@@ -35,8 +36,9 @@ function App() {
           {/* Protected Routes */}
 
           {isAuthenticated ? (
+
             <>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/my-events" element={<MyEvents />} />
               <Route path="/admin-profile" element={<AdminProfile />} />
@@ -50,12 +52,13 @@ function App() {
               />
               <Route path="/sidebar" element={<Sidebar />} />
             </>
-         ) : (
+
+          ) : (
             <>
               <Route path="/login" element={<Navigate to="/login" />} />
               <Route path="/" element={<Navigate to="/login" />} />
             </>
-          )} 
+          )}
         </Routes>
       </Layout>
     </div>

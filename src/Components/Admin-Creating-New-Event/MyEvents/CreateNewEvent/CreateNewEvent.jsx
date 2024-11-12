@@ -20,6 +20,8 @@ import {
 } from "../../../Global/GlobalButton";
 import { AwardCategories } from "../AwardCategories/AwardCategories";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { EXCHNAGE_URL } from "../../../../Url/Url";
 
 export const CreateNewEvent = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -27,13 +29,110 @@ export const CreateNewEvent = () => {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
 
+  const [formData, setFormData] = useState({
+    event_name: "",
+    closing_date: "",
+    closing_time: "",
+    email: "",
+    event_url: "",
+    time_zone: selectedTimezone,
+    is_endorsement: 0,
+    is_withdrawal: 0,
+    is_ediit_entry: 0,
+    limit_submission: 0,
+    submission_limit: "",
+    event_description: "",
+    industry_type: [],
+    additional_email: [],
+  });
+
+  const [files, setFiles] = useState({
+    event_logo: null,
+    event_banner: null,
+  });
+
   const navigate = useNavigate();
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: checked,
+    });
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files: fileList } = e.target;
+    setFiles({
+      ...files,
+      [name]: fileList[0],
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.event_description) {
+      alert("Event description cannot be empty");
+      return;
+    }
+    const form = new FormData();
+    form.append("event_name", formData.event_name);
+    form.append("closing_date", formData.closing_date);
+    form.append("closing_time", formData.closing_time);
+    form.append("email", formData.email);
+    form.append("event_url", formData.event_url);
+    form.append("time_zone", formData.time_zone);
+    form.append("is_endorsement", formData.is_endorsement ? 1 : 0);
+    form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
+    form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
+    form.append("limit_submission", formData.limit_submission ? 1 : 0);
+
+    form.append("submission_limit", formData.submission_limit);
+    form.append("event_description", formData.event_description);
+
+    // Append `industry_type` as an array (without join)
+    form.append("industry_type", JSON.stringify(formData.industry_type)); // Send as JSON string if backend expects an array
+    // Append `additional_email` as an array (without join)
+    form.append("additional_email", JSON.stringify(formData.additional_email)); // Send as JSON string if backend expects an array
+
+
+    // Append the files (if any)
+    if (files.event_logo) form.append("event_logo", files.event_logo);
+    if (files.event_banner) form.append("event_banner", files.event_banner);
+
+    try {
+      const response = await axios.post(`${EXCHNAGE_URL}/createEvent`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Important for file upload
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 200) {
+        // Successfully created the event
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      navigate("/dashboard");  // Redirect to another page after success
+      console.error("Error creating event", error.response || error);
+      // Handle error here, maybe show an error message
+    }
+  };
 
   const buttons = [
     { id: 1, label: "Event details" },
     { id: 2, label: "Award Categories" },
-    // { id: 3, label: "Registration Form" },
-    // { id: 4, label: "Entry Form" },
+    { id: 3, label: "Registration Form" },
+    { id: 4, label: "Entry Form" },
   ];
 
   const handleClick = (id) => {
@@ -89,25 +188,42 @@ export const CreateNewEvent = () => {
 
           <div className="newevent_content">
             {selectedButton === 1 && (
-              <form className="newevent_form">
+              <form className="newevent_form" onSubmit={handleSubmit}>
                 <div className="newevent_row">
                   <div className="newevent_label">
                     <InputLabel>
                       Event Name <span style={{ color: "#c32728" }}>*</span>
                     </InputLabel>
-                    <InputType placeholder="Enter Event Name" />
+                    <InputType
+                      name="event_name"
+                      value={formData.event_name}
+                      onChange={handleChange}
+                      placeholder="Enter Event Name" />
                   </div>
                   <div className="newevent_label">
                     <InputLabel>
                       Industry type <span style={{ color: "#c32728" }}>*</span>
                     </InputLabel>
-                    <SelectBorder style={{ height: "45px" }}>
-                      <option>Select Industry Type</option>
-                      <option>Lorem Ipsum</option>
-                      <option>Lorem Ipsum</option>
-                      <option>Lorem Ipsum</option>
-                      <option>Lorem Ipsum</option>
+                    <SelectBorder
+                      name="industry_type"
+                      value={formData.industry_type}
+                      onChange={(e) => {
+                        // Ensure the selected values are always an array
+                        const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                        setFormData({
+                          ...formData,
+                          industry_type: selectedValues, // Store the selected values as an array
+                        });
+                      }}
+                      multiple
+                      style={{ height: "45px" }}
+                    >
+                      <option value="">Select Industry Type</option>
+                      <option value="Fashion">Fashion</option>
+                      <option value="Skin Care">Skin Care</option>
+                      <option value="Beauty">Beauty</option>
                     </SelectBorder>
+
                   </div>
                 </div>
 
@@ -119,9 +235,11 @@ export const CreateNewEvent = () => {
                       </InputLabel>
                       <input
                         type="date"
-                        id="birthday"
-                        name="birthday"
-                        placeholder=" select date"
+                        id="closing_date"
+                        name="closing_date"
+                        value={formData.closing_date}
+                        onChange={handleChange}
+
                         className="calender"
                       />
                     </div>
@@ -130,8 +248,19 @@ export const CreateNewEvent = () => {
                         Closing Time <span style={{ color: "#c32728" }}>*</span>
                       </InputLabel>
                       <div className="clos_time">
-                        <SelectBorder className="time_select">
-                          <option>1</option>
+                        <SelectBorder
+                          className="time_select"
+                          name="closing_time"
+                          value={formData.closing_time}
+                          onChange={handleChange}
+
+                        >
+                          {[...Array(24).keys()].map((i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1}
+                            </option>
+                          ))}
+                          {/* <option>1</option>
                           <option>2</option>
                           <option>3</option>
                           <option>4</option>
@@ -154,12 +283,17 @@ export const CreateNewEvent = () => {
                           <option>21</option>
                           <option>22</option>
                           <option>23</option>
-                          <option>24</option>
+                          <option>24</option> */}
                         </SelectBorder>
                         <EventHeading>Hr</EventHeading>
 
-                        <SelectBorder className="time_select">
-                          <option>1</option>
+                        <SelectBorder
+                          className="time_select"
+                          name="closing_time_minutes"
+                          value={formData.closing_time_minutes}
+                          onChange={handleChange}
+                        >
+                          {/* <option>1</option>
                           <option>2</option>
                           <option>3</option>
                           <option>4</option>
@@ -218,7 +352,12 @@ export const CreateNewEvent = () => {
                           <option>57</option>
                           <option>58</option>
                           <option>59</option>
-                          <option>60</option>
+                          <option>60</option> */}
+                          {[...Array(60).keys()].map((i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1}
+                            </option>
+                          ))}
                         </SelectBorder>
 
                         <EventHeading>Min</EventHeading>
@@ -229,7 +368,12 @@ export const CreateNewEvent = () => {
                     <InputLabel>
                       Contact Email <span style={{ color: "#c32728" }}>*</span>
                     </InputLabel>
-                    <InputType placeholder="Enter Email Address" />
+                    <InputType
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter Email Address"
+                    />
                   </div>
                 </div>
 
@@ -241,7 +385,12 @@ export const CreateNewEvent = () => {
                       </InputLabel>
                       <EventHeading>https://www.imagesgroup.in/</EventHeading>
                     </div>
-                    <InputType placeholder="Enter URL" />
+                    <InputType
+                      name="event_url"
+                      value={formData.event_url}
+                      onChange={handleChange}
+                      placeholder="Enter URL"
+                    />
                   </div>
                   <div className="newevent_label">
                     <InputLabel>
@@ -271,14 +420,31 @@ export const CreateNewEvent = () => {
                         <MdInfo className="mdi_icon" />
                       </div>
                     </div>
-                    <InputType placeholder="Enter Email Address" />
+                    <InputType
+                      name="additional_email"
+                      value={formData.additional_email.join(', ')}  // Convert the array to a comma-separated string for display
+                      onChange={(e) => {
+                        // Split the input string by comma or semicolon and update the `additional_email` array
+                        const emails = e.target.value.split(/[,;]\s*/);  // Split by comma or semicolon followed by optional spaces
+                        setFormData({
+                          ...formData,
+                          additional_email: emails,
+                        });
+                      }}
+                      placeholder="Enter Email Address"
+                    />
                   </div>
                 </div>
 
                 <div className="newevent_row">
                   <div className="newevent_label">
                     <div className="newevent_check">
-                      <CheckboxInput type="checkbox" />
+                      <CheckboxInput
+                        type="checkbox"
+                        name="is_endorsement"
+                        checked={formData.is_endorsement}
+                        onChange={handleCheckboxChange}
+                      />
                       <InputLabel>Require Endorsement </InputLabel>
                     </div>
 
@@ -292,7 +458,11 @@ export const CreateNewEvent = () => {
 
                   <div className="newevent_label">
                     <div className="newevent_check">
-                      <CheckboxInput type="checkbox" />
+                      <CheckboxInput
+                        type="checkbox"
+                        name="is_withdrawal"
+                        checked={formData.is_withdrawal}
+                        onChange={handleCheckboxChange} />
                       <InputLabel>Allow Submission Withdrawal</InputLabel>
                     </div>
 
@@ -305,7 +475,10 @@ export const CreateNewEvent = () => {
                 <div className="newevent_row">
                   <div className="newevent_label">
                     <div className="newevent_check">
-                      <CheckboxInput type="checkbox" />
+                      <CheckboxInput type="checkbox"
+                        name="is_ediit_entry"
+                        checked={formData.is_ediit_entry}
+                        onChange={handleCheckboxChange} />
                       <InputLabel>Allow Editing to Entries</InputLabel>
                     </div>
 
@@ -317,7 +490,11 @@ export const CreateNewEvent = () => {
 
                   <div className="newevent_label">
                     <div className="newevent_check">
-                      <CheckboxInput type="checkbox" />
+                      <CheckboxInput
+                        type="checkbox"
+                        name="limit_submission"
+                        checked={formData.limit_submission}
+                        onChange={handleCheckboxChange} />
                       <InputLabel>Limit number of submissions</InputLabel>
                     </div>
 
@@ -325,6 +502,19 @@ export const CreateNewEvent = () => {
                       Restrict the number of submissions entrant can make
                     </CheckboxLabel>
                   </div>
+                  {formData.limit_submission && (
+                    <div className="newevent_label">
+                      <InputLabel>
+                        Submission Limit
+                      </InputLabel>
+                      <InputType
+                        name="submission_limit"
+                        value={formData.submission_limit}
+                        onChange={handleChange}
+                        placeholder="Enter Submission Limit"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="newevent_row">
@@ -333,7 +523,9 @@ export const CreateNewEvent = () => {
 
                     <div className="myevent_img">
                       <img src={upload} alt="upload_img" />
-                      <input type="file" className="file_input" />
+                      <input type="file" className="file_input"
+                        name="event_logo"
+                        onChange={handleFileChange} />
                       <Description>Browse File</Description>
                       <CheckboxLabel>
                         This option allows entrants to edit the submission
@@ -347,7 +539,10 @@ export const CreateNewEvent = () => {
 
                     <div className="myevent_img">
                       <img src={upload} alt="upload_img" />
-                      <input type="file" className="file_input" />
+                      <input type="file"
+                        className="file_input"
+                        name="event_banner"
+                        onChange={handleFileChange} />
                       <Description>Browse File</Description>
                       <CheckboxLabel>
                         This option allows entrants to edit the submission
@@ -365,7 +560,12 @@ export const CreateNewEvent = () => {
                         <span style={{ color: "#c32728" }}>*</span>
                       </InputLabel>
                     </div>
-                    <InputType placeholder="Enter Event Description" />
+                    <InputType
+                      name="event_description"
+                      value={formData.event_description}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Enter Event Description" />
                   </div>
                 </div>
 
@@ -377,13 +577,6 @@ export const CreateNewEvent = () => {
                   >
                     Cancel
                   </GreyBorderButton>
-                  <RedBackgroundButton
-                    onClick={() => {
-                      setSelectedButton(2); // Navigate to the next section
-                    }}
-                  >
-                    Save
-                  </RedBackgroundButton>
                   <GreyBackgroundButton
                     onClick={() => {
                       setSelectedButton(2); // Navigate to the next section
@@ -391,6 +584,11 @@ export const CreateNewEvent = () => {
                   >
                     Next
                   </GreyBackgroundButton>
+                  <RedBackgroundButton type="submit"
+
+                  >
+                    Save
+                  </RedBackgroundButton>
                 </div>
               </form>
             )}
@@ -398,6 +596,7 @@ export const CreateNewEvent = () => {
             {selectedButton === 2 && <AwardCategories />}
 
             {selectedButton === 3 && <h1>3</h1>}
+            {selectedButton === 4 && <h1>4</h1>}
           </div>
         </div>
       </div>
