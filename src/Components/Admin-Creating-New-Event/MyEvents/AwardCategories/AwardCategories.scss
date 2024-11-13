@@ -38,6 +38,11 @@
         .award_check {
           display: flex;
           gap: 5px;
+          flex-direction: column;
+          .check_date{
+            display: flex;
+            gap:10px;
+          }
         }
       }
     }

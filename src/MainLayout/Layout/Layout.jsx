@@ -9,13 +9,17 @@ import event from "../../Assets/event.png";
 import { LuGraduationCap } from "react-icons/lu";
 import { MdOutlineLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { userCheckAction, userDataAction, UserDetails } from "../../Components/Redux/Users/action";
+import {
+  userCheckAction,
+  userDataAction,
+  UserDetails,
+} from "../../Components/Redux/Users/action";
 
 export const Layout = ({ children }) => {
   const dispatch = useDispatch();
   const userCheck = useSelector((state) => state?.users?.userCheck);
   const token = localStorage.getItem("token");
-  useEffect(() => { }, [dispatch]);
+  useEffect(() => {}, [dispatch]);
   const [selectedLink, setSelectedLink] = useState("dashboard");
 
   const navigate = useNavigate();
@@ -25,13 +29,12 @@ export const Layout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");  
-    dispatch(userCheckAction(false));  
-    dispatch(UserDetails(""));  
-    dispatch(userDataAction(""));  
-    navigate("/login");  
+    localStorage.removeItem("token");
+    dispatch(userCheckAction(false));
+    dispatch(UserDetails(""));
+    dispatch(userDataAction(""));
+    navigate("/login");
   };
-
 
   return (
     <>
@@ -85,11 +88,12 @@ export const Layout = ({ children }) => {
                     <MdOutlineLogout />
 
                     <span>
-
                       <Sidemenu className="s-color">Logout</Sidemenu>
                     </span>
                   </div>
-                ) : ""}
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

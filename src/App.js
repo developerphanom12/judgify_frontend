@@ -16,6 +16,8 @@ import { EventLivePreview } from "./Components/EventLivePreview/EventLivePreview
 import { useSelector } from "react-redux";
 import { Otp } from "./Components/Admin-Creating-New-Event/LoginPages/Otp/Otp";
 import { NewPassword } from "./Components/Admin-Creating-New-Event/LoginPages/NewPassword/NewPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -25,6 +27,10 @@ function App() {
   return (
     <div className="App">
       <Layout>
+      <ToastContainer
+          className="toast-container"
+          toastClassName="toast-message"
+        />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />

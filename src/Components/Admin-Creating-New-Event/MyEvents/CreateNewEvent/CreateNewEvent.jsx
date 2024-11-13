@@ -22,12 +22,17 @@ import { AwardCategories } from "../AwardCategories/AwardCategories";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
+import { toast } from "react-toastify";
+import { setEventId } from "../../../Redux/Users/action";
+import { useDispatch } from "react-redux";
 
 export const CreateNewEvent = () => {
   const [selectedButton, setSelectedButton] = useState(1);
   const [selectedTimezone, setSelectedTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
+
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     event_name: "",
@@ -52,7 +57,6 @@ export const CreateNewEvent = () => {
   });
 
   const navigate = useNavigate();
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,36 +99,40 @@ export const CreateNewEvent = () => {
     form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
     form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
     form.append("limit_submission", formData.limit_submission ? 1 : 0);
-
     form.append("submission_limit", formData.submission_limit);
     form.append("event_description", formData.event_description);
 
-    // Append `industry_type` as an array (without join)
-    form.append("industry_type", JSON.stringify(formData.industry_type)); // Send as JSON string if backend expects an array
-    // Append `additional_email` as an array (without join)
-    form.append("additional_email", JSON.stringify(formData.additional_email)); // Send as JSON string if backend expects an array
+    // Append industry_type as individual items
+    formData.industry_type.forEach((type) =>
+      form.append("industry_type[]", type)
+    );
+    // Append additional_email as individual items
+    formData.additional_email.forEach((email) =>
+      form.append("additional_email[]", email)
+    );
 
-
-    // Append the files (if any)
     if (files.event_logo) form.append("event_logo", files.event_logo);
     if (files.event_banner) form.append("event_banner", files.event_banner);
 
     try {
       const response = await axios.post(`${EXCHNAGE_URL}/createEvent`, form, {
         headers: {
-          'Content-Type': 'multipart/form-data', // Important for file upload
+          "Content-Type": "multipart/form-data",
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       if (response.status === 200) {
-        // Successfully created the event
-        console.log(response.data.message);
+        toast.success(response.data.message);
+        // eslint-disable-next-line no-lone-blocks
+        {
+          console.log("checkid", response.data.data.id);
+        }
+        dispatch(setEventId(response.data.data.id));
+        setSelectedButton(2);
       }
     } catch (error) {
-      navigate("/dashboard");  // Redirect to another page after success
       console.error("Error creating event", error.response || error);
-      // Handle error here, maybe show an error message
     }
   };
 
@@ -198,7 +206,8 @@ export const CreateNewEvent = () => {
                       name="event_name"
                       value={formData.event_name}
                       onChange={handleChange}
-                      placeholder="Enter Event Name" />
+                      placeholder="Enter Event Name"
+                    />
                   </div>
                   <div className="newevent_label">
                     <InputLabel>
@@ -209,7 +218,10 @@ export const CreateNewEvent = () => {
                       value={formData.industry_type}
                       onChange={(e) => {
                         // Ensure the selected values are always an array
-                        const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                        const selectedValues = Array.from(
+                          e.target.selectedOptions,
+                          (option) => option.value
+                        );
                         setFormData({
                           ...formData,
                           industry_type: selectedValues, // Store the selected values as an array
@@ -223,7 +235,6 @@ export const CreateNewEvent = () => {
                       <option value="Skin Care">Skin Care</option>
                       <option value="Beauty">Beauty</option>
                     </SelectBorder>
-
                   </div>
                 </div>
 
@@ -239,7 +250,6 @@ export const CreateNewEvent = () => {
                         name="closing_date"
                         value={formData.closing_date}
                         onChange={handleChange}
-
                         className="calender"
                       />
                     </div>
@@ -253,7 +263,6 @@ export const CreateNewEvent = () => {
                           name="closing_time"
                           value={formData.closing_time}
                           onChange={handleChange}
-
                         >
                           {[...Array(24).keys()].map((i) => (
                             <option key={i + 1} value={i + 1}>
@@ -422,10 +431,10 @@ export const CreateNewEvent = () => {
                     </div>
                     <InputType
                       name="additional_email"
-                      value={formData.additional_email.join(', ')}  // Convert the array to a comma-separated string for display
+                      value={formData.additional_email.join(", ")} // Convert the array to a comma-separated string for display
                       onChange={(e) => {
                         // Split the input string by comma or semicolon and update the `additional_email` array
-                        const emails = e.target.value.split(/[,;]\s*/);  // Split by comma or semicolon followed by optional spaces
+                        const emails = e.target.value.split(/[,;]\s*/); // Split by comma or semicolon followed by optional spaces
                         setFormData({
                           ...formData,
                           additional_email: emails,
@@ -462,7 +471,8 @@ export const CreateNewEvent = () => {
                         type="checkbox"
                         name="is_withdrawal"
                         checked={formData.is_withdrawal}
-                        onChange={handleCheckboxChange} />
+                        onChange={handleCheckboxChange}
+                      />
                       <InputLabel>Allow Submission Withdrawal</InputLabel>
                     </div>
 
@@ -475,10 +485,12 @@ export const CreateNewEvent = () => {
                 <div className="newevent_row">
                   <div className="newevent_label">
                     <div className="newevent_check">
-                      <CheckboxInput type="checkbox"
+                      <CheckboxInput
+                        type="checkbox"
                         name="is_ediit_entry"
                         checked={formData.is_ediit_entry}
-                        onChange={handleCheckboxChange} />
+                        onChange={handleCheckboxChange}
+                      />
                       <InputLabel>Allow Editing to Entries</InputLabel>
                     </div>
 
@@ -494,7 +506,8 @@ export const CreateNewEvent = () => {
                         type="checkbox"
                         name="limit_submission"
                         checked={formData.limit_submission}
-                        onChange={handleCheckboxChange} />
+                        onChange={handleCheckboxChange}
+                      />
                       <InputLabel>Limit number of submissions</InputLabel>
                     </div>
 
@@ -504,9 +517,7 @@ export const CreateNewEvent = () => {
                   </div>
                   {formData.limit_submission && (
                     <div className="newevent_label">
-                      <InputLabel>
-                        Submission Limit
-                      </InputLabel>
+                      <InputLabel>Submission Limit</InputLabel>
                       <InputType
                         name="submission_limit"
                         value={formData.submission_limit}
@@ -523,9 +534,12 @@ export const CreateNewEvent = () => {
 
                     <div className="myevent_img">
                       <img src={upload} alt="upload_img" />
-                      <input type="file" className="file_input"
+                      <input
+                        type="file"
+                        className="file_input"
                         name="event_logo"
-                        onChange={handleFileChange} />
+                        onChange={handleFileChange}
+                      />
                       <Description>Browse File</Description>
                       <CheckboxLabel>
                         This option allows entrants to edit the submission
@@ -539,10 +553,12 @@ export const CreateNewEvent = () => {
 
                     <div className="myevent_img">
                       <img src={upload} alt="upload_img" />
-                      <input type="file"
+                      <input
+                        type="file"
                         className="file_input"
                         name="event_banner"
-                        onChange={handleFileChange} />
+                        onChange={handleFileChange}
+                      />
                       <Description>Browse File</Description>
                       <CheckboxLabel>
                         This option allows entrants to edit the submission
@@ -565,7 +581,8 @@ export const CreateNewEvent = () => {
                       value={formData.event_description}
                       onChange={handleChange}
                       rows="5"
-                      placeholder="Enter Event Description" />
+                      placeholder="Enter Event Description"
+                    />
                   </div>
                 </div>
 
@@ -579,16 +596,12 @@ export const CreateNewEvent = () => {
                   </GreyBorderButton>
                   <GreyBackgroundButton
                     onClick={() => {
-                      setSelectedButton(2); // Navigate to the next section
+                      setSelectedButton(2);  //Navigate to the next section
                     }}
                   >
                     Next
                   </GreyBackgroundButton>
-                  <RedBackgroundButton type="submit"
-
-                  >
-                    Save
-                  </RedBackgroundButton>
+                  <RedBackgroundButton type="submit">Save</RedBackgroundButton>
                 </div>
               </form>
             )}

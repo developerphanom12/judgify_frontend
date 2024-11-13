@@ -8,6 +8,8 @@ const initialState = {
   isLoading: false,
   email: null,
   password: null,
+  email: "",
+  eventId: "",
 };
 
 const UseReducer = (state = initialState, action) => {
@@ -32,6 +34,19 @@ const UseReducer = (state = initialState, action) => {
         return {
           ...state,
           userCheck: action.payload,
+        };
+
+        case "SET_EMAIL":
+      return {
+        ...state,
+        email: action.payload,
+      };
+
+
+      case "SET_EVENT_ID":
+        return {
+          ...state,
+          id: action.payload,
         };
     //   case "APP_DETAILS":
     //     return {

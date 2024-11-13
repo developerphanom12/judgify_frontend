@@ -33,7 +33,7 @@ const loginSchema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { email, password } = useSelector((state) => state.user || {});
+  const { email, password } = useSelector((state) => state.users || {});
 
   const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
@@ -58,21 +58,22 @@ export const Login = () => {
     try {
       await loginSchema.validate(loginData, { abortEarly: false });
 
-      const response = await axios.post(`${EXCHNAGE_URL}/login`, loginData)
+      const response = await axios.post(`${EXCHNAGE_URL}/login`, loginData);
 
       if (response.status === 200) {
-        console.log("Login successful", response.data, response.data.data.token);
+        console.log(
+          "Login successful",
+          response.data,
+          response.data.data.token
+        );
         // Assuming the API response contains the token
         localStorage.setItem("token", response.data.data.token); // Store token
         dispatch(userDataAction(response?.data?.data));
         dispatch(userCheckAction(true));
         toast.success("Logged in successfully");
         navigate("/dashboard"); // Navigate to dashboard
-
       } else {
-
         toast.error(response.message || "Failed to login. Please try again.");
-
       }
     } catch (error) {
       if (error.inner) {
@@ -91,53 +92,6 @@ export const Login = () => {
       }
     }
   };
-
-
-  // ------
-
-
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await loginSchema.validate(loginData, { abortEarly: false });
-
-  //     // Send the login request
-  //     const response = await axios.post(
-  //       `${EXCHNAGE_URL}/login`,
-  //       loginData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       console.log("Login successful", response.data);
-  //       toast.success("Logged in successfully");
-  //       navigate("/dashboard");
-  //     } else {
-  //       toast.error(response.message || "Failed to login. Please try again.");
-  //     }
-
-  //   } catch (error) {
-  //     if (error.inner) {
-  //       const errors = error.inner.reduce((acc, validationError) => {
-  //         acc[validationError.path] = validationError.message;
-  //         return acc;
-  //       }, {});
-  //       setLoginErrors(errors);
-  //     } else {
-  //       if (error.response && error.response.data) {
-  //         toast.error(error.response.data.message || "Failed to login.");
-  //       } else {
-  //         toast.error("Failed to login. Please try again later.");
-  //       }
-  //       console.error("API Error:", error);
-  //     }
-  //   }
-  // };
 
   return (
     <div className="main_bg_color">
