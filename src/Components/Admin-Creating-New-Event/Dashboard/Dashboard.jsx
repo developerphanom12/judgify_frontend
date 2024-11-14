@@ -109,11 +109,8 @@ export const Dashboard = () => {
               >
                 <div className="dash_logo_status">
                   <div className="dash_logo_brand">
-                    {/* <img
-                      src={`${IMAGES_URL}/${event.event_logo}`}
-
-                    /> */}
-                              <img src={retail} alt="Retail Logo" />
+                  <img src={`${IMAGES_URL}${event.event_logo}`} alt="Logo" />
+                              {/* <img src={retail} alt="Retail Logo" /> */}
                   </div>
 
                   <div className="dash_logo_content">

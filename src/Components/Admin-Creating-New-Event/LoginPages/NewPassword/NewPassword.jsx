@@ -50,7 +50,6 @@ export const NewPassword = () => {
           confirmPassword: newPass.confirmPassword
         });
         if (response.status === 200) {
-          console.log("portData", response.portData);
           navigate("/login");
           toast.success("OTP Verified Successfully");
         }

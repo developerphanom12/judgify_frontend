@@ -596,7 +596,7 @@ export const CreateNewEvent = () => {
                   </GreyBorderButton>
                   <GreyBackgroundButton
                     onClick={() => {
-                      setSelectedButton(2);  //Navigate to the next section
+                      setSelectedButton(2); //Navigate to the next section
                     }}
                   >
                     Next

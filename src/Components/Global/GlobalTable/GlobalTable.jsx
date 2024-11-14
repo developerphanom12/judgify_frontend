@@ -8,10 +8,13 @@ export const GlobalTable = ({ data, columns, onRowClick }) => (
       <tr>
         {columns.map((col, idx) => (
           <th key={idx} className="table_col">
-          <div className="global_col">
-
-                   <span>{col} </span><span className="title_icon"><IoMdArrowDropup/><IoMdArrowDropdown/></span>
-                   </div>  
+            <div className="global_col">
+              <span>{col} </span>
+              <span className="title_icon">
+                <IoMdArrowDropup />
+                <IoMdArrowDropdown />
+              </span>
+            </div>
           </th>
         ))}
       </tr>

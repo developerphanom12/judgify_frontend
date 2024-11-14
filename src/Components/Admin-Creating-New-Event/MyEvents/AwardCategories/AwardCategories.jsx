@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Description, SubHeading } from "../../../Global/GlobalText";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import {
@@ -23,24 +23,20 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
-import * as yup from "yup";
 import { useSelector } from "react-redux";
 
 export const AwardCategories = () => {
   const [show, setShow] = useState(false);
-  const [showTableDiv, setShowTableDiv] = useState(false); // To control table visibility
-  const [showAwardCateDiv, setShowAwardCateDiv] = useState(true); // New state to control award_cate_div visibility
+  const [showTableDiv, setShowTableDiv] = useState(false);
+  const [showAwardCateDiv, setShowAwardCateDiv] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [showStartDate, setShowStartDate] = useState(false);
-  const [showEndDate, setShowEndDate] = useState(false);
-
-  const eventId = useSelector((state) => state.users?.id || "");
-  
-  console.log("Stored eventId:", eventId);
-
+  const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
+  const [awardTableData, setAwardTableData] = useState([]);
+  const eventIds = useSelector((state) => state.users?.id || "");
+  console.log("Stored eventId:", eventIds);
 
   const [awardData, setAwardData] = useState({
-    eventId:"",
+    eventId: eventIds,
     category_name: "",
     category_prefix: "",
     belongs_group: "",
@@ -52,69 +48,131 @@ export const AwardCategories = () => {
     end_date: "",
   });
 
-  const [porterrors, setPortErrors] = useState({});
+  // const handleStartDateCheckbox = (e) => handleData(e);
 
-  const handleStartDateCheckbox = () => setShowStartDate(!showStartDate);
-  const handleEndDateCheckbox = () => setShowEndDate(!showEndDate);
+  // const handleEndDateCheckbox = (e) => handleData(e);
 
-  const hirePortSchema = yup.object().shape({
-    name: yup.string().required("Username is required"),
-    email: yup
-      .string()
-      .email("Invalid email format")
-      .required("Email is required"),
-    mobile_number: yup
-      .string()
-      .matches(/^\d{10}$/, "Phone Number must be 10 digits")
-      .required("Phone Number is required"),
-  });
+  const handleEndorsementCheckbox = (e) => handleData(e);
 
-  const handleData = (e) => {
-    const { name, value } = e.target;
-    setAwardData({ ...awardData, [name]: value.trim() });
+  const handleSaveAndAddNew = () => {
+    setIsSaveAndAddNew(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleData = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      // Handle the checkbox logic: if checked, set to '1', else '0'
+      setAwardData({
+        ...awardData,
+        [name]: checked ? "1" : "0", // Store '1' if checked, '0' if unchecked
+      });
+    } else if (name === "start_date" || name === "end_date") {
+      // Handle date values
+      setAwardData({
+        ...awardData,
+        [name]: value, // Store the date value
+      });
+    } else {
+      setAwardData({ ...awardData, [name]: value.trim() });
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const postApi = async () => {
-      try {
-        await hirePortSchema.validate(awardData, { abortEarly: false });
-        const response = await axios.post(
-          `${EXCHNAGE_URL}/awardCategory`,
-          awardData
-        );
-        if (response.status === 200) {
+    const dataToSend = {
+      ...awardData,
+      is_start_date: awardData.is_start_date === "1" ? "1" : "0",
+      is_end_date: awardData.is_end_date === "1" ? "1" : "0",
+    };
+
+    try {
+      const response = await axios.post(
+        `${EXCHNAGE_URL}/awardCategory`,
+        dataToSend,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Form submitted successfully");
+        if (isSaveAndAddNew) {
+          // Clear form fields
           setAwardData({
+            eventId: eventIds,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
             limit_submission: "",
-            is_start_date: "",
-            is_end_date: "",
-            is_endorsement: "",
+            is_start_date: "0",
+            is_end_date: "0",
+            is_endorsement: "0",
             start_date: "",
             end_date: "",
           });
-          setPortErrors({});
-          toast.success("Form submitted successfully");
-        }
-      } catch (error) {
-        if (error.inner) {
-          const portErrors = error.inner.reduce((acc, validationError) => {
-            acc[validationError.path] = validationError.message;
-            return acc;
-          }, {});
-          setPortErrors(portErrors);
+          setIsSaveAndAddNew(false); // Reset the flag
         } else {
-          toast.error("Failed to submit form. Please try again later.");
-          console.error("API Error:", error);
+          setAwardData({
+            eventId: eventIds,
+            category_name: "",
+            category_prefix: "",
+            belongs_group: "",
+            limit_submission: "",
+            is_start_date: "0",
+            is_end_date: "0",
+            is_endorsement: "0",
+            start_date: "",
+            end_date: "",
+          });
+          handleSaveClose();
         }
+      } else {
+        toast.error("Failed to submit form. Please try again later.");
       }
-    };
-    postApi();
+    } catch (error) {
+      console.error("API Error:", error);
+      toast.error("Failed to submit form. Please try again later.");
+    }
   };
 
+  const getApi = async () => {
+    try {
+      const response = await axios.get(`${EXCHNAGE_URL}/allAwrads`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        // Transform the API response to match the columns format
+        const transformedData = response.data.data?.map((item) => ({
+          "Category Name": item.category_name,
+          "Prefix for Submission": item.category_prefix,
+          "Grouping Title": item.belongs_group,
+          "Limit Submission": item.limit_submission,
+          "Closing Date": new Date(item.closing_date).toLocaleDateString(),
+          Actions: "Edit", // Assuming you want a static "Edit" action, this can be customized
+        }));
+  
+        setAwardTableData(transformedData); // Set transformed data to state
+        console.log("setData", transformedData); // Check the transformed data in the console
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+  
+
+  useEffect(() => {
+    getApi();
+  }, []);
+
+
+  
   const columns = [
     "Category Name",
     "Prefix for Submission",
@@ -124,33 +182,35 @@ export const AwardCategories = () => {
     "Actions",
   ];
 
-  const data = [
-    {
-      "Category Name": "Abc",
-      "Prefix for Submission": "ABC",
-      "Grouping Title": "#WE234343",
-      "Limit Submission": "10",
-      "Closing Date": "25 Sep 2024",
-      Actions: "Edit",
-    },
-    {
-      "Category Name": "Abc",
-      "Prefix for Submission": "ABC",
-      "Grouping Title": "#WE234343",
-      "Limit Submission": "10",
-      "Closing Date": "25 Sep 2024",
-      Actions: "Edit",
-    },
-  ];
+  // const data = [
+  //   {
+  //     "Category Name": "Abc",
+  //     "Prefix for Submission": "ABC",
+  //     "Grouping Title": "#WE234343",
+  //     "Limit Submission": "10",
+  //     "Closing Date": "25 Sep 2024",
+  //     Actions: "Edit",
+  //   },
+  //   {
+  //     "Category Name": "Abc",
+  //     "Prefix for Submission": "ABC",
+  //     "Grouping Title": "#WE234343",
+  //     "Limit Submission": "10",
+  //     "Closing Date": "25 Sep 2024",
+  //     Actions: "Edit",
+  //   },
+  // ];
+  
+  
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleSaveClose = () => {
-    setShow(false); // Hide the modal
-    setShowTableDiv(true); // Show the table div
-    setShowAwardCateDiv(false); // Hide the award_cate_div
+    setShow(false);
+    setShowTableDiv(true);
+    setShowAwardCateDiv(false);
   };
 
   return (
@@ -185,6 +245,7 @@ export const AwardCategories = () => {
             <div className="mod_heading">
               <SubHeading>Award Categories</SubHeading>
             </div>
+
             <form onSubmit={handleSubmit} className="award_form">
               <div className="award_row">
                 <InputLabel>
@@ -236,45 +297,48 @@ export const AwardCategories = () => {
               </div>
 
               <div className="award_row">
-                <div className="award_label">
-                  <div className="award_check">
-                    <div className="check_date">
-                      <CheckboxInput
-                        type="checkbox"
-                        name="is_start_date"
-                        checked={showStartDate}
-                        onChange={handleStartDateCheckbox}
-                      />
-                      <InputLabel>Require Start Date</InputLabel>
+                <div className="start_date_div">
+                  <div className="award_label">
+                    <div className="award_check">
+                      <div className="check_date">
+                        <CheckboxInput
+                          type="checkbox"
+                          name="is_start_date"
+                          checked={awardData.is_start_date === "1"} // Checked when '1'
+                          onChange={handleData}
+                        />
+                        <InputLabel>Require Start Date</InputLabel>
+                      </div>
+                      {awardData.is_start_date === "1" && (
+                        <input
+                          type="date"
+                          name="start_date"
+                          value={awardData.start_date}
+                          onChange={handleData}
+                        />
+                      )}
                     </div>
-                    {showStartDate && (
-                      <input
-                        type="date"
-                        name="start_date"
-                        value={awardData.start_date}
-                        onChange={handleData}
-                      />
-                    )}
                   </div>
-
-                  <div className="award_check">
-                    <div className="check_date">
-                      <CheckboxInput
-                        type="checkbox"
-                        name="is_end_date"
-                        checked={showEndDate}
-                        onChange={handleEndDateCheckbox}
-                      />
-                      <InputLabel>Require End Date</InputLabel>
+                  <div className="award_label">
+                    <div className="award_check">
+                      <div className="check_date">
+                        <CheckboxInput
+                          type="checkbox"
+                          name="is_end_date"
+                          checked={awardData.is_end_date === "1"} // Checked when '1'
+                          onChange={handleData}
+                        />
+                        <InputLabel>Require End Date</InputLabel>
+                      </div>
+                      {awardData.is_end_date === "1" && (
+                        <input
+                          type="date"
+                          name="end_date"
+                          value={awardData.end_date}
+                          onChange={handleData}
+                        />
+                      )}
                     </div>
-                    {showEndDate && (
-                      <input
-                        type="date"
-                        name="end_date"
-                        value={awardData.end_date}
-                        onChange={handleData}
-                      />
-                    )}
                   </div>
                 </div>
               </div>
@@ -286,8 +350,8 @@ export const AwardCategories = () => {
                       <CheckboxInput
                         type="checkbox"
                         name="is_endorsement"
-                        checked={awardData.is_endorsement}
-                        onChange={handleData}
+                        checked={awardData.is_endorsement === "1"} // Compare with "1"
+                        onChange={handleEndorsementCheckbox}
                       />
                       <InputLabel>Required Endorsement</InputLabel>
                     </div>
@@ -296,13 +360,13 @@ export const AwardCategories = () => {
               </div>
 
               <div className="award_btn">
-                <GreyBorderButton>Save & Add New</GreyBorderButton>
-                <div
-                  className="award_modal_close"
-                  type="submit"
-                >
+                <GreyBorderButton onClick={handleSaveAndAddNew}>
+                  Save & Add New
+                </GreyBorderButton>
+
+                <button className="award_modal_close" type="submit">
                   Save & Close
-                </div>
+                </button>
               </div>
             </form>
           </div>
@@ -339,13 +403,19 @@ export const AwardCategories = () => {
               </GreyfilterButton>
             </div>
           </div>
+
           <div className="awardtable_div">
+
+
             <GlobalTable
-              data={data}
+              data={awardTableData}
               columns={columns}
               onRowClick={setSelectedRow}
             />
+
+
           </div>
+
           <div className="award_table_btn">
             <GreyBorderButton
               onClick={() => {
