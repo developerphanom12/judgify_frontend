@@ -51,6 +51,8 @@ function App() {
               <Route path="/title-bar" element={<TitleBar />} />
               <Route path="/registration-form" element={<RegistrationForm />} />
               <Route path="/create-new-event" element={<CreateNewEvent />} />
+              <Route path="/create-new-event/:id" element={<CreateNewEvent />} />
+
               <Route path="/stripe-setting" element={<StripeSetting />} />
               <Route
                 path="/event-live-preview"

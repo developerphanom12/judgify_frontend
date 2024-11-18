@@ -22,16 +22,7 @@ export const Dashboard = () => {
   // Sample data for events
   const navigate = useNavigate();
 
-  const events = [
-    { id: 1, title: "Beauty Pageants", closingDate: "28 Aug 2024" },
-    { id: 2, title: "Beauty Pageants", closingDate: "15 Sep 2024" },
-    { id: 3, title: "Beauty Pageants", closingDate: "10 Oct 2024" },
-    { id: 4, title: "Beauty Pageants", closingDate: "20 Nov 2024" },
-    { id: 5, title: "Beauty Pageants", closingDate: "28 Aug 2024" },
-    { id: 6, title: "Beauty Pageants", closingDate: "15 Sep 2024" },
-    { id: 7, title: "Beauty Pageants", closingDate: "10 Oct 2024" },
-    { id: 8, title: "Beauty Pageants", closingDate: "20 Nov 2024" },
-  ];
+
 
   // Array of background colors
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
@@ -43,27 +34,21 @@ export const Dashboard = () => {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-
       });
 
       if (response.status === 200) {
         setDashboard(response.data.data);
         console.log("setData", response.data.data);
       }
-
     } catch (error) {
       console.error("Error fetching data:", error.message);
       //     // Optionally handle the error, e.g., show an alert or redirect to login
     }
-  }
-
+  };
 
   useEffect(() => {
     getApi();
   }, []);
-
-
-
 
   return (
     <div>
@@ -104,13 +89,17 @@ export const Dashboard = () => {
                 className="dash_subevent"
                 key={event.id}
                 style={{
-                  backgroundColor: backgroundColors[index % backgroundColors.length],
+                  backgroundColor:
+                    backgroundColors[index % backgroundColors.length],
+                }}
+                onClick={() => {
+                  navigate("/create-new-event",{state:{eventId:event.id}});
                 }}
               >
                 <div className="dash_logo_status">
                   <div className="dash_logo_brand">
-                  <img src={`${IMAGES_URL}${event.event_logo}`} alt="Logo" />
-                              {/* <img src={retail} alt="Retail Logo" /> */}
+                    <img src={`${IMAGES_URL}${event.event_logo}`} alt="Logo" />
+                    {/* <img src={retail} alt="Retail Logo" /> */}
                   </div>
 
                   <div className="dash_logo_content">
@@ -121,12 +110,12 @@ export const Dashboard = () => {
                 <div className="dash_close_date">
                   <RedMainHeading>{event.event_name}</RedMainHeading>
                   <ClosingDateContent>
-                    Closing Date: {new Date(event.closing_date).toLocaleDateString()}
+                    Closing Date:{" "}
+                    {new Date(event.closing_date).toLocaleDateString()}
                   </ClosingDateContent>
                 </div>
               </div>
             ))}
-
           </div>
         </div>
       </div>

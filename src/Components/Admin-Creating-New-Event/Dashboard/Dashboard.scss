@@ -35,16 +35,16 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      // justify-content: center;
+    
       .dash_subevent {
         background-color: #ffe2e5;
-        //    flex:1;
         width: 24%;
         border-radius: 20px;
         padding: 20px;
         display: flex;
         flex-direction: column;
         gap: 30px;
+        cursor: pointer;
         .dash_logo_status {
           display: flex;
           justify-content: space-between;
