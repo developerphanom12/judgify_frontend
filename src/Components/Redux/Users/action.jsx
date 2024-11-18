@@ -43,6 +43,6 @@ export const UserDetails = (data) => {
   });
 
   export const setEventId = (id) => ({
-    type: "SET_EVENT_ID",
+    type: SET_EVENT_ID,
     payload: id,
   });

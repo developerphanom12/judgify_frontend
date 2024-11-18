@@ -19,7 +19,7 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { LuFilter } from "react-icons/lu";
 import { GlobalTable } from "../../../Global/GlobalTable/GlobalTable";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
@@ -32,11 +32,15 @@ export const AwardCategories = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
   const [awardTableData, setAwardTableData] = useState([]);
-  const eventIds = useSelector((state) => state.users?.id || "");
-  console.log("Stored eventId:", eventIds);
 
+  const eventIds = useSelector((state) => state.users?.id || "");
+
+  const eventIdsString = String(eventIds); // Convert to string
+
+  console.log("Stored eventId:", eventIdsString);
+  
   const [awardData, setAwardData] = useState({
-    eventId: eventIds,
+    eventId: eventIdsString,
     category_name: "",
     category_prefix: "",
     belongs_group: "",
@@ -48,9 +52,9 @@ export const AwardCategories = () => {
     end_date: "",
   });
 
-  // const handleStartDateCheckbox = (e) => handleData(e);
+  const location = useLocation();
 
-  // const handleEndDateCheckbox = (e) => handleData(e);
+  const { eventId } = location.state || {};
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -146,7 +150,7 @@ export const AwardCategories = () => {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-  
+
       if (response.status === 200) {
         // Transform the API response to match the columns format
         const transformedData = response.data.data?.map((item) => ({
@@ -157,7 +161,7 @@ export const AwardCategories = () => {
           "Closing Date": new Date(item.closing_date).toLocaleDateString(),
           Actions: "Edit", // Assuming you want a static "Edit" action, this can be customized
         }));
-  
+
         setAwardTableData(transformedData); // Set transformed data to state
         console.log("setData", transformedData); // Check the transformed data in the console
       }
@@ -165,14 +169,11 @@ export const AwardCategories = () => {
       console.error("Error fetching data:", error.message);
     }
   };
-  
 
   useEffect(() => {
     getApi();
   }, []);
 
-
-  
   const columns = [
     "Category Name",
     "Prefix for Submission",
@@ -182,26 +183,6 @@ export const AwardCategories = () => {
     "Actions",
   ];
 
-  // const data = [
-  //   {
-  //     "Category Name": "Abc",
-  //     "Prefix for Submission": "ABC",
-  //     "Grouping Title": "#WE234343",
-  //     "Limit Submission": "10",
-  //     "Closing Date": "25 Sep 2024",
-  //     Actions: "Edit",
-  //   },
-  //   {
-  //     "Category Name": "Abc",
-  //     "Prefix for Submission": "ABC",
-  //     "Grouping Title": "#WE234343",
-  //     "Limit Submission": "10",
-  //     "Closing Date": "25 Sep 2024",
-  //     Actions: "Edit",
-  //   },
-  // ];
-  
-  
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
@@ -216,6 +197,7 @@ export const AwardCategories = () => {
   return (
     <>
       {/* Conditionally render award_cate_div based on showAwardCateDiv */}
+
       {showAwardCateDiv && (
         <div className="award_cate_div">
           <CreateButton className="award_content" onClick={handleShow}>
@@ -232,6 +214,63 @@ export const AwardCategories = () => {
               {" "}
               Creating Award Categories is a must for you to live your event.
             </Description>
+          </div>
+        </div>
+      )}
+
+      {/* Conditionally render the table div when the state showTableDiv is true */}
+      {showTableDiv && (
+        <div className="table_div">
+          <div className="award_table_div">
+            <div className="award_table_search">
+              <div className="award_table_icon">
+                <IoSearchSharp />
+              </div>
+              <div className="award_table_icon_content">
+                <input type="text" placeholder="Search here..." />
+              </div>
+            </div>
+            <div className="award_filter_btn">
+              <CreateButton onClick={handleShow}>New Category</CreateButton>
+              <ViewMoreButton style={{ color: "#333333" }}>
+                Export CSV
+              </ViewMoreButton>
+              <SelectBorder style={{ color: "#777777" }}>
+                <option>Sort by : Newest</option>
+                <option>Sort by : Oldest</option>
+              </SelectBorder>
+              <GreyfilterButton className="award_filter_icon">
+                {" "}
+                <LuFilter />
+                Filter
+              </GreyfilterButton>
+            </div>
+          </div>
+
+          <div className="awardtable_div">
+            <GlobalTable
+              data={awardTableData}
+              columns={columns}
+              onRowClick={setSelectedRow}
+            />
+          </div>
+
+          <div className="award_table_btn">
+            <GreyBorderButton
+              onClick={() => {
+                setShowAwardCateDiv(true); // Show the award_cate_div
+                setShowTableDiv(false); // Hide the table div
+              }}
+            >
+              Previous
+            </GreyBorderButton>
+            <RedBackgroundButton
+              onClick={() => {
+                navigate("/event-live-preview");
+              }}
+            >
+              Next
+            </RedBackgroundButton>
           </div>
         </div>
       )}
@@ -373,68 +412,6 @@ export const AwardCategories = () => {
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
-
-      {/* Conditionally render the table div when the state showTableDiv is true */}
-
-      {showTableDiv && (
-        <div className="table_div">
-          <div className="award_table_div">
-            <div className="award_table_search">
-              <div className="award_table_icon">
-                <IoSearchSharp />
-              </div>
-              <div className="award_table_icon_content">
-                <input type="text" placeholder="Search here..." />
-              </div>
-            </div>
-            <div className="award_filter_btn">
-              <CreateButton onClick={handleShow}>New Category</CreateButton>
-              <ViewMoreButton style={{ color: "#333333" }}>
-                Export CSV
-              </ViewMoreButton>
-              <SelectBorder style={{ color: "#777777" }}>
-                <option>Sort by : Newest</option>
-                <option>Sort by : Oldest</option>
-              </SelectBorder>
-              <GreyfilterButton className="award_filter_icon">
-                {" "}
-                <LuFilter />
-                Filter
-              </GreyfilterButton>
-            </div>
-          </div>
-
-          <div className="awardtable_div">
-
-
-            <GlobalTable
-              data={awardTableData}
-              columns={columns}
-              onRowClick={setSelectedRow}
-            />
-
-
-          </div>
-
-          <div className="award_table_btn">
-            <GreyBorderButton
-              onClick={() => {
-                setShowAwardCateDiv(true); // Show the award_cate_div
-                setShowTableDiv(false); // Hide the table div
-              }}
-            >
-              Previous
-            </GreyBorderButton>
-            <RedBackgroundButton
-              onClick={() => {
-                navigate("/event-live-preview");
-              }}
-            >
-              Next
-            </RedBackgroundButton>
-          </div>
-        </div>
-      )}
     </>
   );
 };

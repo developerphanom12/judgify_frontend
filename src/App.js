@@ -18,6 +18,7 @@ import { Otp } from "./Components/Admin-Creating-New-Event/LoginPages/Otp/Otp";
 import { NewPassword } from "./Components/Admin-Creating-New-Event/LoginPages/NewPassword/NewPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AwardCategories } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategories";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -52,6 +53,7 @@ function App() {
               <Route path="/registration-form" element={<RegistrationForm />} />
               <Route path="/create-new-event" element={<CreateNewEvent />} />
               <Route path="/create-new-event/:id" element={<CreateNewEvent />} />
+              <Route path="/award-categories" element={<AwardCategories />} />
 
               <Route path="/stripe-setting" element={<StripeSetting />} />
               <Route

@@ -22,8 +22,6 @@ export const Dashboard = () => {
   // Sample data for events
   const navigate = useNavigate();
 
-
-
   // Array of background colors
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
 
@@ -93,7 +91,9 @@ export const Dashboard = () => {
                     backgroundColors[index % backgroundColors.length],
                 }}
                 onClick={() => {
-                  navigate("/create-new-event",{state:{eventId:event.id}});
+                  navigate("/create-new-event", {
+                    state: { eventId: event.id },
+                  });
                 }}
               >
                 <div className="dash_logo_status">
