@@ -46,12 +46,12 @@ function App() {
 
             <>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/my-events" element={<MyEvents />} />
-              <Route path="/admin-profile" element={<AdminProfile />} />
-              <Route path="/title-bar" element={<TitleBar />} />
-              <Route path="/registration-form" element={<RegistrationForm />} />
-              <Route path="/create-new-event" element={<CreateNewEvent />} />
+              <Route path="/admin-profile" element={<AdminProfile/>} />
+              <Route path="/title-bar" element={<TitleBar/>}/>
+              <Route path="/registration-form" element={<RegistrationForm/>} />
+              <Route path="/create-new-event" element={<CreateNewEvent/>} />
               <Route path="/create-new-event/:id" element={<CreateNewEvent />} />
               <Route path="/award-categories" element={<AwardCategories />} />
 

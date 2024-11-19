@@ -64,6 +64,11 @@
             flex-direction: column;
             gap: 5px;
             width: 50%;
+            .timezone_div{
+              border-radius: 12px;
+    border: 1px solid #66666659;
+    padding: 10px;
+            }
             .event_label_cont {
               display: flex;
               justify-content: space-between;
@@ -97,6 +102,11 @@
               width: 90%;
               cursor: pointer;
               position: relative;
+              .logo_get{
+                img{
+                  height:100px;
+                }
+              }
               .file_input {
                 position: absolute;
                 top: 0;

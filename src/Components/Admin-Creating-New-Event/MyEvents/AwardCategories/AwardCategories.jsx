@@ -24,6 +24,8 @@ import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import * as XLSX from "xlsx";
+
 
 export const AwardCategories = () => {
   const [show, setShow] = useState(false);
@@ -34,11 +36,9 @@ export const AwardCategories = () => {
   const [awardTableData, setAwardTableData] = useState([]);
 
   const eventIds = useSelector((state) => state.users?.id || "");
+  const eventIdsString = String(eventIds); //Convert to string
+  console.log("Stored eventId show:", eventIdsString);
 
-  const eventIdsString = String(eventIds); // Convert to string
-
-  console.log("Stored eventId:", eventIdsString);
-  
   const [awardData, setAwardData] = useState({
     eventId: eventIdsString,
     category_name: "",
@@ -52,9 +52,14 @@ export const AwardCategories = () => {
     end_date: "",
   });
 
-  const location = useLocation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
 
-  const { eventId } = location.state || {};
+  const [exportdata, subExportdata] = useState([]);
+
+  // const location = useLocation();
+
+  // const { eventId } = location.state || {};
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -142,9 +147,45 @@ export const AwardCategories = () => {
     }
   };
 
+  // const getApi = async () => {
+  //   try {
+  //     const response = await axios.get(`${EXCHNAGE_URL}/allAwards?eventId=${eventIdsString}&search=${searchTerm}&sortOrder=${sortOrder}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+
+  //     if (response.status === 200) {
+  //       // Transform the API response to match the columns format
+  //       const transformedData = response.data.data?.map((item) => ({
+  //         "eventId":item.eventIdsString,
+  //         "Category Name": item.category_name,
+  //         "Prefix for Submission": item.category_prefix,
+  //         "Grouping Title": item.belongs_group,
+  //         "Limit Submission": item.limit_submission,
+  //         "Closing Date": new Date(item.closing_date).toLocaleDateString(),
+  //         Actions: "Edit",
+  //       }));
+
+  //       setAwardTableData(transformedData); // Set transformed data to state
+  //       console.log("setData", transformedData); // Check the transformed data in the console
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error.message);
+  //   }
+  // };
   const getApi = async () => {
     try {
-      const response = await axios.get(`${EXCHNAGE_URL}/allAwrads`, {
+      // Construct the base URL without the search parameter
+      let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${eventIdsString}&sortOrder=${sortOrder}`;
+
+      // Append the search parameter only if searchTerm is not empty
+      if (searchTerm) {
+        apiUrl += `&search=${searchTerm}`;
+      }
+
+      const response = await axios.get(apiUrl, {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -154,12 +195,13 @@ export const AwardCategories = () => {
       if (response.status === 200) {
         // Transform the API response to match the columns format
         const transformedData = response.data.data?.map((item) => ({
+          eventId: item.eventIdsString,
           "Category Name": item.category_name,
           "Prefix for Submission": item.category_prefix,
           "Grouping Title": item.belongs_group,
           "Limit Submission": item.limit_submission,
           "Closing Date": new Date(item.closing_date).toLocaleDateString(),
-          Actions: "Edit", // Assuming you want a static "Edit" action, this can be customized
+          Actions: "Edit",
         }));
 
         setAwardTableData(transformedData); // Set transformed data to state
@@ -172,7 +214,16 @@ export const AwardCategories = () => {
 
   useEffect(() => {
     getApi();
-  }, []);
+  }, [searchTerm, sortOrder]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Update searchTerm state on input change
+  };
+
+  // Handle sort order change
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value); // Update sortOrder state when user selects an option
+  };
 
   const columns = [
     "Category Name",
@@ -182,6 +233,108 @@ export const AwardCategories = () => {
     "Closing Date",
     "Actions",
   ];
+
+  // const exportgetApi = async () => {
+  //   try {
+  //     const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+
+  //     if (response.status === 200) {
+  //       subExportdata(response.data.data);
+  //       console.log("setData", response.data.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error.message);
+  //     //     // Optionally handle the error, e.g., show an alert or redirect to login
+  //   }
+  // };
+  const exportgetApi = async () => {
+    try {
+      const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        // Assuming response.data.data contains the table data to be exported
+        const tableData = response.data.data;
+        
+        // Convert the data to Excel
+        exportToExcel(tableData);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      // Optionally handle the error, e.g., show an alert or redirect to login
+    }
+  };
+  
+  // Function to export data to Excel file
+  const exportToExcel = (data) => {
+    // Convert the data into a worksheet
+    const ws = XLSX.utils.json_to_sheet(data);
+    
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1"); // Append sheet to workbook
+  
+    // Generate Excel file and trigger the download
+    XLSX.writeFile(wb, "award_data.xlsx");
+  };
+  
+  // const exportgetApi = async () => {
+  //   try {
+  //     const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Assuming response.data.data contains the table data to be exported
+  //       const tableData = response.data.data;
+  //       const csvData = convertToCSV(tableData);
+  //       triggerDownload(csvData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error.message);
+  //     // Optionally handle the error, e.g., show an alert or redirect to login
+  //   }
+  // };
+  
+  // const convertToCSV = (data) => {
+  //   const header = Object.keys(data[0]).join(","); // Get the header row
+  //   const rows = data.map(row => Object.values(row).join(",")); // Get each row of values
+  //   return [header, ...rows].join("\n"); // Join the header and rows with newlines
+  // };
+  
+
+  // const triggerDownload = (csvData) => {
+  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     // Create a link and trigger the download
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", "award_data.csv"); // Optional: Customize the file name
+  //     link.style.visibility = "hidden"; // Hide the link
+  //     document.body.appendChild(link);
+  //     link.click(); // Trigger the download
+  //     document.body.removeChild(link); // Clean up the DOM
+  //   }
+  // };
+  
+  
+
+  useEffect(() => {
+    exportgetApi();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -227,17 +380,32 @@ export const AwardCategories = () => {
                 <IoSearchSharp />
               </div>
               <div className="award_table_icon_content">
-                <input type="text" placeholder="Search here..." />
+                {/* <input type="text" placeholder="Search here..." /> */}
+                <input
+                  type="text"
+                  placeholder="Search here..."
+                  value={searchTerm} // Bind value to searchTerm state
+                  onChange={handleSearchChange} // Update searchTerm state on input change
+                />
               </div>
             </div>
             <div className="award_filter_btn">
               <CreateButton onClick={handleShow}>New Category</CreateButton>
-              <ViewMoreButton style={{ color: "#333333" }}>
+
+              <ViewMoreButton
+                style={{ color: "#333333" }}
+                onClick={exportgetApi}
+              >
                 Export CSV
               </ViewMoreButton>
-              <SelectBorder style={{ color: "#777777" }}>
-                <option>Sort by : Newest</option>
-                <option>Sort by : Oldest</option>
+
+              <SelectBorder
+                style={{ color: "#777777" }}
+                onChange={handleSortChange}
+                value={sortOrder}
+              >
+                <option value="newest">Sort by : Newest</option>
+                <option value="oldest">Sort by : Oldest</option>
               </SelectBorder>
               <GreyfilterButton className="award_filter_icon">
                 {" "}

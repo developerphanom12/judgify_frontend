@@ -394,14 +394,11 @@ export const CreateNewEvent = () => {
                           <InputLabel>
                             Timezone <span style={{ color: "#c32728" }}>*</span>
                           </InputLabel>
-                          {/* 
                         
-                        <TimezoneSelect value={selectedTimezone}
-                         value={eventData.time_zone}
-      onChange={(e) => setEventData({ ...eventData, time_zone: e.target.value })} />*/}
 
                           <input
                             type="text"
+                            className="timezone_div"
                             value={eventData.time_zone}
                             onChange={(e) =>
                               setEventData({
@@ -1053,7 +1050,7 @@ export const CreateNewEvent = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategories id="2" />}
+            {selectedButton === 2 && <AwardCategories id="2"/>}
 
             {selectedButton === 3 && <h1>3</h1>}
             {selectedButton === 4 && <h1>4</h1>}

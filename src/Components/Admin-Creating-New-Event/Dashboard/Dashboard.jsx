@@ -19,10 +19,10 @@ import { EXCHNAGE_URL, IMAGES_URL } from "../../../Url/Url";
 export const Dashboard = () => {
   const [dashboard, setDashboard] = useState([]);
 
-  // Sample data for events
+  
   const navigate = useNavigate();
 
-  // Array of background colors
+
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
 
   const getApi = async () => {
