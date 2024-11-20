@@ -23,11 +23,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as XLSX from "xlsx";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import { FaEdit } from "react-icons/fa";
+import { setAwardId } from "../../../Redux/Users/action";
 
-
-export const AwardCategories = () => {
+export const AwardCategories = ({ eventidprops }) => {
   const [show, setShow] = useState(false);
   const [showTableDiv, setShowTableDiv] = useState(false);
   const [showAwardCateDiv, setShowAwardCateDiv] = useState(true);
@@ -38,6 +40,9 @@ export const AwardCategories = () => {
   const eventIds = useSelector((state) => state.users?.id || "");
   const eventIdsString = String(eventIds); //Convert to string
   console.log("Stored eventId show:", eventIdsString);
+
+  const awardId = useSelector((state) => state.users.awardId || "");
+  console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
     eventId: eventIdsString,
@@ -55,11 +60,30 @@ export const AwardCategories = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
 
-  const [exportdata, subExportdata] = useState([]);
+  const [showSecondModal, setShowSecondModal] = useState(false);
+
+  // const [showStartDate, setShowStartDate] = useState(false);
+  // const [showEndDate, setShowEndDate] = useState(false);
+
+  const [editaward, seteditaward] = useState({
+    category_name: "",
+    category_prefix: "",
+    belongs_group: "",
+    limit_submission: "",
+    start_date: "",
+    end_date: "",
+    is_endorsement: false,
+    is_start_date: false,
+    is_end_date: false,
+  });
+
+  const [localAwardId, setLocalAwardId] = useState(null);
+  const dispatch = useDispatch();
 
   // const location = useLocation();
-
   // const { eventId } = location.state || {};
+
+  // console.log("eventid in award category", eventId);
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -147,37 +171,8 @@ export const AwardCategories = () => {
     }
   };
 
-  // const getApi = async () => {
-  //   try {
-  //     const response = await axios.get(`${EXCHNAGE_URL}/allAwards?eventId=${eventIdsString}&search=${searchTerm}&sortOrder=${sortOrder}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       // Transform the API response to match the columns format
-  //       const transformedData = response.data.data?.map((item) => ({
-  //         "eventId":item.eventIdsString,
-  //         "Category Name": item.category_name,
-  //         "Prefix for Submission": item.category_prefix,
-  //         "Grouping Title": item.belongs_group,
-  //         "Limit Submission": item.limit_submission,
-  //         "Closing Date": new Date(item.closing_date).toLocaleDateString(),
-  //         Actions: "Edit",
-  //       }));
-
-  //       setAwardTableData(transformedData); // Set transformed data to state
-  //       console.log("setData", transformedData); // Check the transformed data in the console
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //   }
-  // };
   const getApi = async () => {
     try {
-      // Construct the base URL without the search parameter
       let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${eventIdsString}&sortOrder=${sortOrder}`;
 
       // Append the search parameter only if searchTerm is not empty
@@ -194,18 +189,37 @@ export const AwardCategories = () => {
 
       if (response.status === 200) {
         // Transform the API response to match the columns format
-        const transformedData = response.data.data?.map((item) => ({
-          eventId: item.eventIdsString,
-          "Category Name": item.category_name,
-          "Prefix for Submission": item.category_prefix,
-          "Grouping Title": item.belongs_group,
-          "Limit Submission": item.limit_submission,
-          "Closing Date": new Date(item.closing_date).toLocaleDateString(),
-          Actions: "Edit",
-        }));
+        const transformedData = response.data.data?.map((item) => {
+          // Dispatch awardId to Redux
+          dispatch(setAwardId(item.awardId)); // Store awardId in Redux
 
-        setAwardTableData(transformedData); // Set transformed data to state
-        console.log("setData", transformedData); // Check the transformed data in the console
+          return {
+            eventId: item.eventIdsString,
+            "Category Name": item.category_name,
+            "Prefix for Submission": item.category_prefix,
+            "Grouping Title": item.belongs_group,
+            "Limit Submission": item.limit_submission,
+            "Closing Date": new Date(item.closing_date).toLocaleDateString(),
+            Actions: (
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                  cursor: "pointer",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <FaEdit onClick={() => handleShowSecondModal(item.awardId)} />
+
+                <RiDeleteBin6Fill onClick={() => deleteAward(item.awardId)} />
+              </div>
+            ),
+          };
+        });
+
+        setAwardTableData(transformedData);
+        console.log("setData", transformedData);
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
@@ -216,11 +230,115 @@ export const AwardCategories = () => {
     getApi();
   }, [searchTerm, sortOrder]);
 
+  const deleteAward = async (awardId) => {
+    console.log("Award ID to delete:", awardId);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${EXCHNAGE_URL}/awards/${awardId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Award deleted successfully:", response.data.message);
+        toast.success("Deleted successfully");
+        getApi();
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting award:",
+        error.response?.data?.message || error.message
+      );
+      toast.error("Error occurred while deleting");
+      // Handle error, like showing an error message to the user
+    }
+  };
+
+  const editgetApi = async (awardId) => {
+    try {
+      const response = await axios.get(`${EXCHNAGE_URL}/awardget/${awardId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.status === 200) {
+        seteditaward(response.data.data); // Assuming you have seteditaward to store fetched data
+        console.log("setData", response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (showSecondModal && localAwardId) {
+      editgetApi(localAwardId);
+      console.log("localAwardId", localAwardId);
+    }
+  }, [showSecondModal, localAwardId]);
+
+  // console("localAwardId",localAwardId)
+  const handleSave = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    const formattedStartDate = editaward.is_start_date
+      ? new Date(editaward.start_date).toISOString().split("T")[0]
+      : null;
+    const formattedEndDate = editaward.is_end_date
+      ? new Date(editaward.end_date).toISOString().split("T")[0]
+      : null;
+    try {
+      const response = await axios.post(
+        `${EXCHNAGE_URL}/updateAwardCategory`,
+        {
+          awardId: localAwardId,
+          category_name: editaward.category_name,
+          category_prefix: editaward.category_prefix,
+          belongs_group: editaward.belongs_group,
+          limit_submission: editaward.limit_submission,
+          is_start_date: editaward.is_start_date,
+          start_date: formattedStartDate,
+          is_end_date: editaward.is_end_date,
+          end_date: formattedEndDate,
+          is_endorsement: editaward.is_endorsement,
+        },
+        {
+          // Config options, including headers
+          headers: {
+            "Content-Type": "application/json", // Changed to "application/json" for simple JSON data
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Category saved successfully!");
+        handleCloseSecondModal(); // Close the modal after successful save
+      }
+    } catch (error) {
+      console.error("Error saving category:", error);
+      toast.error("Failed to save the category. Please try again.");
+    }
+  };
+
+  const handleCloseSecondModal = () => {
+    setShowSecondModal(false);
+    setAwardId(null); // Reset awardId when closing modal
+  };
+
+  const handleShowSecondModal = (id) => {
+    setLocalAwardId(id); // Set awardId explicitly before opening the modal
+    setShowSecondModal(true);
+  };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value); // Update searchTerm state on input change
   };
 
-  // Handle sort order change
   const handleSortChange = (event) => {
     setSortOrder(event.target.value); // Update sortOrder state when user selects an option
   };
@@ -254,17 +372,20 @@ export const AwardCategories = () => {
   // };
   const exportgetApi = async () => {
     try {
-      const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+      const response = await axios.get(
+        `${EXCHNAGE_URL}/download?eventId=${eventIdsString}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       if (response.status === 200) {
         // Assuming response.data.data contains the table data to be exported
         const tableData = response.data.data;
-        
+
         // Convert the data to Excel
         exportToExcel(tableData);
       }
@@ -273,64 +394,18 @@ export const AwardCategories = () => {
       // Optionally handle the error, e.g., show an alert or redirect to login
     }
   };
-  
-  // Function to export data to Excel file
+
   const exportToExcel = (data) => {
     // Convert the data into a worksheet
     const ws = XLSX.utils.json_to_sheet(data);
-    
+
     // Create a new workbook
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1"); // Append sheet to workbook
-  
+
     // Generate Excel file and trigger the download
     XLSX.writeFile(wb, "award_data.xlsx");
   };
-  
-  // const exportgetApi = async () => {
-  //   try {
-  //     const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-  
-  //     if (response.status === 200) {
-  //       // Assuming response.data.data contains the table data to be exported
-  //       const tableData = response.data.data;
-  //       const csvData = convertToCSV(tableData);
-  //       triggerDownload(csvData);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //     // Optionally handle the error, e.g., show an alert or redirect to login
-  //   }
-  // };
-  
-  // const convertToCSV = (data) => {
-  //   const header = Object.keys(data[0]).join(","); // Get the header row
-  //   const rows = data.map(row => Object.values(row).join(",")); // Get each row of values
-  //   return [header, ...rows].join("\n"); // Join the header and rows with newlines
-  // };
-  
-
-  // const triggerDownload = (csvData) => {
-  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-  //   const link = document.createElement("a");
-  //   if (link.download !== undefined) {
-  //     // Create a link and trigger the download
-  //     const url = URL.createObjectURL(blob);
-  //     link.setAttribute("href", url);
-  //     link.setAttribute("download", "award_data.csv"); // Optional: Customize the file name
-  //     link.style.visibility = "hidden"; // Hide the link
-  //     document.body.appendChild(link);
-  //     link.click(); // Trigger the download
-  //     document.body.removeChild(link); // Clean up the DOM
-  //   }
-  // };
-  
-  
 
   useEffect(() => {
     exportgetApi();
@@ -341,107 +416,122 @@ export const AwardCategories = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // const handleCloseSecondModal = () => setShowSecondModal(false);
+  // const handleShowSecondModal = () => setShowSecondModal(true);
+
   const handleSaveClose = () => {
     setShow(false);
     setShowTableDiv(true);
     setShowAwardCateDiv(false);
   };
 
+  const formatDate = (date) => {
+    if (!date) return "";
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    return formattedDate;
+  };
+
   return (
     <>
-      {/* Conditionally render award_cate_div based on showAwardCateDiv */}
+      {/* {eventidprops ? (
+        <> */}
+       {showTableDiv && ( 
 
-      {showAwardCateDiv && (
-        <div className="award_cate_div">
-          <CreateButton className="award_content" onClick={handleShow}>
-            <IoMdAddCircleOutline />
-            Create Award Category
-          </CreateButton>
-
-          <div className="desc_div">
-            <Description>
-              Award Categories are selected by the entrants before they submit
-              their works.
-            </Description>
-            <Description>
-              {" "}
-              Creating Award Categories is a must for you to live your event.
-            </Description>
-          </div>
-        </div>
-      )}
-
-      {/* Conditionally render the table div when the state showTableDiv is true */}
-      {showTableDiv && (
-        <div className="table_div">
-          <div className="award_table_div">
-            <div className="award_table_search">
-              <div className="award_table_icon">
-                <IoSearchSharp />
+          <div className="table_div">
+            <div className="award_table_div">
+              <div className="award_table_search">
+                <div className="award_table_icon">
+                  <IoSearchSharp />
+                </div>
+                <div className="award_table_icon_content">
+                  {/* <input type="text" placeholder="Search here..." /> */}
+                  <input
+                    type="text"
+                    placeholder="Search here..."
+                    value={searchTerm} // Bind value to searchTerm state
+                    onChange={handleSearchChange} // Update searchTerm state on input change
+                  />
+                </div>
               </div>
-              <div className="award_table_icon_content">
-                {/* <input type="text" placeholder="Search here..." /> */}
-                <input
-                  type="text"
-                  placeholder="Search here..."
-                  value={searchTerm} // Bind value to searchTerm state
-                  onChange={handleSearchChange} // Update searchTerm state on input change
-                />
+              <div className="award_filter_btn">
+                <CreateButton onClick={handleShow}>New Category</CreateButton>
+
+                <ViewMoreButton
+                  style={{ color: "#333333" }}
+                  onClick={exportgetApi}
+                >
+                  Export CSV
+                </ViewMoreButton>
+
+                <SelectBorder
+                  style={{ color: "#777777" }}
+                  onChange={handleSortChange}
+                  value={sortOrder}
+                >
+                  <option value="newest">Sort by : Newest</option>
+                  <option value="oldest">Sort by : Oldest</option>
+                </SelectBorder>
+                <GreyfilterButton className="award_filter_icon">
+                  {" "}
+                  <LuFilter />
+                  Filter
+                </GreyfilterButton>
               </div>
             </div>
-            <div className="award_filter_btn">
-              <CreateButton onClick={handleShow}>New Category</CreateButton>
 
-              <ViewMoreButton
-                style={{ color: "#333333" }}
-                onClick={exportgetApi}
-              >
-                Export CSV
-              </ViewMoreButton>
+            <div className="awardtable_div">
+              <GlobalTable
+                data={awardTableData}
+                columns={columns}
+                onRowClick={setSelectedRow}
+              />
+            </div>
 
-              <SelectBorder
-                style={{ color: "#777777" }}
-                onChange={handleSortChange}
-                value={sortOrder}
+            <div className="award_table_btn">
+              <GreyBorderButton
+                onClick={() => {
+                  setShowAwardCateDiv(true); // Show the award_cate_div
+                  setShowTableDiv(false); // Hide the table div
+                }}
               >
-                <option value="newest">Sort by : Newest</option>
-                <option value="oldest">Sort by : Oldest</option>
-              </SelectBorder>
-              <GreyfilterButton className="award_filter_icon">
-                {" "}
-                <LuFilter />
-                Filter
-              </GreyfilterButton>
+                Previous
+              </GreyBorderButton>
+              <RedBackgroundButton
+                onClick={() => {
+                  navigate("/event-live-preview");
+                }}
+              >
+                Next
+              </RedBackgroundButton>
             </div>
           </div>
+          
+         )} 
+        {/* </>
+      ) : (
+        <> */}
+          {showAwardCateDiv && (
+            <div className="award_cate_div">
+              <CreateButton className="award_content" onClick={handleShow}>
+                <IoMdAddCircleOutline />
+                Create Award Category
+              </CreateButton>
 
-          <div className="awardtable_div">
-            <GlobalTable
-              data={awardTableData}
-              columns={columns}
-              onRowClick={setSelectedRow}
-            />
-          </div>
-
-          <div className="award_table_btn">
-            <GreyBorderButton
-              onClick={() => {
-                setShowAwardCateDiv(true); // Show the award_cate_div
-                setShowTableDiv(false); // Hide the table div
-              }}
-            >
-              Previous
-            </GreyBorderButton>
-            <RedBackgroundButton
-              onClick={() => {
-                navigate("/event-live-preview");
-              }}
-            >
-              Next
-            </RedBackgroundButton>
-          </div>
-        </div>
-      )}
+              <div className="desc_div">
+                <Description>
+                  Award Categories are selected by the entrants before they
+                  submit their works.
+                </Description>
+                <Description>
+                  {" "}
+                  Creating Award Categories is a must for you to live your
+                  event.
+                </Description>
+              </div>
+            </div>
+          )}
+        {/* </>
+      )} */}
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
@@ -574,6 +664,182 @@ export const AwardCategories = () => {
                 <button className="award_modal_close" type="submit">
                   Save & Close
                 </button>
+              </div>
+            </form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer></Modal.Footer>
+      </Modal>
+
+      <Modal show={showSecondModal} onHide={handleCloseSecondModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title></Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mod_cont">
+            <div className="mod_heading">
+              <SubHeading>Edit Category</SubHeading>
+            </div>
+
+            <form className="award_form" onSubmit={handleSave}>
+              <div className="award_row">
+                <InputLabel>
+                  Category Name <span style={{ color: "#c32728" }}>*</span>
+                </InputLabel>
+
+                <InputType
+                  name="category_name"
+                  value={editaward.category_name}
+                  onChange={(e) =>
+                    seteditaward({
+                      ...editaward,
+                      category_name: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="award_row">
+                <InputLabel>
+                  Category Prefix <span style={{ color: "#c32728" }}>*</span>
+                </InputLabel>
+
+                <InputType
+                  name="category_prefix"
+                  value={editaward.category_prefix}
+                  onChange={(e) =>
+                    seteditaward({
+                      ...editaward,
+                      category_prefix: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="award_row">
+                <InputLabel>
+                  Belongs to a Group <span style={{ color: "#c32728" }}>*</span>
+                </InputLabel>
+
+                <InputType
+                  name="belongs_group"
+                  value={editaward.belongs_group}
+                  onChange={(e) =>
+                    seteditaward({
+                      ...editaward,
+                      belongs_group: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="award_row">
+                <InputLabel>
+                  Limit Number of Submissions
+                  <span style={{ color: "#c32728" }}>*</span>
+                </InputLabel>
+
+                <InputType
+                  name="limit_submission"
+                  value={editaward.limit_submission}
+                  onChange={(e) =>
+                    seteditaward({
+                      ...editaward,
+                      limit_submission: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="award_row">
+                <div className="start_date_div">
+                  <div className="award_label">
+                    <div className="award_check">
+                      <div className="check_date">
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={editaward.is_start_date}
+                          // onChange={() => setShowStartDate(!showStartDate)}
+                          onChange={() =>
+                            seteditaward({
+                              ...editaward,
+                              is_start_date: !editaward.is_start_date,
+                            })
+                          }
+                        />
+                        <InputLabel>Require Start Date</InputLabel>
+                      </div>
+
+                      {editaward.is_start_date && (
+                        <input
+                          type="date"
+                          value={formatDate(editaward.start_date)}
+                          // onChange={(e) =>
+                          //   seteditaward({
+                          //     ...editaward,
+                          //     start_date: e.target.value,
+                          //   })
+                          // }
+                          onChange={(e) =>
+                            seteditaward({
+                              ...editaward,
+                              start_date: e.target.value,
+                            })
+                          }
+                        />
+                      )}
+                    </div>
+                  </div>
+                  <div className="award_label">
+                    <div className="award_check">
+                      <div className="check_date">
+                        <CheckboxInput
+                          type="checkbox"
+                          checked={editaward.is_end_date}
+                          // onChange={() => setShowEndDate(!showEndDate)}
+                          onChange={() =>
+                            seteditaward({
+                              ...editaward,
+                              is_end_date: !editaward.is_end_date,
+                            })
+                          }
+                        />
+
+                        <InputLabel>Require End Date</InputLabel>
+                      </div>
+                      {editaward.is_end_date && (
+                        <input
+                          type="date"
+                          value={formatDate(editaward.end_date)}
+                          onChange={(e) =>
+                            seteditaward({
+                              ...editaward,
+                              end_date: e.target.value,
+                            })
+                          }
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="award_row">
+                <div className="award_label">
+                  <div className="award_check">
+                    <div className="check_date">
+                      <CheckboxInput
+                        type="checkbox"
+                        checked={editaward.is_endorsement}
+                      />
+                      <InputLabel>Required Endorsement</InputLabel>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="award_btn">
+                <button className="award_modal_close">Save & Close</button>
               </div>
             </form>
           </div>

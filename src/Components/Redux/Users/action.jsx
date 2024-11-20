@@ -3,6 +3,7 @@
 export const SET_USER_CREDENTIALS = "SET_USER_CREDENTIALS";
 export const SET_EMAIL = "SET_EMAIL";
 export const SET_EVENT_ID = "SET_EVENT_ID";
+export const SET_AWARD_ID = "SET_AWARD_ID";
 
 
 export const setUserCredentials = (email, password) => ({
@@ -45,4 +46,10 @@ export const UserDetails = (data) => {
   export const setEventId = (id) => ({
     type: SET_EVENT_ID,
     payload: id,
+  });
+
+  export const setAwardId = (awardId) => ({
+    type: "SET_AWARD_ID",
+    
+    payload: awardId,
   });

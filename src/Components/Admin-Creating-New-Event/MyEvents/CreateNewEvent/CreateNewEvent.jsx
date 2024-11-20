@@ -33,9 +33,10 @@ export const CreateNewEvent = () => {
   );
 
   const location = useLocation();
-  const { eventId } = location.state || {}; // Accessing eventId passed from previous page
 
-  console.log(eventId);
+  const { eventId } = location.state || {}; // Accessing eventId passed from previous page
+  console.log("event Id", eventId);
+
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -77,6 +78,7 @@ export const CreateNewEvent = () => {
     industry_types: [],
   });
 
+
   const getApi = async () => {
     const event_id = eventId; // Replace with your dynamic event_id
 
@@ -90,7 +92,6 @@ export const CreateNewEvent = () => {
 
       if (response.status === 200) {
         console.log("Fetched Data:", response.data.data);
-
         // Populate the form fields with the fetched data
         setEventData({
           name: response.data.data.name || "", // assuming name exists in the API response
@@ -171,9 +172,8 @@ export const CreateNewEvent = () => {
         setSelectedButton(2);
         toast.success(response.data.message);
         console.log("checkid", response.data.data.id);
-        const eventId = response.data.data.id; 
+        const eventId = response.data.data.id;
         dispatch(setEventId(eventId));
-    
       }
     } catch (error) {
       console.error("Error creating event", error.response || error);
@@ -394,7 +394,6 @@ export const CreateNewEvent = () => {
                           <InputLabel>
                             Timezone <span style={{ color: "#c32728" }}>*</span>
                           </InputLabel>
-                        
 
                           <input
                             type="text"
@@ -623,6 +622,12 @@ export const CreateNewEvent = () => {
                           onClick={() => {
                             setSelectedButton(2); //Navigate to the next section
                           }}
+
+                          // onClick={() => {
+                             //   navigate(setSelectedButton(2), {
+                          //     state: { eventId: eventId }, // Pass eventId in state
+                          //   });
+                          // }}
                         >
                           Save
                         </RedBackgroundButton>
@@ -1050,7 +1055,7 @@ export const CreateNewEvent = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategories id="2"/>}
+            {selectedButton === 2 && <AwardCategories id="2" eventidprops={eventId}  />}
 
             {selectedButton === 3 && <h1>3</h1>}
             {selectedButton === 4 && <h1>4</h1>}

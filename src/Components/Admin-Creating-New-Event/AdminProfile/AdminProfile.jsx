@@ -404,7 +404,9 @@ export const AdminProfile = () => {
                 </div>
 
                 <div className="adminprof_button">
-                  <GreyBorderButton onClick={() => setSelectedButton(2)}>Cancel</GreyBorderButton>
+                  <GreyBorderButton onClick={() => setSelectedButton(2)}>
+                    Cancel
+                  </GreyBorderButton>
                   <RedBackgroundButton>Save</RedBackgroundButton>
                 </div>
               </div>

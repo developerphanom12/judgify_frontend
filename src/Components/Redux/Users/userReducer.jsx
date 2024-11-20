@@ -1,4 +1,4 @@
-import { SET_EVENT_ID, SET_USER_CREDENTIALS } from "./action";
+import { SET_AWARD_ID, SET_EVENT_ID, SET_USER_CREDENTIALS } from "./action";
 
 const initialState = {
   user: {},
@@ -10,6 +10,7 @@ const initialState = {
   password: null,
   email: "",
   id: "",
+  awardId: "", 
 };
 
 const UseReducer = (state = initialState, action) => {
@@ -47,6 +48,12 @@ const UseReducer = (state = initialState, action) => {
           ...state,
           id: action.payload, // Store the eventId in the state
         };
+
+        case SET_AWARD_ID:
+          return {
+            ...state,
+            awardId: action.payload, // Update awardId in the state
+          };
 
     //   case "APP_DETAILS":
     //     return {
