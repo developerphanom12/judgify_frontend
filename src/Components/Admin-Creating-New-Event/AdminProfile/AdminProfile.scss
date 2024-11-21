@@ -48,10 +48,22 @@
             flex-direction: column;
             gap: 5px;
             width: 47%;
-            .admin_timezone {
-              border-radius: 12px;
-              border: 1px solid #66666659;
-              padding: 10px;
+            .error {
+              color: #c32728;
+              text-align: left;
+            }
+            .time_get_post {
+              display: flex;
+              gap: 20px;
+              .admin_timezone {
+                border-radius: 12px;
+                border: 1px solid #66666659;
+                padding: 10px;
+                flex: 1;
+              }
+              .time_zone_post {
+                flex: 1;
+              }
             }
             .myevent_img {
               border: 2px dashed #cccccc;
@@ -64,8 +76,8 @@
               width: 100%;
               cursor: pointer;
               position: relative;
-              .update_image{
-                height:150px
+              .update_image {
+                height: 150px;
               }
               .file_input {
                 position: absolute;
@@ -144,6 +156,9 @@
     flex-direction: column;
     .adminprof_label {
       width: 100%;
+      .time_get_post {
+        flex-direction: column;
+      }
     }
   }
 
@@ -155,5 +170,19 @@
 @media (min-width: 567px) and (max-width: 1024px) {
   .adminprof_div .adminprof_bg .adminprof_btn_click {
     width: 70%;
+  }
+
+  .adminprof_div
+    .adminprof_bg
+    .adminprof_content
+    .profile_form
+    .adminprof_row
+    .adminprof_label
+    .time_get_post {
+    gap: 5px;
+    .admin_timezone {
+      flex: unset;
+      width: 50%;
+    }
   }
 }

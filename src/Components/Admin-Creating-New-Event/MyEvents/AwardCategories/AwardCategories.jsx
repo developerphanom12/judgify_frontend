@@ -28,8 +28,9 @@ import * as XLSX from "xlsx";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import { setAwardId } from "../../../Redux/Users/action";
+import * as Yup from "yup";
 
-export const AwardCategories = ({ eventidprops }) => {
+export const AwardCategories = () => {
   const [show, setShow] = useState(false);
   const [showTableDiv, setShowTableDiv] = useState(false);
   const [showAwardCateDiv, setShowAwardCateDiv] = useState(true);
@@ -37,9 +38,22 @@ export const AwardCategories = ({ eventidprops }) => {
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
   const [awardTableData, setAwardTableData] = useState([]);
 
-  const eventIds = useSelector((state) => state.users?.id || "");
-  const eventIdsString = String(eventIds); //Convert to string
-  console.log("Stored eventId show:", eventIdsString);
+  // const eventIds = useSelector((state) => state.users?.id || "");
+
+  const location = useLocation();
+
+  const { eventId } = location.state || {};
+  const eventIdsString = String(eventId); //Convert to string
+  console.log("Stored eventId showww:", eventIdsString);
+
+  // const { eventId,eventIdd  } = location.state || {};
+  // const eventIdsString = String(`${eventId}-${eventIdd}`);
+
+
+
+
+  // console.log("Event ID on the event page:", eventIdd);
+
 
   const awardId = useSelector((state) => state.users.awardId || "");
   console.log("Award ID from Redux:", awardId);
@@ -62,9 +76,6 @@ export const AwardCategories = ({ eventidprops }) => {
 
   const [showSecondModal, setShowSecondModal] = useState(false);
 
-  // const [showStartDate, setShowStartDate] = useState(false);
-  // const [showEndDate, setShowEndDate] = useState(false);
-
   const [editaward, seteditaward] = useState({
     category_name: "",
     category_prefix: "",
@@ -77,13 +88,19 @@ export const AwardCategories = ({ eventidprops }) => {
     is_end_date: false,
   });
 
+  const [errors, setErrors] = useState({});
+
   const [localAwardId, setLocalAwardId] = useState(null);
   const dispatch = useDispatch();
 
-  // const location = useLocation();
-  // const { eventId } = location.state || {};
-
-  // console.log("eventid in award category", eventId);
+  const validationSchema = Yup.object({
+    category_name: Yup.string().required("Category Name is required"),
+    category_prefix: Yup.string().required("Category Prefix is required"),
+    belongs_group: Yup.string().required("Belongs to Group is required"),
+    limit_submission: Yup.string().required("Limit Submission is required"),
+    start_date: Yup.date().required("Start Date is required"),
+    end_date: Yup.date().required("End Date is required"),
+  });
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -135,7 +152,7 @@ export const AwardCategories = ({ eventidprops }) => {
         if (isSaveAndAddNew) {
           // Clear form fields
           setAwardData({
-            eventId: eventIds,
+            eventId: eventIdsString,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -149,7 +166,7 @@ export const AwardCategories = ({ eventidprops }) => {
           setIsSaveAndAddNew(false); // Reset the flag
         } else {
           setAwardData({
-            eventId: eventIds,
+            eventId: eventIdsString,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -282,9 +299,8 @@ export const AwardCategories = ({ eventidprops }) => {
     }
   }, [showSecondModal, localAwardId]);
 
-  // console("localAwardId",localAwardId)
   const handleSave = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
       : null;
@@ -292,6 +308,8 @@ export const AwardCategories = ({ eventidprops }) => {
       ? new Date(editaward.end_date).toISOString().split("T")[0]
       : null;
     try {
+      await validationSchema.validate(editaward, { abortEarly: false });
+
       const response = await axios.post(
         `${EXCHNAGE_URL}/updateAwardCategory`,
         {
@@ -320,8 +338,16 @@ export const AwardCategories = ({ eventidprops }) => {
         handleCloseSecondModal(); // Close the modal after successful save
       }
     } catch (error) {
-      console.error("Error saving category:", error);
-      toast.error("Failed to save the category. Please try again.");
+      if (error.name === "ValidationError") {
+        const errorMessages = {};
+        error.inner.forEach((err) => {
+          errorMessages[err.path] = err.message;
+        });
+        setErrors(errorMessages);
+      } else {
+        console.error("Error updating profile:", error.message);
+        toast.error("Error updating profile");
+      }
     }
   };
 
@@ -352,24 +378,6 @@ export const AwardCategories = ({ eventidprops }) => {
     "Actions",
   ];
 
-  // const exportgetApi = async () => {
-  //   try {
-  //     const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${eventIdsString}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       subExportdata(response.data.data);
-  //       console.log("setData", response.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //     //     // Optionally handle the error, e.g., show an alert or redirect to login
-  //   }
-  // };
   const exportgetApi = async () => {
     try {
       const response = await axios.get(
@@ -416,9 +424,6 @@ export const AwardCategories = ({ eventidprops }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const handleCloseSecondModal = () => setShowSecondModal(false);
-  // const handleShowSecondModal = () => setShowSecondModal(true);
-
   const handleSaveClose = () => {
     setShow(false);
     setShowTableDiv(true);
@@ -435,102 +440,99 @@ export const AwardCategories = ({ eventidprops }) => {
     <>
       {/* {eventidprops ? (
         <> */}
-       {showTableDiv && ( 
-
-          <div className="table_div">
-            <div className="award_table_div">
-              <div className="award_table_search">
-                <div className="award_table_icon">
-                  <IoSearchSharp />
-                </div>
-                <div className="award_table_icon_content">
-                  {/* <input type="text" placeholder="Search here..." /> */}
-                  <input
-                    type="text"
-                    placeholder="Search here..."
-                    value={searchTerm} // Bind value to searchTerm state
-                    onChange={handleSearchChange} // Update searchTerm state on input change
-                  />
-                </div>
+      {showTableDiv && (
+        <div className="table_div">
+          <div className="award_table_div">
+            <div className="award_table_search">
+              <div className="award_table_icon">
+                <IoSearchSharp />
               </div>
-              <div className="award_filter_btn">
-                <CreateButton onClick={handleShow}>New Category</CreateButton>
-
-                <ViewMoreButton
-                  style={{ color: "#333333" }}
-                  onClick={exportgetApi}
-                >
-                  Export CSV
-                </ViewMoreButton>
-
-                <SelectBorder
-                  style={{ color: "#777777" }}
-                  onChange={handleSortChange}
-                  value={sortOrder}
-                >
-                  <option value="newest">Sort by : Newest</option>
-                  <option value="oldest">Sort by : Oldest</option>
-                </SelectBorder>
-                <GreyfilterButton className="award_filter_icon">
-                  {" "}
-                  <LuFilter />
-                  Filter
-                </GreyfilterButton>
+              <div className="award_table_icon_content">
+                {/* <input type="text" placeholder="Search here..." /> */}
+                <input
+                  type="text"
+                  placeholder="Search here..."
+                  value={searchTerm} // Bind value to searchTerm state
+                  onChange={handleSearchChange} // Update searchTerm state on input change
+                />
               </div>
             </div>
+            <div className="award_filter_btn">
+              <CreateButton onClick={handleShow}>New Category</CreateButton>
 
-            <div className="awardtable_div">
-              <GlobalTable
-                data={awardTableData}
-                columns={columns}
-                onRowClick={setSelectedRow}
-              />
-            </div>
+              <ViewMoreButton
+                style={{ color: "#333333" }}
+                onClick={exportgetApi}
+              >
+                Export CSV
+              </ViewMoreButton>
 
-            <div className="award_table_btn">
-              <GreyBorderButton
-                onClick={() => {
-                  setShowAwardCateDiv(true); // Show the award_cate_div
-                  setShowTableDiv(false); // Hide the table div
-                }}
+              <SelectBorder
+                style={{ color: "#777777" }}
+                onChange={handleSortChange}
+                value={sortOrder}
               >
-                Previous
-              </GreyBorderButton>
-              <RedBackgroundButton
-                onClick={() => {
-                  navigate("/event-live-preview");
-                }}
-              >
-                Next
-              </RedBackgroundButton>
+                <option value="newest">Sort by : Newest</option>
+                <option value="oldest">Sort by : Oldest</option>
+              </SelectBorder>
+              <GreyfilterButton className="award_filter_icon">
+                {" "}
+                <LuFilter />
+                Filter
+              </GreyfilterButton>
             </div>
           </div>
-          
-         )} 
-        {/* </>
+
+          <div className="awardtable_div">
+            <GlobalTable
+              data={awardTableData}
+              columns={columns}
+              onRowClick={setSelectedRow}
+            />
+          </div>
+
+          <div className="award_table_btn">
+            <GreyBorderButton
+              onClick={() => {
+                setShowAwardCateDiv(true); // Show the award_cate_div
+                setShowTableDiv(false); // Hide the table div
+              }}
+            >
+              Previous
+            </GreyBorderButton>
+            <RedBackgroundButton
+              onClick={() => {
+                navigate("/event-live-preview");
+              }}
+            >
+              Next
+            </RedBackgroundButton>
+          </div>
+        </div>
+      )}
+      {/* </>
       ) : (
         <> */}
-          {showAwardCateDiv && (
-            <div className="award_cate_div">
-              <CreateButton className="award_content" onClick={handleShow}>
-                <IoMdAddCircleOutline />
-                Create Award Category
-              </CreateButton>
+      {showAwardCateDiv && (
+        <div className="award_cate_div">
+          <CreateButton className="award_content" onClick={handleShow}>
+            <IoMdAddCircleOutline />
+            Create Award Category
+          </CreateButton>
 
-              <div className="desc_div">
-                <Description>
-                  Award Categories are selected by the entrants before they
-                  submit their works.
-                </Description>
-                <Description>
-                  {" "}
-                  Creating Award Categories is a must for you to live your
-                  event.
-                </Description>
-              </div>
-            </div>
-          )}
-        {/* </>
+          <div className="desc_div">
+            <Description>
+              Award Categories are selected by the entrants before they submit
+              their works.
+            </Description>
+            <Description>
+              {" "}
+              Creating Award Categories is a must for you to live your event.
+            </Description>
+          </div>
+        </div>
+      )}
+      {/* </>
       )} */}
 
       <Modal show={show} onHide={handleClose} size="lg">
@@ -697,6 +699,9 @@ export const AwardCategories = ({ eventidprops }) => {
                     })
                   }
                 />
+                {errors.category_name && (
+                  <span className="error">{errors.category_name}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -714,6 +719,9 @@ export const AwardCategories = ({ eventidprops }) => {
                     })
                   }
                 />
+                {errors.category_prefix && (
+                  <span className="error">{errors.category_prefix}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -731,6 +739,9 @@ export const AwardCategories = ({ eventidprops }) => {
                     })
                   }
                 />
+                {errors.belongs_group && (
+                  <span className="error">{errors.belongs_group}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -749,6 +760,9 @@ export const AwardCategories = ({ eventidprops }) => {
                     })
                   }
                 />
+                {errors.limit_submission && (
+                  <span className="error">{errors.limit_submission}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -773,13 +787,7 @@ export const AwardCategories = ({ eventidprops }) => {
                       {editaward.is_start_date && (
                         <input
                           type="date"
-                          value={formatDate(editaward.start_date)}
-                          // onChange={(e) =>
-                          //   seteditaward({
-                          //     ...editaward,
-                          //     start_date: e.target.value,
-                          //   })
-                          // }
+                          value={formatDate(editaward.start_date || "")}
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
@@ -787,6 +795,9 @@ export const AwardCategories = ({ eventidprops }) => {
                             })
                           }
                         />
+                      )}
+                      {errors.start_date && (
+                        <span className="error">{errors.start_date}</span>
                       )}
                     </div>
                   </div>
@@ -810,7 +821,7 @@ export const AwardCategories = ({ eventidprops }) => {
                       {editaward.is_end_date && (
                         <input
                           type="date"
-                          value={formatDate(editaward.end_date)}
+                          value={formatDate(editaward.end_date || "")}
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
@@ -818,6 +829,9 @@ export const AwardCategories = ({ eventidprops }) => {
                             })
                           }
                         />
+                      )}
+                      {errors.end_date && (
+                        <span className="error">{errors.end_date}</span>
                       )}
                     </div>
                   </div>
@@ -831,6 +845,12 @@ export const AwardCategories = ({ eventidprops }) => {
                       <CheckboxInput
                         type="checkbox"
                         checked={editaward.is_endorsement}
+                        onChange={() =>
+                          seteditaward({
+                            ...editaward,
+                            is_endorsement: !editaward.is_endorsement,
+                          })
+                        }
                       />
                       <InputLabel>Required Endorsement</InputLabel>
                     </div>

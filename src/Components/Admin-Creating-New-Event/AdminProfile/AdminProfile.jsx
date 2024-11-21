@@ -21,8 +21,38 @@ import { Description } from "../../Global/GlobalText";
 import upload from "../../../Assets/upload.png";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
+// import moment from "moment-timezone"; // Only if you're using moment-timezone
+import TimezoneSelect from "react-timezone-select"; // Import TimezoneSelect
+
+// const timezoneList = moment.tz.names();
 
 export const AdminProfile = () => {
+  const validationSchema = Yup.object().shape({
+    first_name: Yup.string().required("First name is required"),
+    last_name: Yup.string().required("Last name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    time_zone: Yup.string().required("Time zone is required"),
+    mobile_number: Yup.string()
+      .matches(/^\d{10}$/, "Phone Number must be 10 digits")
+      .required("Phone Number is required"),
+    company: Yup.string().required("Company is required"),
+    job_title: Yup.string().required("Job title is required"),
+    profile_image: Yup.string().nullable(),
+  });
+
+  const validationPasswordSchema = Yup.object().shape({
+    currentPassword: Yup.string().required("Current password is required"),
+    newPassword: Yup.string()
+      .min(8, "New password must be at least 8 characters")
+      .required("New password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+      .required("Confirm password is required"),
+  });
+
   const [selectedButton, setSelectedButton] = useState(1); // Initial state as 1 to show "Your Profile"
 
   const [adminProfile, setAdminProfile] = useState({
@@ -35,13 +65,19 @@ export const AdminProfile = () => {
     job_title: "",
     profile_image: "",
   });
+
+  const [errors, setErrors] = useState({}); // Store validation errors
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
+  const [passerrors, setPassErrors] = useState({}); // Store validation errors
   const [profilePicture, setProfilePicture] = useState(null); // New state for profile picture
+
+  const [selectedTimezone, setSelectedTimezone] = useState(null); // State for the selected time zone
 
   const getApi = async () => {
     try {
@@ -77,6 +113,8 @@ export const AdminProfile = () => {
 
   const handleSave = async () => {
     try {
+      await validationSchema.validate(adminProfile, { abortEarly: false });
+
       const formData = new FormData();
       formData.append("first_name", adminProfile.first_name);
       formData.append("last_name", adminProfile.last_name);
@@ -109,8 +147,16 @@ export const AdminProfile = () => {
         toast.success("Profile updated successfully");
       }
     } catch (error) {
-      console.error("Error updating profile:", error.message);
-      toast.error("Error updating profile");
+      if (error.name === "ValidationError") {
+        const errorMessages = {};
+        error.inner.forEach((err) => {
+          errorMessages[err.path] = err.message;
+        });
+        setErrors(errorMessages);
+      } else {
+        console.error("Error updating profile:", error.message);
+        toast.error("Error updating profile");
+      }
     }
   };
 
@@ -138,12 +184,11 @@ export const AdminProfile = () => {
   };
 
   const handlePasswordChange = async () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("New passwords do not match");
-      return;
-    }
-
     try {
+      await validationPasswordSchema.validate(passwordData, {
+        abortEarly: false,
+      });
+
       const response = await axios.post(
         `${EXCHNAGE_URL}/newPassword`,
         {
@@ -160,11 +205,23 @@ export const AdminProfile = () => {
 
       if (response.status === 200) {
         toast.success("Password updated successfully");
+
         setSelectedButton(3); // Redirect to the "Your Profile" tab
       }
     } catch (error) {
-      console.error("Error updating password:", error.message);
-      toast.error("Error updating password");
+      // console.error("Error updating password:", error.message);
+      // toast.error("Error updating password");
+      if (error.name === "ValidationError") {
+        // Handle Yup validation errors
+        const errorMessages = {};
+        error.inner.forEach((err) => {
+          errorMessages[err.path] = err.message;
+          toast.error(err.message); //
+        });
+        setPassErrors(errorMessages);
+      } else {
+        toast.error("Error updating password");
+      }
     }
   };
 
@@ -206,6 +263,9 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.first_name && (
+                      <span className="error">{errors.first_name}</span>
+                    )}
                   </div>
                   <div className="adminprof_label">
                     <InputLabel>Last Name</InputLabel>
@@ -219,6 +279,9 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.last_name && (
+                      <span className="error">{errors.last_name}</span>
+                    )}
                   </div>
                 </div>
 
@@ -235,10 +298,13 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.email && (
+                      <span className="error">{errors.email}</span>
+                    )}
                   </div>
                   <div className="adminprof_label">
                     <InputLabel>Time Zone</InputLabel>
-                    <input
+                    {/* <input
                       className="admin_timezone"
                       type="text"
                       value={adminProfile.time_zone}
@@ -248,7 +314,37 @@ export const AdminProfile = () => {
                           time_zone: e.target.value,
                         })
                       }
+
+                      
+                    />  */}
+
+                 <div className="time_get_post">
+
+                    <input
+                      className="admin_timezone"
+                      type="text"
+                      value={adminProfile.time_zone}
+                      placeholder="Selected Timezone"
                     />
+                    <TimezoneSelect
+                    className="time_zone_post"
+                      value={selectedTimezone} // Value will be set from selectedTimezone state
+                      onChange={(selected) => {
+                        setSelectedTimezone(selected); // Update selectedTimezone when changed
+                        setAdminProfile({
+                          ...adminProfile,
+                          time_zone: selected.value, // Assuming selected value has 'value' property
+                        });
+                      }}
+                      // options={timezoneOptions}  // Populate the options from the fetched timezones
+                      placeholder="Select Timezone"
+                    />
+
+</div>
+
+                    {errors.time_zone && (
+                      <span className="error">{errors.time_zone}</span>
+                    )}
                   </div>
                 </div>
 
@@ -265,6 +361,9 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.mobile_number && (
+                      <span className="error">{errors.mobile_number}</span>
+                    )}
                   </div>
                   <div className="adminprof_label">
                     <InputLabel>Company</InputLabel>
@@ -278,6 +377,9 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.company && (
+                      <span className="error">{errors.company}</span>
+                    )}
                   </div>
                 </div>
 
@@ -294,6 +396,9 @@ export const AdminProfile = () => {
                         })
                       }
                     />
+                    {errors.job_title && (
+                      <span className="error">{errors.job_title}</span>
+                    )}
                   </div>
                   <div className="adminprof_label">
                     <InputLabel>Profile Picture</InputLabel>
@@ -311,6 +416,10 @@ export const AdminProfile = () => {
                         name="profile_picture"
                         onChange={handleFileChange} // Call your handler
                       />
+
+                      {errors.profile_image && (
+                        <span className="error">{errors.profile_image}</span>
+                      )}
 
                       <Description>Browse File</Description>
                       <CheckboxLabel>
@@ -350,6 +459,11 @@ export const AdminProfile = () => {
                       value={passwordData.currentPassword}
                       onChange={handlePasswordInputChange}
                     />
+                    {passerrors.currentPassword && (
+                      <span className="error">
+                        {passerrors.currentPassword}
+                      </span>
+                    )}
                   </div>
                   <div className="adminprof_label">
                     <InputLabel>New Password</InputLabel>
@@ -359,6 +473,9 @@ export const AdminProfile = () => {
                       value={passwordData.newPassword}
                       onChange={handlePasswordInputChange}
                     />
+                    {passerrors.newPassword && (
+                      <span className="error">{passerrors.newPassword}</span>
+                    )}
                   </div>
                 </div>
 
@@ -371,6 +488,11 @@ export const AdminProfile = () => {
                       value={passwordData.confirmPassword}
                       onChange={handlePasswordInputChange}
                     />
+                    {passerrors.confirmPassword && (
+                      <span className="error">
+                        {passerrors.confirmPassword}
+                      </span>
+                    )}
                   </div>
                 </div>
 

@@ -32,12 +32,14 @@ export const CreateNewEvent = () => {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
 
-  const location = useLocation();
+  // const [eventIdd, setEventId] = useState(null); // Store the eventId here
 
+  // const eventId = useSelector((state) => state.users?.id || "");
+  const location = useLocation();
   const { eventId } = location.state || {}; // Accessing eventId passed from previous page
   console.log("event Id", eventId);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     event_name: "",
@@ -78,10 +80,8 @@ export const CreateNewEvent = () => {
     industry_types: [],
   });
 
-
   const getApi = async () => {
     const event_id = eventId; // Replace with your dynamic event_id
-
     try {
       const response = await axios.get(`${EXCHNAGE_URL}/getEvent/${event_id}`, {
         headers: {
@@ -92,7 +92,6 @@ export const CreateNewEvent = () => {
 
       if (response.status === 200) {
         console.log("Fetched Data:", response.data.data);
-        // Populate the form fields with the fetched data
         setEventData({
           name: response.data.data.name || "", // assuming name exists in the API response
           event_name: response.data.data.event_name || "",
@@ -170,10 +169,14 @@ export const CreateNewEvent = () => {
 
       if (response.status === 200) {
         setSelectedButton(2);
+
         toast.success(response.data.message);
         console.log("checkid", response.data.data.id);
-        const eventId = response.data.data.id;
-        dispatch(setEventId(eventId));
+        // dispatch(setEventId(eventId));
+        // const eventId = response.data.data.id;
+
+        // const id = response.data.data.id;
+        // setEventId(id);
       }
     } catch (error) {
       console.error("Error creating event", error.response || error);
@@ -425,12 +428,26 @@ export const CreateNewEvent = () => {
                               <MdInfo className="mdi_icon" />
                             </div>
                           </div>
-                          <InputType
+                          {/* <InputType
                             value={eventData.additional_emails.join(", ")} // Display additional emails as a comma-separated list
                             onChange={(e) =>
                               setEventData({
                                 ...eventData,
                                 additional_emails: e.target.value.split(","),
+                              })
+                            }
+                          /> */}
+                          <InputType
+                            value={eventData.additional_emails
+                              .map((email) => email.email_address) // Extract the email_address from each object
+                              .join(", ")} // Display as a comma-separated list
+                            onChange={(e) =>
+                              setEventData({
+                                ...eventData,
+                                additional_emails: e.target.value
+                                  .split(",") // Split by commas
+                                  .map((email) => email.trim()) // Trim any leading/trailing spaces
+                                  .map((email) => ({ email_address: email })), // Format back into objects
                               })
                             }
                           />
@@ -613,21 +630,19 @@ export const CreateNewEvent = () => {
                         </GreyBorderButton>
                         <GreyBackgroundButton
                           onClick={() => {
-                            setSelectedButton(2); //Navigate to the next section
+                            navigate(setSelectedButton(2), {
+                              state: { eventId: eventId }, // Pass eventId in state
+                            });
                           }}
                         >
                           Next
                         </GreyBackgroundButton>
                         <RedBackgroundButton
                           onClick={() => {
-                            setSelectedButton(2); //Navigate to the next section
+                            navigate(setSelectedButton(2), {
+                              state: { eventId: eventId }, // Pass eventId in state
+                            });
                           }}
-
-                          // onClick={() => {
-                             //   navigate(setSelectedButton(2), {
-                          //     state: { eventId: eventId }, // Pass eventId in state
-                          //   });
-                          // }}
                         >
                           Save
                         </RedBackgroundButton>
@@ -1044,7 +1059,9 @@ export const CreateNewEvent = () => {
                         >
                           Cancel
                         </GreyBorderButton>
-                        <GreyBackgroundButton>Next</GreyBackgroundButton>
+
+                        {/* <GreyBackgroundButton>Next</GreyBackgroundButton> */}
+
                         <RedBackgroundButton type="submit">
                           Save
                         </RedBackgroundButton>
@@ -1055,7 +1072,7 @@ export const CreateNewEvent = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategories id="2" eventidprops={eventId}  />}
+            {selectedButton === 2 && <AwardCategories eventidprops={eventId} />}
 
             {selectedButton === 3 && <h1>3</h1>}
             {selectedButton === 4 && <h1>4</h1>}

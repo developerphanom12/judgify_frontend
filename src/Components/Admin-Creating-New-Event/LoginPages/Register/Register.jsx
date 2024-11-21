@@ -38,10 +38,11 @@ const hirePortSchema = yup.object().shape({
   company: yup.string().required("Company is required"),
   mobile_number: yup
     .string()
-    .matches(
-      /^[6-9]\d{9}$/,
-      "Mobile number must start with digits 6-9 and contain only digits"
-    )
+    // .matches(
+    //   /^[6-9]\d{9}$/,
+    //   "Mobile number must start with digits 6-9 and contain only digits"
+    // )
+    .matches(/^\d{10}$/, "Phone Number must be 10 digits")
     .required("Mobile number is required"),
   country: yup.string().required("Country is required"),
 });
