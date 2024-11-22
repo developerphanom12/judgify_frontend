@@ -15,38 +15,46 @@ import retail from "../../../Assets/ret.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../Url/Url";
+import { useDispatch } from "react-redux";
+import { setEventIdGet } from "../../Redux/Users/action";
 
 export const Dashboard = () => {
   const [dashboard, setDashboard] = useState([]);
+  const [eventsToShow, setEventsToShow] = useState(8); // Start by showing 10 events
 
-  
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
 
-  const getApi = async () => {
-    try {
-      const response = await axios.get(`${EXCHNAGE_URL}/dashboardEvents`, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  useEffect(() => {
+    const getApi = async () => {
+      try {
+        const response = await axios.get(`${EXCHNAGE_URL}/dashboardEvents`, {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-      if (response.status === 200) {
-        setDashboard(response.data.data);
-        console.log("setData", response.data.data);
+        if (response.status === 200) {
+          setDashboard(response.data.data);
+          console.log("setData", response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-      //     // Optionally handle the error, e.g., show an alert or redirect to login
-    }
+    };
+
+    getApi();
+  }, []); // Run only once when the component mounts
+
+  const loadMoreEvents = () => {
+    setEventsToShow(eventsToShow + 8); // Increase the number of events to show
   };
 
-  useEffect(() => {
-    getApi();
-  }, []);
+  // Slice the dashboard array to only show the number of events specified in eventsToShow
+  const visibleEvents = dashboard.slice(0, eventsToShow);
 
   return (
     <div>
@@ -60,7 +68,7 @@ export const Dashboard = () => {
             <CreateButton
               className="plus_content"
               onClick={() => {
-                navigate("/create-new-event");
+                navigate("/create-new-event-post");
               }}
             >
               <IoMdAddCircleOutline />
@@ -82,7 +90,7 @@ export const Dashboard = () => {
           </div>
 
           <div className="dash_event">
-            {dashboard.map((event, index) => (
+            {visibleEvents.map((event, index) => (
               <div
                 className="dash_subevent"
                 key={event.id}
@@ -91,15 +99,14 @@ export const Dashboard = () => {
                     backgroundColors[index % backgroundColors.length],
                 }}
                 onClick={() => {
-                  navigate("/create-new-event", {
-                    state: { eventId: event.id },
-                  });
+                  dispatch(setEventIdGet(event.id));
+                  console.log("Navigating with event ID:", event.id);
+                  navigate("/create-new-event");
                 }}
               >
                 <div className="dash_logo_status">
                   <div className="dash_logo_brand">
                     <img src={`${IMAGES_URL}${event.event_logo}`} alt="Logo" />
-                    {/* <img src={retail} alt="Retail Logo" /> */}
                   </div>
 
                   <div className="dash_logo_content">
@@ -117,6 +124,15 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
+
+          {/* Only show the 'View More' button if there are more events to display */}
+          {dashboard.length > eventsToShow && (
+            <div className="load-more-btn">
+              <ViewMoreButton onClick={loadMoreEvents}>
+                Load More
+              </ViewMoreButton>
+            </div>
+          )}
         </div>
       </div>
     </div>

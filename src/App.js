@@ -19,6 +19,8 @@ import { NewPassword } from "./Components/Admin-Creating-New-Event/LoginPages/Ne
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AwardCategories } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategories";
+import { CreateNewEventPost } from "./Components/Admin-Creating-New-Event/MyEvents/CreateNewEvent/CreateNewEventPost";
+import { AwardCategoriesPost } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategoriesPost";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -51,11 +53,13 @@ function App() {
               <Route path="/title-bar" element={<TitleBar />} />
               <Route path="/registration-form" element={<RegistrationForm />} />
               <Route path="/create-new-event" element={<CreateNewEvent />} />
+              <Route path="/create-new-event-post" element={<CreateNewEventPost />} />
               <Route
                 path="/create-new-event/:id"
                 element={<CreateNewEvent />}
               />
               <Route path="/award-categories" element={<AwardCategories />} />
+              <Route path="/award-categories-post" element={<AwardCategoriesPost />} />
 
               <Route path="/stripe-setting" element={<StripeSetting />} />
               <Route

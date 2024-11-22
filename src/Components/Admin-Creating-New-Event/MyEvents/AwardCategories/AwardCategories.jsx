@@ -37,29 +37,17 @@ export const AwardCategories = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
   const [awardTableData, setAwardTableData] = useState([]);
+  const eventIdGet = useSelector((state) => state?.users?.eventIdGet || "");
+  const initialEventId = String(eventIdGet);
 
-  // const eventIds = useSelector((state) => state.users?.id || "");
-
-  const location = useLocation();
-
-  const { eventId } = location.state || {};
-  const eventIdsString = String(eventId); //Convert to string
-  console.log("Stored eventId showww:", eventIdsString);
-
-  // const { eventId,eventIdd  } = location.state || {};
-  // const eventIdsString = String(`${eventId}-${eventIdd}`);
-
-
-
-
-  // console.log("Event ID on the event page:", eventIdd);
-
+  console.log("Stored eventId showww:", eventIdGet);
 
   const awardId = useSelector((state) => state.users.awardId || "");
-  console.log("Award ID from Redux:", awardId);
+  // console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
-    eventId: eventIdsString,
+    //eventId: eventIdsString,
+    eventId: initialEventId,
     category_name: "",
     category_prefix: "",
     belongs_group: "",
@@ -98,8 +86,8 @@ export const AwardCategories = () => {
     category_prefix: Yup.string().required("Category Prefix is required"),
     belongs_group: Yup.string().required("Belongs to Group is required"),
     limit_submission: Yup.string().required("Limit Submission is required"),
-    start_date: Yup.date().required("Start Date is required"),
-    end_date: Yup.date().required("End Date is required"),
+    start_date: Yup.date().optional("Start Date is required"),
+    end_date: Yup.date().optional("End Date is required"),
   });
 
   const handleEndorsementCheckbox = (e) => handleData(e);
@@ -134,6 +122,8 @@ export const AwardCategories = () => {
       ...awardData,
       is_start_date: awardData.is_start_date === "1" ? "1" : "0",
       is_end_date: awardData.is_end_date === "1" ? "1" : "0",
+      is_endorsement: awardData.is_endorsement === "1" ? "1" : "0", // Ensure it has a value before submission
+
     };
 
     try {
@@ -152,7 +142,7 @@ export const AwardCategories = () => {
         if (isSaveAndAddNew) {
           // Clear form fields
           setAwardData({
-            eventId: eventIdsString,
+            eventId: initialEventId,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -166,7 +156,7 @@ export const AwardCategories = () => {
           setIsSaveAndAddNew(false); // Reset the flag
         } else {
           setAwardData({
-            eventId: eventIdsString,
+            eventId: "",
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -190,7 +180,7 @@ export const AwardCategories = () => {
 
   const getApi = async () => {
     try {
-      let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${eventIdsString}&sortOrder=${sortOrder}`;
+      let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${initialEventId}&sortOrder=${sortOrder}`;
 
       // Append the search parameter only if searchTerm is not empty
       if (searchTerm) {
@@ -211,7 +201,7 @@ export const AwardCategories = () => {
           dispatch(setAwardId(item.awardId)); // Store awardId in Redux
 
           return {
-            eventId: item.eventIdsString,
+            eventId: initialEventId,
             "Category Name": item.category_name,
             "Prefix for Submission": item.category_prefix,
             "Grouping Title": item.belongs_group,
@@ -381,7 +371,7 @@ export const AwardCategories = () => {
   const exportgetApi = async () => {
     try {
       const response = await axios.get(
-        `${EXCHNAGE_URL}/download?eventId=${eventIdsString}`,
+        `${EXCHNAGE_URL}/download?eventId=${initialEventId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -438,8 +428,6 @@ export const AwardCategories = () => {
 
   return (
     <>
-      {/* {eventidprops ? (
-        <> */}
       {showTableDiv && (
         <div className="table_div">
           <div className="award_table_div">
@@ -510,9 +498,7 @@ export const AwardCategories = () => {
           </div>
         </div>
       )}
-      {/* </>
-      ) : (
-        <> */}
+
       {showAwardCateDiv && (
         <div className="award_cate_div">
           <CreateButton className="award_content" onClick={handleShow}>
@@ -532,8 +518,6 @@ export const AwardCategories = () => {
           </div>
         </div>
       )}
-      {/* </>
-      )} */}
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>

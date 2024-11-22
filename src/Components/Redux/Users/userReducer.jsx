@@ -4,17 +4,19 @@ const initialState = {
   user: {},
   userCheck: false,
   role: "",
-  // appDetails: {},
+  eventIdGet: null,
   isLoading: false,
   email: null,
   password: null,
   email: "",
-  id: "",
+  id: null,
   awardId: "", 
 };
 
 const UseReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_EVENT_ID_GET":
+      return { ...state, eventIdGet: action.payload };
     case SET_USER_CREDENTIALS:
       return {
         ...state,

@@ -43,13 +43,28 @@ export const UserDetails = (data) => {
     payload: email,
   });
 
-  export const setEventId = (id) => ({
-    type: SET_EVENT_ID,
-    payload: id,
-  });
+  // export const setEventId = (id) => ({
+  //   type: "SET_EVENT_ID",
+  //   payload: id,
+  //   console.log("id",id),
+  // });
+
+  export const setEventId = (id) => {
+    console.log("Dispatched Event ID:", id);  // Log the ID
+    return {
+      type: "SET_EVENT_ID",
+      payload: id,
+    };
+  };
+  export const setEventIdGet = (id) => {
+    console.log("Dispatched Event ID:", id);  // Log the ID
+    return {
+      type: "SET_EVENT_ID_GET",
+      payload: id,
+    };
+  };
 
   export const setAwardId = (awardId) => ({
     type: "SET_AWARD_ID",
-    
     payload: awardId,
   });
