@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Description, SubHeading } from "../../../Global/GlobalText";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import { SubHeading } from "../../../Global/GlobalText";
 import {
   CreateButton,
   GreyBorderButton,
@@ -19,7 +18,7 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { LuFilter } from "react-icons/lu";
 import { GlobalTable } from "../../../Global/GlobalTable/GlobalTable";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
@@ -32,18 +31,17 @@ import * as Yup from "yup";
 
 export const AwardCategories = () => {
   const [show, setShow] = useState(false);
-  const [showTableDiv, setShowTableDiv] = useState(false);
-  const [showAwardCateDiv, setShowAwardCateDiv] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
   const [awardTableData, setAwardTableData] = useState([]);
+
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet || "");
   const initialEventId = String(eventIdGet);
+  console.log("Stored eventId showww:", initialEventId);
 
-  console.log("Stored eventId showww:", eventIdGet);
-
+  // console.log("Stored eventId showww:", eventIdGet);
   const awardId = useSelector((state) => state.users.awardId || "");
-  // console.log("Award ID from Redux:", awardId);
+  console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
     //eventId: eventIdsString,
@@ -123,7 +121,6 @@ export const AwardCategories = () => {
       is_start_date: awardData.is_start_date === "1" ? "1" : "0",
       is_end_date: awardData.is_end_date === "1" ? "1" : "0",
       is_endorsement: awardData.is_endorsement === "1" ? "1" : "0", // Ensure it has a value before submission
-
     };
 
     try {
@@ -156,7 +153,7 @@ export const AwardCategories = () => {
           setIsSaveAndAddNew(false); // Reset the flag
         } else {
           setAwardData({
-            eventId: "",
+            eventId: initialEventId,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -181,12 +178,9 @@ export const AwardCategories = () => {
   const getApi = async () => {
     try {
       let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${initialEventId}&sortOrder=${sortOrder}`;
-
-      // Append the search parameter only if searchTerm is not empty
       if (searchTerm) {
         apiUrl += `&search=${searchTerm}`;
       }
-
       const response = await axios.get(apiUrl, {
         headers: {
           "Content-Type": "application/json",
@@ -195,11 +189,8 @@ export const AwardCategories = () => {
       });
 
       if (response.status === 200) {
-        // Transform the API response to match the columns format
         const transformedData = response.data.data?.map((item) => {
-          // Dispatch awardId to Redux
           dispatch(setAwardId(item.awardId)); // Store awardId in Redux
-
           return {
             eventId: initialEventId,
             "Category Name": item.category_name,
@@ -213,7 +204,7 @@ export const AwardCategories = () => {
                   display: "flex",
                   gap: "10px",
                   cursor: "pointer",
-                  display: "flex",
+
                   justifyContent: "center",
                 }}
               >
@@ -405,9 +396,13 @@ export const AwardCategories = () => {
     XLSX.writeFile(wb, "award_data.xlsx");
   };
 
+  // useEffect(() => {
+  //   exportgetApi();
+  // }, []);
+
   useEffect(() => {
     exportgetApi();
-  }, []);
+  });
 
   const navigate = useNavigate();
 
@@ -416,8 +411,6 @@ export const AwardCategories = () => {
 
   const handleSaveClose = () => {
     setShow(false);
-    setShowTableDiv(true);
-    setShowAwardCateDiv(false);
   };
 
   const formatDate = (date) => {
@@ -428,96 +421,71 @@ export const AwardCategories = () => {
 
   return (
     <>
-      {showTableDiv && (
-        <div className="table_div">
-          <div className="award_table_div">
-            <div className="award_table_search">
-              <div className="award_table_icon">
-                <IoSearchSharp />
-              </div>
-              <div className="award_table_icon_content">
-                {/* <input type="text" placeholder="Search here..." /> */}
-                <input
-                  type="text"
-                  placeholder="Search here..."
-                  value={searchTerm} // Bind value to searchTerm state
-                  onChange={handleSearchChange} // Update searchTerm state on input change
-                />
-              </div>
+      <div className="table_div">
+        <div className="award_table_div">
+          <div className="award_table_search">
+            <div className="award_table_icon">
+              <IoSearchSharp />
             </div>
-            <div className="award_filter_btn">
-              <CreateButton onClick={handleShow}>New Category</CreateButton>
-
-              <ViewMoreButton
-                style={{ color: "#333333" }}
-                onClick={exportgetApi}
-              >
-                Export CSV
-              </ViewMoreButton>
-
-              <SelectBorder
-                style={{ color: "#777777" }}
-                onChange={handleSortChange}
-                value={sortOrder}
-              >
-                <option value="newest">Sort by : Newest</option>
-                <option value="oldest">Sort by : Oldest</option>
-              </SelectBorder>
-              <GreyfilterButton className="award_filter_icon">
-                {" "}
-                <LuFilter />
-                Filter
-              </GreyfilterButton>
+            <div className="award_table_icon_content">
+              {/* <input type="text" placeholder="Search here..." /> */}
+              <input
+                type="text"
+                placeholder="Search here..."
+                value={searchTerm} // Bind value to searchTerm state
+                onChange={handleSearchChange} // Update searchTerm state on input change
+              />
             </div>
           </div>
+          <div className="award_filter_btn">
+            <CreateButton onClick={handleShow}>New Category</CreateButton>
 
-          <div className="awardtable_div">
-            <GlobalTable
-              data={awardTableData}
-              columns={columns}
-              onRowClick={setSelectedRow}
-            />
-          </div>
+            <ViewMoreButton style={{ color: "#333333" }} onClick={exportgetApi}>
+              Export CSV
+            </ViewMoreButton>
 
-          <div className="award_table_btn">
-            <GreyBorderButton
-              onClick={() => {
-                setShowAwardCateDiv(true); // Show the award_cate_div
-                setShowTableDiv(false); // Hide the table div
-              }}
+            <SelectBorder
+              style={{ color: "#777777" }}
+              onChange={handleSortChange}
+              value={sortOrder}
             >
-              Previous
-            </GreyBorderButton>
-            <RedBackgroundButton
-              onClick={() => {
-                navigate("/event-live-preview");
-              }}
-            >
-              Next
-            </RedBackgroundButton>
-          </div>
-        </div>
-      )}
-
-      {showAwardCateDiv && (
-        <div className="award_cate_div">
-          <CreateButton className="award_content" onClick={handleShow}>
-            <IoMdAddCircleOutline />
-            Create Award Category
-          </CreateButton>
-
-          <div className="desc_div">
-            <Description>
-              Award Categories are selected by the entrants before they submit
-              their works.
-            </Description>
-            <Description>
+              <option value="newest">Sort by : Newest</option>
+              <option value="oldest">Sort by : Oldest</option>
+            </SelectBorder>
+            <GreyfilterButton className="award_filter_icon">
               {" "}
-              Creating Award Categories is a must for you to live your event.
-            </Description>
+              <LuFilter />
+              Filter
+            </GreyfilterButton>
           </div>
         </div>
-      )}
+
+        <div className="awardtable_div">
+          <GlobalTable
+            data={awardTableData}
+            columns={columns}
+            onRowClick={setSelectedRow}
+          />
+        </div>
+
+        <div className="award_table_btn">
+          <GreyBorderButton
+          // onClick={() => {
+          //   setShowAwardCateDiv(true); // Show the award_cate_div
+          //   setShowTableDiv(false); // Hide the table div
+          // }}
+          >
+            Previous
+          </GreyBorderButton>
+          <RedBackgroundButton
+            onClick={() => {
+              navigate("/event-live-preview");
+            }}
+          >
+            Next
+          </RedBackgroundButton>
+        </div>
+      </div>
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
@@ -530,6 +498,7 @@ export const AwardCategories = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="award_form">
+
               <div className="award_row">
                 <InputLabel>
                   Category Name <span style={{ color: "#c32728" }}>*</span>
@@ -651,6 +620,7 @@ export const AwardCategories = () => {
                   Save & Close
                 </button>
               </div>
+
             </form>
           </div>
         </Modal.Body>
@@ -681,7 +651,9 @@ export const AwardCategories = () => {
                       ...editaward,
                       category_name: e.target.value,
                     })
+                  
                   }
+                  readOnly
                 />
                 {errors.category_name && (
                   <span className="error">{errors.category_name}</span>

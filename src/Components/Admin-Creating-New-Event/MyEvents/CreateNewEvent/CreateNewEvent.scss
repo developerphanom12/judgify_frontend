@@ -64,10 +64,11 @@
             flex-direction: column;
             gap: 5px;
             width: 50%;
-            .timezone_div{
+           
+            .timezone_div {
               border-radius: 12px;
-    border: 1px solid #66666659;
-    padding: 10px;
+              border: 1px solid #66666659;
+              padding: 10px;
             }
             .event_label_cont {
               display: flex;
@@ -90,6 +91,7 @@
               display: flex;
               gap: 10px;
             }
+
             .myevent_img {
               border: 2px dashed #cccccc;
               border-radius: 3px;
@@ -102,9 +104,12 @@
               width: 90%;
               cursor: pointer;
               position: relative;
-              .logo_get{
-                img{
-                  height:100px;
+              .preview_img {
+                height: 100px;
+              }
+              .logo_get {
+                img {
+                  height: 100px;
                 }
               }
               .file_input {
@@ -139,7 +144,7 @@
               .calender {
                 border-radius: 12px;
                 border: 1px solid #66666659;
-                padding:12px;
+                padding: 12px;
               }
             }
           }
@@ -170,43 +175,47 @@
         }
       }
     }
+
+    .error {
+      color: #c32728;
+      text-align: left;
+  }
+  
   }
 }
 
 @media (max-width: 567px) {
-  .newevent_div{
-
+  .newevent_div {
     padding: 20px 8px;
-  
-  .newevent_bg .btn_radio {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    .newevent_btn_click {
+
+    .newevent_bg .btn_radio {
+      justify-content: center;
       flex-wrap: wrap;
-      button {
-        flex: 1;
+      gap: 10px;
+      .newevent_btn_click {
+        flex-wrap: wrap;
+        button {
+          flex: 1;
+        }
       }
     }
   }
-}
   .newevent_div .newevent_bg .newevent_content .newevent_form .newevent_row {
     flex-direction: column;
     .newevent_label {
       width: 100%;
       gap: 5px;
       .event_label_cont {
-
         flex-direction: column;
-        span{
+        span {
           text-align: left;
         }
-    }
+      }
     }
     .newevent_closing_label {
-      display:flex;
-      gap:20px;
-      width:100%;
+      display: flex;
+      gap: 20px;
+      width: 100%;
       flex-direction: column;
       .clos_label {
         width: 100%;

@@ -7,58 +7,24 @@ import {
   CheckboxLabel,
   InputLabel,
   InputType,
-  SelectBorder,
 } from "../../../Global/GlobalFormElement";
 import { Description, EventHeading } from "../../../Global/GlobalText";
-import TimezoneSelect from "react-timezone-select";
 import { MdInfo } from "react-icons/md";
-import upload from "../../../../Assets/upload.png";
 import {
   GreyBackgroundButton,
   GreyBorderButton,
   RedBackgroundButton,
 } from "../../../Global/GlobalButton";
 import { AwardCategories } from "../AwardCategories/AwardCategories";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
-import { toast } from "react-toastify";
-import { setEventId } from "../../../Redux/Users/action";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const CreateNewEvent = () => {
   const [selectedButton, setSelectedButton] = useState(1);
-  const [selectedTimezone, setSelectedTimezone] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone
-  );
-
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet);
-  // const location = useLocation();
-  // const { eventIdGet } = location.state || {};
   console.log("unknown", eventIdGet);
-  const dispatch = useDispatch();
-
-  const [formData, setFormData] = useState({
-    event_name: "",
-    closing_date: "",
-    closing_time: "",
-    email: "",
-    event_url: "",
-    time_zone: selectedTimezone,
-    is_endorsement: 0,
-    is_withdrawal: 0,
-    is_ediit_entry: 0,
-    limit_submission: 0,
-    submission_limit: "",
-    event_description: "",
-    industry_type: [],
-    additional_email: [],
-  });
-
-  const [files, setFiles] = useState({
-    event_logo: null,
-    event_banner: null,
-  });
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -78,6 +44,7 @@ export const CreateNewEvent = () => {
   });
 
   useEffect(() => {
+    
     const getApi = async () => {
       try {
         const response = await axios.get(
@@ -121,36 +88,7 @@ export const CreateNewEvent = () => {
     getApi();
   }, []);
 
-  const formatDate = (date) => {
-    const [day, month, year] = date.split("/"); // Split into day, month, year
-    return `${year}-${month}-${day}`; // Return in YYYY-MM-DD format
-  };
-
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: checked,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    const { name, files: fileList } = e.target;
-    setFiles({
-      ...files,
-      [name]: fileList[0],
-    });
-  };
 
   const buttons = [
     { id: 1, label: "Event details" },
@@ -238,25 +176,16 @@ export const CreateNewEvent = () => {
                           Industry type{" "}
                           <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
-                        <SelectBorder
-                          // name="industry_type"
-                          style={{ height: "45px" }}
-                          multiple
-                          value={eventData.industry_types}
-                          onChange={(e) =>
-                            setEventData({
-                              ...eventData,
-                              industry_types: [...e.target.selectedOptions].map(
-                                (o) => o.value
-                              ),
-                            })
+
+                        {/* <InputType placeholder="Industry Type" /> */}
+                        <InputType
+                          placeholder="Industry Type"
+                          value={
+                            eventData.industry_types
+                              .map((industry) => industry.industry_type_name)
+                              .join(", ") || ""
                           }
-                        >
-                          <option value="">Select Industry Type</option>
-                          <option value="Fashion">Fashion</option>
-                          <option value="Skin Care">Skin Care</option>
-                          <option value="Beauty">Beauty</option>
-                        </SelectBorder>
+                        />
                       </div>
                     </div>
 
@@ -285,14 +214,16 @@ export const CreateNewEvent = () => {
                             className="calender"
                           />
                         </div>
+
                         {/* <div className="clos_label">
-                            <InputLabel>
-                              Closing Time{" "}
-                              <span style={{ color: "#c32728" }}>*</span>
-                            </InputLabel>
-                           <div className="time">{eventData.closing_time}</div>
+                          <InputLabel>
+                            Closing Time{" "}
+                            <span style={{ color: "#c32728" }}>*</span>
+                          </InputLabel>
+                          <div className="time">{eventData.closing_time}</div>
                           
-                          </div> */}
+                          
+                        </div> */}
                       </div>
                       <div className="newevent_label">
                         <InputLabel>

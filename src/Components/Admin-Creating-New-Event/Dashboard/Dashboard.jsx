@@ -11,7 +11,6 @@ import {
 } from "../../Global/GlobalText";
 import { CreateButton, ViewMoreButton } from "../../Global/GlobalButton";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import retail from "../../../Assets/ret.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../Url/Url";

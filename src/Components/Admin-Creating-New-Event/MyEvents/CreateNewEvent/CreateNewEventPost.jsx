@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./CreateNewEvent.scss";
 import { TitleBar } from "../../../Global/TitleBar/TitleBar";
 import { SlArrowRight } from "react-icons/sl";
@@ -14,19 +14,16 @@ import TimezoneSelect from "react-timezone-select";
 import { MdInfo } from "react-icons/md";
 import upload from "../../../../Assets/upload.png";
 import {
-  GreyBackgroundButton,
   GreyBorderButton,
   RedBackgroundButton,
 } from "../../../Global/GlobalButton";
-import { AwardCategories } from "../AwardCategories/AwardCategories";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
+import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { toast } from "react-toastify";
 import { setEventId } from "../../../Redux/Users/action";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AwardCategoriesPost } from "../AwardCategories/AwardCategoriesPost";
-// import { MultiSelect } from "react-multi-select-component";
 
 export const CreateNewEventPost = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -53,21 +50,127 @@ export const CreateNewEventPost = () => {
     additional_email: [],
   });
 
-  const [files, setFiles] = useState({
-    event_logo: null,
-    event_banner: null,
-  });
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.event_name) newErrors.event_name = "Event name is required.";
+    if (!formData.closing_date)
+      newErrors.closing_date = "Closing date is required.";
+    if (!formData.closing_time)
+      newErrors.closing_time = "Closing time is required.";
+
+    if (!formData.email) newErrors.email = "Contact email is required.";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Email is invalid.";
+
+    if (!formData.event_url) newErrors.event_url = "Event URL is required.";
+
+    if (formData.additional_email.length === 0) {
+      newErrors.additional_email = "Additional email is required.";
+    }
+
+    if (!formData.time_zone) newErrors.time_zone = "Timezone is required.";
+
+    if (!formData.industry_type.length)
+      newErrors.industry_type = "Industry type is required.";
+    if (!formData.event_description)
+      newErrors.event_description = "Event description is required.";
+
+    // if (formData.limit_submission && !formData.submission_limit)
+    //   newErrors.submission_limit = "Submission limit is required.";
+
+    if (!files.event_logo) newErrors.event_logo = "Image is required.";
+    if (!files.event_banner) newErrors.event_banner = "Image is required.";
+
+    return newErrors;
+  };
+
+  // const [files, setFiles] = useState({
+  //   event_logo: null,
+  //   event_banner: null,
+  // });
 
   // const [formpostData, setFormPostData] = useState({
   //   industry_type: [], // To store selected industry types as an array
   // });
 
+  const [files, setFiles] = useState({
+    event_logo: null,
+    event_banner: null,
+  });
+
+  const [previews, setPreviews] = useState({
+    event_logo: null,
+    event_banner: null,
+  });
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!formData.event_description) {
+  //     alert("Event description cannot be empty");
+  //     return;
+  //   }
+  //   const form = new FormData();
+  //   form.append("event_name", formData.event_name);
+  //   form.append("closing_date", formData.closing_date);
+  //   form.append("closing_time", formData.closing_time);
+  //   form.append("email", formData.email);
+  //   form.append("event_url", formData.event_url);
+  //   form.append("time_zone", formData.time_zone);
+  //   form.append("is_endorsement", formData.is_endorsement ? 1 : 0);
+  //   form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
+  //   form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
+  //   form.append("limit_submission", formData.limit_submission ? 1 : 0);
+  //   form.append("submission_limit", formData.submission_limit);
+  //   form.append("event_description", formData.event_description);
+
+  //   // Append industry_type as individual items
+  //   formData.industry_type.forEach((type) =>
+  //     form.append("industry_type[]", type)
+  //   );
+  //   // Append additional_email as individual items
+  //   formData.additional_email.forEach((email) =>
+  //     form.append("additional_email[]", email)
+  //   );
+
+  //   if (files.event_logo) form.append("event_logo", files.event_logo);
+  //   if (files.event_banner) form.append("event_banner", files.event_banner);
+
+  //   try {
+  //     const response = await axios.post(`${EXCHNAGE_URL}/createEvent`, form, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+
+  //     if (response.status === 200) {
+  //       // console.log("checkid", response.data.data.id);
+  //       setSelectedButton(2);
+  //       const eventId = response.data.eventId;
+  //       console.log("tat", eventId);
+  //       dispatch(setEventId(eventId));
+  //       toast.success(response.data.message);
+
+  //       // const id = response.data.data.id;
+  //       // setEventId(id);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating event", error.response || error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.event_description) {
-      alert("Event description cannot be empty");
-      return;
+
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return; // Stop the form submission if there are errors
     }
+
     const form = new FormData();
     form.append("event_name", formData.event_name);
     form.append("closing_date", formData.closing_date);
@@ -79,14 +182,16 @@ export const CreateNewEventPost = () => {
     form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
     form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
     form.append("limit_submission", formData.limit_submission ? 1 : 0);
-    form.append("submission_limit", formData.submission_limit);
+    // form.append("submission_limit", formData.submission_limit );
+
+    const submissionLimit = formData.submission_limit ? formData.submission_limit : 0;
+    form.append("submission_limit", submissionLimit);
+  
     form.append("event_description", formData.event_description);
 
-    // Append industry_type as individual items
     formData.industry_type.forEach((type) =>
       form.append("industry_type[]", type)
     );
-    // Append additional_email as individual items
     formData.additional_email.forEach((email) =>
       form.append("additional_email[]", email)
     );
@@ -103,19 +208,33 @@ export const CreateNewEventPost = () => {
       });
 
       if (response.status === 200) {
-        // console.log("checkid", response.data.data.id);
         setSelectedButton(2);
         const eventId = response.data.eventId;
-        console.log("tat", eventId);
         dispatch(setEventId(eventId));
-        toast.success(response.data.message);
-
-        // const id = response.data.data.id;
-        // setEventId(id);
+        toast.success("Event Created Successfully", response.data.message);
       }
     } catch (error) {
       console.error("Error creating event", error.response || error);
+      toast.error("An error occurred while creating the event");
     }
+  };
+
+  const handleFileChange = (e) => {
+    const { name, files: fileList } = e.target;
+    const file = fileList[0];
+
+    if (file) {
+      const previewURL = URL.createObjectURL(file);
+      setPreviews((prevPreviews) => ({
+        ...prevPreviews,
+        [name]: previewURL,
+      }));
+    }
+
+    setFiles((prevFiles) => ({
+      ...prevFiles,
+      [name]: file,
+    }));
   };
 
   const navigate = useNavigate();
@@ -136,25 +255,11 @@ export const CreateNewEventPost = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files: fileList } = e.target;
-    setFiles({
-      ...files,
-      [name]: fileList[0],
-    });
-  };
-
   const buttons = [
     { id: 1, label: "Event details" },
     { id: 2, label: "Award Categories" },
     { id: 3, label: "Registration Form" },
     { id: 4, label: "Entry Form" },
-  ];
-
-  const options = [
-    { label: "Fashion", value: "Fashion" },
-    { label: "Skin Care", value: "Skin Care" },
-    { label: "Beauty", value: "Beauty" },
   ];
 
   const handleClick = (id) => {
@@ -224,6 +329,10 @@ export const CreateNewEventPost = () => {
                           onChange={handleChange}
                           placeholder="Enter Event Name"
                         />
+
+                        {errors.event_name && (
+                          <span className="error">{errors.event_name}</span>
+                        )}
                       </div>
                       <div className="newevent_label">
                         <InputLabel>
@@ -260,6 +369,10 @@ export const CreateNewEventPost = () => {
                           <option value="Skin Care">Skin Care</option>
                           <option value="Beauty">Beauty</option>
                         </SelectBorder>
+
+                        {errors.industry_type && (
+                          <span className="error">{errors.industry_type}</span>
+                        )}
                       </div>
                     </div>
 
@@ -278,6 +391,9 @@ export const CreateNewEventPost = () => {
                             onChange={handleChange}
                             className="calender"
                           />
+                          {errors.closing_date && (
+                            <span className="error">{errors.closing_date}</span>
+                          )}
                         </div>
                         <div className="clos_label">
                           <InputLabel>
@@ -296,30 +412,6 @@ export const CreateNewEventPost = () => {
                                   {i + 1}
                                 </option>
                               ))}
-                              {/* <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
-                          <option>11</option>
-                          <option>12</option>
-                          <option>13</option>
-                          <option>14</option>
-                          <option>15</option>
-                          <option>16</option>
-                          <option>17</option>
-                          <option>18</option>
-                          <option>19</option>
-                          <option>20</option>
-                          <option>21</option>
-                          <option>22</option>
-                          <option>23</option>
-                          <option>24</option> */}
                             </SelectBorder>
                             <EventHeading>Hr</EventHeading>
 
@@ -329,66 +421,6 @@ export const CreateNewEventPost = () => {
                               value={formData.closing_time_minutes}
                               onChange={handleChange}
                             >
-                              {/* <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                          <option>6</option>
-                          <option>7</option>
-                          <option>8</option>
-                          <option>9</option>
-                          <option>10</option>
-                          <option>11</option>
-                          <option>12</option>
-                          <option>13</option>
-                          <option>14</option>
-                          <option>15</option>
-                          <option>16</option>
-                          <option>17</option>
-                          <option>18</option>
-                          <option>19</option>
-                          <option>20</option>
-                          <option>21</option>
-                          <option>22</option>
-                          <option>23</option>
-                          <option>24</option>
-                          <option>25</option>
-                          <option>26</option>
-                          <option>27</option>
-                          <option>28</option>
-                          <option>29</option>
-                          <option>30</option>
-                          <option>31</option>
-                          <option>32</option>
-                          <option>33</option>
-                          <option>34</option>
-                          <option>35</option>
-                          <option>36</option>
-                          <option>37</option>
-                          <option>38</option>
-                          <option>39</option>
-                          <option>40</option>
-                          <option>41</option>
-                          <option>42</option>
-                          <option>43</option>
-                          <option>44</option>
-                          <option>45</option>
-                          <option>46</option>
-                          <option>47</option>
-                          <option>48</option>
-                          <option>49</option>
-                          <option>50</option>
-                          <option>51</option>
-                          <option>52</option>
-                          <option>53</option>
-                          <option>54</option>
-                          <option>55</option>
-                          <option>56</option>
-                          <option>57</option>
-                          <option>58</option>
-                          <option>59</option>
-                          <option>60</option> */}
                               {[...Array(60).keys()].map((i) => (
                                 <option key={i + 1} value={i + 1}>
                                   {i + 1}
@@ -398,6 +430,10 @@ export const CreateNewEventPost = () => {
 
                             <EventHeading>Min</EventHeading>
                           </div>
+
+                          {errors.closing_time && (
+                            <span className="error">{errors.closing_time}</span>
+                          )}
                         </div>
                       </div>
                       <div className="newevent_label">
@@ -411,6 +447,10 @@ export const CreateNewEventPost = () => {
                           onChange={handleChange}
                           placeholder="Enter Email Address"
                         />
+
+                        {errors.email && (
+                          <span className="error">{errors.email}</span>
+                        )}
                       </div>
                     </div>
 
@@ -434,16 +474,22 @@ export const CreateNewEventPost = () => {
                           onChange={handleChange}
                           placeholder="https://www.awardsuite.com/"
                         />
+                        {errors.event_url && (
+                          <span className="error">{errors.event_url}</span>
+                        )}
                       </div>
                       <div className="newevent_label">
                         <InputLabel>
                           Timezone <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
-
                         <TimezoneSelect
                           value={selectedTimezone}
                           onChange={setSelectedTimezone}
                         />
+                        {errors.time_zone && (
+                          <span className="error">{errors.time_zone}</span>
+                        )}{" "}
+                        {/* Display error if timezone is missing */}
                       </div>
                     </div>
 
@@ -476,6 +522,12 @@ export const CreateNewEventPost = () => {
                           }}
                           placeholder="Enter Email Address"
                         />
+
+                        {errors.additional_email && (
+                          <span className="error">
+                            {errors.additional_email}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -559,6 +611,12 @@ export const CreateNewEventPost = () => {
                             onChange={handleChange}
                             placeholder="Enter Submission Limit"
                           />
+
+                          {/* {errors.submission_limit && (
+                            <span className="error">
+                              {errors.submission_limit}
+                            </span>
+                          )} */}
                         </div>
                       )}
                     </div>
@@ -568,30 +626,52 @@ export const CreateNewEventPost = () => {
                         <InputLabel>Event Logo (2MB Max)</InputLabel>
 
                         <div className="myevent_img">
-                          <img src={upload} alt="upload_img" />
+                          {previews.event_logo ? (
+                            <img
+                              src={previews.event_logo}
+                              alt="Event Logo Preview"
+                              className="preview_img"
+                            />
+                          ) : (
+                            <img src={upload} alt="Default Logo" />
+                          )}
                           <input
                             type="file"
                             className="file_input"
                             name="event_logo"
+                            accept="image/*"
                             onChange={handleFileChange}
                           />
+
                           <Description>Browse File</Description>
                           <CheckboxLabel>
                             This option allows entrants to edit the submission
                             details.
                           </CheckboxLabel>
                         </div>
+                        {errors.event_logo && (
+                          <span className="error">{errors.event_logo}</span>
+                        )}
                       </div>
 
                       <div className="newevent_label">
                         <InputLabel>Event Banner (2MB Max)</InputLabel>
 
                         <div className="myevent_img">
-                          <img src={upload} alt="upload_img" />
+                          {previews.event_banner ? (
+                            <img
+                              src={previews.event_banner}
+                              alt="Event Banner Preview"
+                              className="preview_img"
+                            />
+                          ) : (
+                            <img src={upload} alt="Default Banner" />
+                          )}
                           <input
                             type="file"
                             className="file_input"
                             name="event_banner"
+                            accept="image/*"
                             onChange={handleFileChange}
                           />
                           <Description>Browse File</Description>
@@ -600,6 +680,9 @@ export const CreateNewEventPost = () => {
                             details.
                           </CheckboxLabel>
                         </div>
+                        {errors.event_banner && (
+                          <span className="error">{errors.event_banner}</span>
+                        )}
                       </div>
                     </div>
 
@@ -618,6 +701,11 @@ export const CreateNewEventPost = () => {
                           rows="5"
                           placeholder="Enter Event Description"
                         />
+                        {errors.event_description && (
+                          <span className="error">
+                            {errors.event_description}
+                          </span>
+                        )}
                       </div>
                     </div>
 

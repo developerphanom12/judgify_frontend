@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AwardCategories } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategories";
 import { CreateNewEventPost } from "./Components/Admin-Creating-New-Event/MyEvents/CreateNewEvent/CreateNewEventPost";
 import { AwardCategoriesPost } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategoriesPost";
+import { Test } from "./Components/Admin-Creating-New-Event/Test/Test";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -62,6 +63,7 @@ function App() {
               <Route path="/award-categories-post" element={<AwardCategoriesPost />} />
 
               <Route path="/stripe-setting" element={<StripeSetting />} />
+              <Route path="/test" element={<Test/>} />
               <Route
                 path="/event-live-preview"
                 element={<EventLivePreview />}

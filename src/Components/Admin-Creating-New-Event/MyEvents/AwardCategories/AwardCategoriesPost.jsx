@@ -19,7 +19,7 @@ import {
 import { IoSearchSharp } from "react-icons/io5";
 import { LuFilter } from "react-icons/lu";
 import { GlobalTable } from "../../../Global/GlobalTable/GlobalTable";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import axios from "axios";
@@ -39,13 +39,11 @@ export const AwardCategoriesPost = () => {
   const [awardTableData, setAwardTableData] = useState([]);
 
   const eventIds = useSelector((state) => state.users?.id || "");
-
   const initialEventId = String(eventIds);
-
   console.log("Stored eventId showww:posttttt", eventIds);
 
   const awardId = useSelector((state) => state.users.awardId || "");
-  // console.log("Award ID from Redux:", awardId);
+  console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
     //eventId: eventIdsString,
@@ -125,8 +123,6 @@ export const AwardCategoriesPost = () => {
       is_start_date: awardData.is_start_date === "1" ? "1" : "0",
       is_end_date: awardData.is_end_date === "1" ? "1" : "0",
       is_endorsement: awardData.is_endorsement === "1" ? "1" : "0",
-     
-   
     };
 
     try {
@@ -153,13 +149,13 @@ export const AwardCategoriesPost = () => {
             is_start_date: "0",
             is_end_date: "0",
             is_endorsement: "0",
-            start_date: "0",
-            end_date: "0",
+            start_date: "",
+            end_date: "",
           });
           setIsSaveAndAddNew(false); // Reset the flag
         } else {
           setAwardData({
-            eventId: "",
+            eventId: initialEventId,
             category_name: "",
             category_prefix: "",
             belongs_group: "",
@@ -216,7 +212,6 @@ export const AwardCategoriesPost = () => {
                   display: "flex",
                   gap: "10px",
                   cursor: "pointer",
-                  display: "flex",
                   justifyContent: "center",
                 }}
               >
@@ -408,9 +403,13 @@ export const AwardCategoriesPost = () => {
     XLSX.writeFile(wb, "award_data.xlsx");
   };
 
+  // useEffect(() => {
+  //   exportgetApi();
+  // }, []);
+
   useEffect(() => {
     exportgetApi();
-  }, []);
+  });
 
   const navigate = useNavigate();
 
@@ -431,8 +430,6 @@ export const AwardCategoriesPost = () => {
 
   return (
     <>
-      {/* {eventidprops ? (
-        <> */}
       {showTableDiv && (
         <div className="table_div">
           <div className="award_table_div">
@@ -503,9 +500,7 @@ export const AwardCategoriesPost = () => {
           </div>
         </div>
       )}
-      {/* </>
-      ) : (
-        <> */}
+
       {showAwardCateDiv && (
         <div className="award_cate_div">
           <CreateButton className="award_content" onClick={handleShow}>
@@ -525,8 +520,6 @@ export const AwardCategoriesPost = () => {
           </div>
         </div>
       )}
-      {/* </>
-      )} */}
 
       <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
@@ -691,6 +684,7 @@ export const AwardCategoriesPost = () => {
                       category_name: e.target.value,
                     })
                   }
+                  readOnly
                 />
                 {errors.category_name && (
                   <span className="error">{errors.category_name}</span>
