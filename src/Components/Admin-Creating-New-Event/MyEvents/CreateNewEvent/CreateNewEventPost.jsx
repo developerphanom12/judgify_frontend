@@ -24,12 +24,15 @@ import { toast } from "react-toastify";
 import { setEventId } from "../../../Redux/Users/action";
 import { useDispatch } from "react-redux";
 import { AwardCategoriesPost } from "../AwardCategories/AwardCategoriesPost";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
 
 export const CreateNewEventPost = () => {
   const [selectedButton, setSelectedButton] = useState(1);
   const [selectedTimezone, setSelectedTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
+  const [time, setTime] = useState("00:00");
 
   const dispatch = useDispatch();
 
@@ -70,10 +73,11 @@ export const CreateNewEventPost = () => {
       newErrors.additional_email = "Additional email is required.";
     }
 
-    if (!formData.time_zone) newErrors.time_zone = "Timezone is required.";
+    // if (!formData.time_zone) newErrors.time_zone = "Timezone is required.";
 
     if (!formData.industry_type.length)
       newErrors.industry_type = "Industry type is required.";
+
     if (!formData.event_description)
       newErrors.event_description = "Event description is required.";
 
@@ -105,62 +109,6 @@ export const CreateNewEventPost = () => {
     event_banner: null,
   });
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (!formData.event_description) {
-  //     alert("Event description cannot be empty");
-  //     return;
-  //   }
-  //   const form = new FormData();
-  //   form.append("event_name", formData.event_name);
-  //   form.append("closing_date", formData.closing_date);
-  //   form.append("closing_time", formData.closing_time);
-  //   form.append("email", formData.email);
-  //   form.append("event_url", formData.event_url);
-  //   form.append("time_zone", formData.time_zone);
-  //   form.append("is_endorsement", formData.is_endorsement ? 1 : 0);
-  //   form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
-  //   form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
-  //   form.append("limit_submission", formData.limit_submission ? 1 : 0);
-  //   form.append("submission_limit", formData.submission_limit);
-  //   form.append("event_description", formData.event_description);
-
-  //   // Append industry_type as individual items
-  //   formData.industry_type.forEach((type) =>
-  //     form.append("industry_type[]", type)
-  //   );
-  //   // Append additional_email as individual items
-  //   formData.additional_email.forEach((email) =>
-  //     form.append("additional_email[]", email)
-  //   );
-
-  //   if (files.event_logo) form.append("event_logo", files.event_logo);
-  //   if (files.event_banner) form.append("event_banner", files.event_banner);
-
-  //   try {
-  //     const response = await axios.post(`${EXCHNAGE_URL}/createEvent`, form, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       // console.log("checkid", response.data.data.id);
-  //       setSelectedButton(2);
-  //       const eventId = response.data.eventId;
-  //       console.log("tat", eventId);
-  //       dispatch(setEventId(eventId));
-  //       toast.success(response.data.message);
-
-  //       // const id = response.data.data.id;
-  //       // setEventId(id);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error creating event", error.response || error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -184,9 +132,11 @@ export const CreateNewEventPost = () => {
     form.append("limit_submission", formData.limit_submission ? 1 : 0);
     // form.append("submission_limit", formData.submission_limit );
 
-    const submissionLimit = formData.submission_limit ? formData.submission_limit : 0;
+    const submissionLimit = formData.submission_limit
+      ? formData.submission_limit
+      : 0;
     form.append("submission_limit", submissionLimit);
-  
+
     form.append("event_description", formData.event_description);
 
     formData.industry_type.forEach((type) =>
@@ -400,36 +350,18 @@ export const CreateNewEventPost = () => {
                             Closing Time{" "}
                             <span style={{ color: "#c32728" }}>*</span>
                           </InputLabel>
-                          <div className="clos_time">
-                            <SelectBorder
-                              className="time_select"
-                              name="closing_time"
-                              value={formData.closing_time}
-                              onChange={handleChange}
-                            >
-                              {[...Array(24).keys()].map((i) => (
-                                <option key={i + 1} value={i + 1}>
-                                  {i + 1}
-                                </option>
-                              ))}
-                            </SelectBorder>
-                            <EventHeading>Hr</EventHeading>
 
-                            <SelectBorder
-                              className="time_select"
-                              name="closing_time_minutes"
-                              value={formData.closing_time_minutes}
-                              onChange={handleChange}
-                            >
-                              {[...Array(60).keys()].map((i) => (
-                                <option key={i + 1} value={i + 1}>
-                                  {i + 1}
-                                </option>
-                              ))}
-                            </SelectBorder>
-
-                            <EventHeading>Min</EventHeading>
-                          </div>
+                          <TimePicker
+                            onChange={(value) => {
+                              setTime(value);
+                              setFormData({
+                                ...formData,
+                                closing_time: value,
+                              });
+                            }}
+                            value={time}
+                            disableClock={true}
+                          />
 
                           {errors.closing_time && (
                             <span className="error">{errors.closing_time}</span>
@@ -482,14 +414,18 @@ export const CreateNewEventPost = () => {
                         <InputLabel>
                           Timezone <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
-                        <TimezoneSelect
+
+                         <TimezoneSelect
                           value={selectedTimezone}
                           onChange={setSelectedTimezone}
-                        />
-                        {errors.time_zone && (
+                        /> 
+
+
+                        {/* {errors.time_zone && (
                           <span className="error">{errors.time_zone}</span>
-                        )}{" "}
-                        {/* Display error if timezone is missing */}
+                        )}{" "}  */}
+
+                  
                       </div>
                     </div>
 

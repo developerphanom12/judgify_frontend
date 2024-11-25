@@ -84,6 +84,7 @@ color:#FFFFFF;
 padding:10px 20px;
 cursor: pointer;
 border-radius: 30px;
+border: 1px solid transparent
 `;
 
 export const GreyfilterButton = styled.button`

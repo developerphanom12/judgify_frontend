@@ -30,6 +30,31 @@ import { FaEdit } from "react-icons/fa";
 import { setAwardId } from "../../../Redux/Users/action";
 import * as Yup from "yup";
 
+// const validationCategorySchema = Yup.object({
+//   category_name: Yup.string().required("Category Name is required"),
+//   category_prefix: Yup.string().required("Category Prefix is required"),
+//   belongs_group: Yup.string().required("Belongs to Group is required"),
+//   limit_submission: Yup.string().required("Limit Submission is required"),
+//   start_date: Yup.date().optional("Start Date is required"),
+//   end_date: Yup.date().optional("End Date is required"),
+// });
+
+const validationCategorySchema = Yup.object({
+  category_name: Yup.string().required("Category Name is required"),
+  category_prefix: Yup.string().required("Category Prefix is required"),
+  belongs_group: Yup.string().required("Belongs to Group is required"),
+  limit_submission: Yup.string().required("Limit Submission is required"),
+});
+
+const validationSchema = Yup.object({
+  category_name: Yup.string().required("Category Name is required"),
+  category_prefix: Yup.string().required("Category Prefix is required"),
+  belongs_group: Yup.string().required("Belongs to Group is required"),
+  limit_submission: Yup.string().required("Limit Submission is required"),
+  start_date: Yup.date().optional("Start Date is required"),
+  end_date: Yup.date().optional("End Date is required"),
+});
+
 export const AwardCategoriesPost = () => {
   const [show, setShow] = useState(false);
   const [showTableDiv, setShowTableDiv] = useState(false);
@@ -46,7 +71,6 @@ export const AwardCategoriesPost = () => {
   console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
-    //eventId: eventIdsString,
     eventId: initialEventId,
     category_name: "",
     category_prefix: "",
@@ -71,24 +95,16 @@ export const AwardCategoriesPost = () => {
     limit_submission: "",
     start_date: "",
     end_date: "",
-    is_endorsement: false,
-    is_start_date: false,
-    is_end_date: false,
+    is_endorsement: "",
+    is_start_date: "",
+    is_end_date: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [categoryerrors, setCategoryErrors] = useState({});
 
   const [localAwardId, setLocalAwardId] = useState(null);
   const dispatch = useDispatch();
-
-  const validationSchema = Yup.object({
-    category_name: Yup.string().required("Category Name is required"),
-    category_prefix: Yup.string().required("Category Prefix is required"),
-    belongs_group: Yup.string().required("Belongs to Group is required"),
-    limit_submission: Yup.string().required("Limit Submission is required"),
-    start_date: Yup.date().optional("Start Date is required"),
-    end_date: Yup.date().optional("End Date is required"),
-  });
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -125,7 +141,17 @@ export const AwardCategoriesPost = () => {
       is_endorsement: awardData.is_endorsement === "1" ? "1" : "0",
     };
 
+    if (awardData.is_start_date !== "1") {
+      delete dataToSend.start_date;
+    }
+
+    if (awardData.is_end_date !== "1") {
+      delete dataToSend.end_date;
+    }
+
     try {
+      await validationCategorySchema.validate(awardData, { abortEarly: false });
+
       const response = await axios.post(
         `${EXCHNAGE_URL}/awardCategory`,
         dataToSend,
@@ -137,7 +163,9 @@ export const AwardCategoriesPost = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Form submitted successfully");
+        toast.success("Category Submitted Successfully");
+        setCategoryErrors({}); // Reset validation errors
+
         if (isSaveAndAddNew) {
           // Clear form fields
           setAwardData({
@@ -169,11 +197,25 @@ export const AwardCategoriesPost = () => {
           handleSaveClose();
         }
       } else {
-        toast.error("Failed to submit form. Please try again later.");
+        toast.error("Failed to submit Category. Please try again later.");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      toast.error("Failed to submit form. Please try again later.");
+
+      if (error.inner) {
+        const categoryerrors = error.inner.reduce((acc, validationError) => {
+          acc[validationError.path] = validationError.message;
+          return acc;
+        }, {});
+        setCategoryErrors(categoryerrors);
+      } else {
+        if (error.response && error.response.data) {
+          toast.error(error.response.data.message || "Failed to submit form.");
+        } else {
+          toast.error("Failed to submit form. Please try again later.");
+        }
+        console.error("API Error:", error);
+      }
+      
     }
   };
 
@@ -313,9 +355,8 @@ export const AwardCategoriesPost = () => {
           is_endorsement: editaward.is_endorsement,
         },
         {
-          // Config options, including headers
           headers: {
-            "Content-Type": "application/json", // Changed to "application/json" for simple JSON data
+            "Content-Type": "application/json",
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
@@ -323,7 +364,7 @@ export const AwardCategoriesPost = () => {
 
       if (response.status === 200) {
         toast.success("Category saved successfully!");
-        handleCloseSecondModal(); // Close the modal after successful save
+        handleCloseSecondModal();
       }
     } catch (error) {
       if (error.name === "ValidationError") {
@@ -402,10 +443,6 @@ export const AwardCategoriesPost = () => {
     // Generate Excel file and trigger the download
     XLSX.writeFile(wb, "award_data.xlsx");
   };
-
-  // useEffect(() => {
-  //   exportgetApi();
-  // }, []);
 
   useEffect(() => {
     exportgetApi();
@@ -542,6 +579,10 @@ export const AwardCategoriesPost = () => {
                   onChange={handleData}
                   placeholder="Enter Category Name"
                 />
+
+                {categoryerrors.category_name && (
+                  <span className="error">{categoryerrors.category_name}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -554,6 +595,12 @@ export const AwardCategoriesPost = () => {
                   onChange={handleData}
                   placeholder="Enter Category Prefix"
                 />
+
+                {categoryerrors.category_prefix && (
+                  <span className="error">
+                    {categoryerrors.category_prefix}
+                  </span>
+                )}
               </div>
 
               <div className="award_row">
@@ -566,6 +613,9 @@ export const AwardCategoriesPost = () => {
                   onChange={handleData}
                   placeholder="Enter Group"
                 />
+                {categoryerrors.belongs_group && (
+                  <span className="error">{categoryerrors.belongs_group}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -579,6 +629,12 @@ export const AwardCategoriesPost = () => {
                   onChange={handleData}
                   placeholder="Enter Limit Number"
                 />
+
+                {categoryerrors.limit_submission && (
+                  <span className="error">
+                    {categoryerrors.limit_submission}
+                  </span>
+                )}
               </div>
 
               <div className="award_row">
@@ -760,7 +816,6 @@ export const AwardCategoriesPost = () => {
                         <CheckboxInput
                           type="checkbox"
                           checked={editaward.is_start_date}
-                          // onChange={() => setShowStartDate(!showStartDate)}
                           onChange={() =>
                             seteditaward({
                               ...editaward,
@@ -783,9 +838,9 @@ export const AwardCategoriesPost = () => {
                           }
                         />
                       )}
-                      {errors.start_date && (
+                      {/* {errors.start_date && (
                         <span className="error">{errors.start_date}</span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="award_label">
@@ -794,7 +849,6 @@ export const AwardCategoriesPost = () => {
                         <CheckboxInput
                           type="checkbox"
                           checked={editaward.is_end_date}
-                          // onChange={() => setShowEndDate(!showEndDate)}
                           onChange={() =>
                             seteditaward({
                               ...editaward,
@@ -817,9 +871,9 @@ export const AwardCategoriesPost = () => {
                           }
                         />
                       )}
-                      {errors.end_date && (
+                      {/* {errors.end_date && (
                         <span className="error">{errors.end_date}</span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>

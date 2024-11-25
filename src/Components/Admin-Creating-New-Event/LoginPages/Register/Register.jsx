@@ -77,7 +77,6 @@ export const Register = () => {
 
         // Dispatch email and password to Redux
         dispatch(setUserCredentials(portData.email, portData.password));
-
         navigate("/login");
       } else {
         toast.error(

@@ -22,6 +22,10 @@ import { AwardCategories } from "./Components/Admin-Creating-New-Event/MyEvents/
 import { CreateNewEventPost } from "./Components/Admin-Creating-New-Event/MyEvents/CreateNewEvent/CreateNewEventPost";
 import { AwardCategoriesPost } from "./Components/Admin-Creating-New-Event/MyEvents/AwardCategories/AwardCategoriesPost";
 import { Test } from "./Components/Admin-Creating-New-Event/Test/Test";
+import { UserSubmissionDetails } from "./Components/User-Flow-While-Registration/UserSubmissionDetails/UserSubmissionDetails";
+import { UserRegistrationProfile } from "./Components/User-Flow-While-Registration/UserRegistrationProfile/UserRegistrationProfile";
+import { UserDashboard } from "./Components/User-Flow-While-Registration/UserDashboard/UserDashboard";
+import { UserTitlebar } from "./Components/Global/User-Flow/UserTitleBar/UserTitleBar";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -42,6 +46,12 @@ function App() {
           <Route path="/otp" element={<Otp />} />
           <Route path="/register" element={<Register />} />
           <Route path="/new-password" element={<NewPassword />} />
+          <Route path="/user-submission-details" element={<UserSubmissionDetails/>} />
+          <Route path="/user-registration-profile" element={<UserRegistrationProfile/>} />
+          <Route path="/user-dashboard" element={<UserDashboard/>} />
+          <Route path="/user-titleBar" element={<UserTitlebar/>} />
+
+
 
           {/* Protected Routes */}
 

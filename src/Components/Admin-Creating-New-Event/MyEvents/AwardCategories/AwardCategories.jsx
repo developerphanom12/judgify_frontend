@@ -29,7 +29,23 @@ import { FaEdit } from "react-icons/fa";
 import { setAwardId } from "../../../Redux/Users/action";
 import * as Yup from "yup";
 
-export const AwardCategories = () => {
+const validationCategorySchema = Yup.object({
+  category_name: Yup.string().required("Category Name is required"),
+  category_prefix: Yup.string().required("Category Prefix is required"),
+  belongs_group: Yup.string().required("Belongs to Group is required"),
+  limit_submission: Yup.string().required("Limit Submission is required"),
+});
+
+const validationSchema = Yup.object({
+  category_name: Yup.string().required("Category Name is required"),
+  category_prefix: Yup.string().required("Category Prefix is required"),
+  belongs_group: Yup.string().required("Belongs to Group is required"),
+  limit_submission: Yup.string().required("Limit Submission is required"),
+  start_date: Yup.date().optional("Start Date is required"),
+  end_date: Yup.date().optional("End Date is required"),
+});
+
+export const AwardCategories = ({ setSelectedButton }) => {
   const [show, setShow] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
@@ -75,18 +91,10 @@ export const AwardCategories = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [categoryerrors, setCategoryErrors] = useState({});
 
   const [localAwardId, setLocalAwardId] = useState(null);
   const dispatch = useDispatch();
-
-  const validationSchema = Yup.object({
-    category_name: Yup.string().required("Category Name is required"),
-    category_prefix: Yup.string().required("Category Prefix is required"),
-    belongs_group: Yup.string().required("Belongs to Group is required"),
-    limit_submission: Yup.string().required("Limit Submission is required"),
-    start_date: Yup.date().optional("Start Date is required"),
-    end_date: Yup.date().optional("End Date is required"),
-  });
 
   const handleEndorsementCheckbox = (e) => handleData(e);
 
@@ -120,10 +128,20 @@ export const AwardCategories = () => {
       ...awardData,
       is_start_date: awardData.is_start_date === "1" ? "1" : "0",
       is_end_date: awardData.is_end_date === "1" ? "1" : "0",
-      is_endorsement: awardData.is_endorsement === "1" ? "1" : "0", // Ensure it has a value before submission
+      is_endorsement: awardData.is_endorsement === "1" ? "1" : "0",
     };
 
+    if (awardData.is_start_date !== "1") {
+      delete dataToSend.start_date;
+    }
+
+    if (awardData.is_end_date !== "1") {
+      delete dataToSend.end_date;
+    }
+
     try {
+      await validationCategorySchema.validate(awardData, { abortEarly: false });
+
       const response = await axios.post(
         `${EXCHNAGE_URL}/awardCategory`,
         dataToSend,
@@ -135,7 +153,8 @@ export const AwardCategories = () => {
       );
 
       if (response.status === 200) {
-        toast.success("Form submitted successfully");
+        toast.success("Category Submitted Successfully");
+        setCategoryErrors({}); // Reset validation errors
         if (isSaveAndAddNew) {
           // Clear form fields
           setAwardData({
@@ -167,11 +186,26 @@ export const AwardCategories = () => {
           handleSaveClose();
         }
       } else {
-        toast.error("Failed to submit form. Please try again later.");
+        toast.error("Failed to submit Category. Please try again later.");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      toast.error("Failed to submit form. Please try again later.");
+      // console.error("API Error:", error);
+      // toast.error("Failed to submit Category. Please try again later.");
+
+      if (error.inner) {
+        const categoryerrors = error.inner.reduce((acc, validationError) => {
+          acc[validationError.path] = validationError.message;
+          return acc;
+        }, {});
+        setCategoryErrors(categoryerrors);
+      } else {
+        if (error.response && error.response.data) {
+          toast.error(error.response.data.message || "Failed to submit form.");
+        } else {
+          toast.error("Failed to submit form. Please try again later.");
+        }
+        console.error("API Error:", error);
+      }
     }
   };
 
@@ -461,20 +495,19 @@ export const AwardCategories = () => {
         </div>
 
         <div className="awardtable_div">
-          <GlobalTable
-            data={awardTableData}
-            columns={columns}
-            onRowClick={setSelectedRow}
-          />
+          {awardTableData && awardTableData.length > 0 ? (
+            <GlobalTable
+              data={awardTableData}
+              columns={columns}
+              onRowClick={setSelectedRow}
+            />
+          ) : (
+            <p>No Data available</p>
+          )}
         </div>
 
         <div className="award_table_btn">
-          <GreyBorderButton
-          // onClick={() => {
-          //   setShowAwardCateDiv(true); // Show the award_cate_div
-          //   setShowTableDiv(false); // Hide the table div
-          // }}
-          >
+          <GreyBorderButton onClick={() => setSelectedButton(1)}>
             Previous
           </GreyBorderButton>
           <RedBackgroundButton
@@ -498,7 +531,6 @@ export const AwardCategories = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="award_form">
-
               <div className="award_row">
                 <InputLabel>
                   Category Name <span style={{ color: "#c32728" }}>*</span>
@@ -509,6 +541,10 @@ export const AwardCategories = () => {
                   onChange={handleData}
                   placeholder="Enter Category Name"
                 />
+
+                {categoryerrors.category_name && (
+                  <span className="error">{categoryerrors.category_name}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -521,6 +557,11 @@ export const AwardCategories = () => {
                   onChange={handleData}
                   placeholder="Enter Category Prefix"
                 />
+                {categoryerrors.category_prefix && (
+                  <span className="error">
+                    {categoryerrors.category_prefix}
+                  </span>
+                )}
               </div>
 
               <div className="award_row">
@@ -533,6 +574,10 @@ export const AwardCategories = () => {
                   onChange={handleData}
                   placeholder="Enter Group"
                 />
+
+                {categoryerrors.belongs_group && (
+                  <span className="error">{categoryerrors.belongs_group}</span>
+                )}
               </div>
 
               <div className="award_row">
@@ -546,6 +591,12 @@ export const AwardCategories = () => {
                   onChange={handleData}
                   placeholder="Enter Limit Number"
                 />
+
+                {categoryerrors.limit_submission && (
+                  <span className="error">
+                    {categoryerrors.limit_submission}
+                  </span>
+                )}
               </div>
 
               <div className="award_row">
@@ -620,7 +671,6 @@ export const AwardCategories = () => {
                   Save & Close
                 </button>
               </div>
-
             </form>
           </div>
         </Modal.Body>
@@ -651,7 +701,6 @@ export const AwardCategories = () => {
                       ...editaward,
                       category_name: e.target.value,
                     })
-                  
                   }
                   readOnly
                 />

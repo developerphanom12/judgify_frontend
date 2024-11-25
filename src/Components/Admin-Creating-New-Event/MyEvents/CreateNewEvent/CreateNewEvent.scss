@@ -64,7 +64,9 @@
             flex-direction: column;
             gap: 5px;
             width: 50%;
-           
+
+       
+
             .timezone_div {
               border-radius: 12px;
               border: 1px solid #66666659;
@@ -132,15 +134,21 @@
               display: flex;
               flex-direction: column;
               gap: 5px;
-              .clos_time {
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                .time_select {
-                  width: 38%;
-                  height: 50px;
-                }
-              }
+
+              .react-time-picker__wrapper {
+                border-radius: 12px!important;
+                border: 1px solid rgba(102, 102, 102, 0.3490196078)!important;
+                padding: 10px!important;
+            }
+              // .clos_time {
+              //   display: flex;
+              //   gap: 10px;
+              //   align-items: center;
+              //   .time_select {
+              //     width: 38%;
+              //     height: 50px;
+              //   }
+              // }
               .calender {
                 border-radius: 12px;
                 border: 1px solid #66666659;
@@ -179,8 +187,7 @@
     .error {
       color: #c32728;
       text-align: left;
-  }
-  
+    }
   }
 }
 

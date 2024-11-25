@@ -63,7 +63,7 @@ export const CreateNewEvent = () => {
             name: response.data.data.name || "", // assuming name exists in the API response
             event_name: response.data.data.event_name || "",
             closing_date: response.data.data.closing_date || "",
-            closing_time: response.data.data.cling_time || "",
+            closing_time: response.data.data.closing_time || "",
             email: response.data.data.email || "",
             event_url: response.data.data.event_url || "",
             time_zone: response.data.data.time_zone || "",
@@ -177,7 +177,7 @@ export const CreateNewEvent = () => {
                           <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
 
-                        {/* <InputType placeholder="Industry Type" /> */}
+                        
                         <InputType
                           placeholder="Industry Type"
                           value={
@@ -215,15 +215,29 @@ export const CreateNewEvent = () => {
                           />
                         </div>
 
-                        {/* <div className="clos_label">
+                        <div className="clos_label">
                           <InputLabel>
                             Closing Time{" "}
                             <span style={{ color: "#c32728" }}>*</span>
                           </InputLabel>
-                          <div className="time">{eventData.closing_time}</div>
+                          {/* <div className="time">{eventData.closing_time}</div>
+                           */}
+
+                           <InputType
+                          name="closing_time"
+                          placeholder="Closing Time"
+                          value={eventData.closing_time}
+                          onChange={(e) =>
+                            setEventData({
+                              ...eventData,
+                              closing_time: e.target.value,
+                            })
+                          }
+                        />
                           
-                          
-                        </div> */}
+                        </div> 
+
+                        
                       </div>
                       <div className="newevent_label">
                         <InputLabel>
@@ -536,7 +550,7 @@ export const CreateNewEvent = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategories />}
+            {selectedButton === 2 && <AwardCategories  setSelectedButton={setSelectedButton}/>}
 
             {selectedButton === 3 && <h1>3</h1>}
             {selectedButton === 4 && <h1>4</h1>}

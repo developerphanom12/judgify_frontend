@@ -1,0 +1,45 @@
+.user_dashboard_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .user_dashboard_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    height:100vh;
+    .user_price_div{
+        display: flex;
+        gap:30px;
+        margin-top:20px;
+        .user_dashboard_sub{
+            border-radius: 20px;
+            padding:30px;
+            flex:1;
+            height:300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:15px;
+            flex-direction: column;
+            svg{
+                height:60px;
+                width: 100px;
+                color:#C32728;
+            }
+        }
+        .sub_details{
+            background-color: #FFE2E5;
+        }
+        .pending_pay{
+            background-color: #FFF4DE;
+
+        }
+        .my_profile{
+            background-color: #F6F6FB;
+
+        }
+    }
+
+  }
+}
