@@ -5,7 +5,6 @@ import {
   CheckboxLabel,
   InputLabel,
   InputType,
-  SelectBorder,
 } from "../../Global/GlobalFormElement";
 import {
   GreyBorderButton,

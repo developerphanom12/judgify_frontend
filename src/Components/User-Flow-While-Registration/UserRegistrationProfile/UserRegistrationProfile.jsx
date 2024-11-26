@@ -4,10 +4,12 @@ import {  RedMainHeading } from "../../Global/GlobalText";
 import { InputLabel, InputType, SelectBorder } from "../../Global/GlobalFormElement";
 import {  GreyBorderButton, RedBackgroundButton } from "../../Global/GlobalButton";
 import { UserTopBanner } from "../../Global/User-Flow/UserTopBanner/UserTopBanner";
+import { UserBottomBar } from "../../Global/User-Flow/UserBottomBar/UserBottomBar";
 
 export const UserRegistrationProfile = () => {
   return (
     <>
+
       <UserTopBanner/>
 
       <div className="registration_form_main">
@@ -100,6 +102,8 @@ export const UserRegistrationProfile = () => {
 
         </form>
       </div>
+
+      <UserBottomBar/>
 
     </>
   );

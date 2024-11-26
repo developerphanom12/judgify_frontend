@@ -122,4 +122,6 @@ text-align: left;
 color: #FAFAFA;
 padding:10px 20px;
 cursor: pointer;
+border-radius: 50px;
+border:1px solid transparent;
 `

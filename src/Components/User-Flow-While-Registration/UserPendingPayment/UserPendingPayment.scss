@@ -1,0 +1,98 @@
+.user_pending_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    .user_pending_bg {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      gap:40px;
+      flex-direction: column;
+      .payment_heading{
+        display: flex;
+        justify-content: flex-start;
+      }
+      .user_pending_categories{
+        display: flex;
+        gap:10px;
+        flex-direction: column;
+      }
+      .user_pending_table{
+        display: flex;
+        flex-direction: column;
+        gap:40px;
+        .user_pending_button{
+            display: flex;
+            gap:10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border-radius:8px;
+            border:unset;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            th, td {
+                text-align: left;
+                padding: 12px;
+              }
+          }
+          
+      }
+      .user_main_card_div{
+        display: flex;
+        gap:20px;
+        .user_card_check{
+            display: flex;
+            flex-direction: column;
+            gap:10px;
+            flex:1;
+            .user_card_div{
+                border:1px solid #777777;
+                border-radius:8px;
+                padding:20px;
+             
+                display:flex;
+                flex-direction:column;
+                align-items:flex-start;
+                gap: 20px;
+                .user_pending_amount{
+                    display: flex;
+                    gap:10px;
+                    flex-direction: column;
+                    width: 100%;
+                    .user_amount_sub{
+                        display: flex;
+                        justify-content: space-between;
+    
+                    }
+                    .user_pending_line{
+                        margin:0
+                    }
+                }
+            }
+            .user_pending_checkbox{
+                display: flex;
+                gap:10px;
+            }
+        }
+
+        .user_card_form{
+            flex:1;
+            display: flex;
+            flex-direction: column;
+            gap:20px;
+            .user_card_form_label{
+                display: flex;
+                gap:10px;
+                flex-direction: column;
+            }
+            .user_card_form_btn{
+                display: flex;
+                justify-content: flex-start;
+            }
+        }
+      }
+      }
+    }

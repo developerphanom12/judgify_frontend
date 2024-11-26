@@ -12,7 +12,6 @@ import {
   RedMainHeading,
   StatusContent,
 } from "../../../Global/GlobalText";
-import retail from "../../../../Assets/ret.png";
 import { GrDocumentText } from "react-icons/gr";
 import {
   HiOutlineDocumentArrowUp,

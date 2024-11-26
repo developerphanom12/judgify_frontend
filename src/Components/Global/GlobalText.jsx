@@ -25,6 +25,16 @@ text-decoration: underline;
 cursor: pointer;
 `;
 
+export const PaymentPendingHeading = styled.span`
+font-family: Poppins;
+font-size: 16px;
+font-weight: 500;
+line-height: 24px;
+text-align: left;
+margin:0;
+color:#C32728;
+`;
+
 export const StripeHeading = styled.span`
 font-family: Poppins;
 font-size: 16px;
@@ -61,6 +71,7 @@ font-size: 18px;
 font-weight: 400;
 line-height: 27px;
 margin:0;
+color:#333333;
 `;
 
 export const RegisterGreenHeading = styled.span`
@@ -209,6 +220,18 @@ text-align: left;
 color:#FFFFFF;
 margin:0;
 `;
+
+ export const BootomBarHeading = styled.p`
+font-family: Poppins;
+font-size: 20px;
+font-weight: 400;
+line-height: 22px;
+text-align: left;
+color:#FFFFFF;
+margin:0;
+`; 
+
+
 export const PreviewHeading = styled.h5`
 font-family: Poppins;
 font-size: 26px;
@@ -230,4 +253,5 @@ font-weight: 600;
 line-height: 32px;
 text-align: left;
 color: #00AC4F;
+margin:0;
 `;

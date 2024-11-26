@@ -26,8 +26,7 @@ export const UserDashboard = () => {
               <RedBackgroundButton>Pay Now</RedBackgroundButton>
             </div>
             <div className="user_dashboard_sub my_profile">
-              <FaUserFriends />
-
+              <FaUserFriends/>
               <RedMainHeading>My Profile</RedMainHeading>
             </div>
           </div>

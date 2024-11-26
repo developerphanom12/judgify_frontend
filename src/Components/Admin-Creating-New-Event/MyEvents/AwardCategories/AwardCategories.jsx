@@ -41,8 +41,8 @@ const validationSchema = Yup.object({
   category_prefix: Yup.string().required("Category Prefix is required"),
   belongs_group: Yup.string().required("Belongs to Group is required"),
   limit_submission: Yup.string().required("Limit Submission is required"),
-  start_date: Yup.date().optional("Start Date is required"),
-  end_date: Yup.date().optional("End Date is required"),
+  // start_date: Yup.date().optional("Start Date is required"),
+  // end_date: Yup.date().optional("End Date is required"),
 });
 
 export const AwardCategories = ({ setSelectedButton }) => {
@@ -54,8 +54,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet || "");
   const initialEventId = String(eventIdGet);
   console.log("Stored eventId showww:", initialEventId);
-
-  // console.log("Stored eventId showww:", eventIdGet);
   const awardId = useSelector((state) => state.users.awardId || "");
   console.log("Award ID from Redux:", awardId);
 
@@ -85,9 +83,9 @@ export const AwardCategories = ({ setSelectedButton }) => {
     limit_submission: "",
     start_date: "",
     end_date: "",
-    is_endorsement: false,
-    is_start_date: false,
-    is_end_date: false,
+    is_endorsement: 0,
+    is_start_date: 0,
+    is_end_date: 0,
   });
 
   const [errors, setErrors] = useState({});
@@ -155,6 +153,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
       if (response.status === 200) {
         toast.success("Category Submitted Successfully");
         setCategoryErrors({}); // Reset validation errors
+        getApi();
         if (isSaveAndAddNew) {
           // Clear form fields
           setAwardData({
@@ -264,7 +263,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
   const deleteAward = async (awardId) => {
     console.log("Award ID to delete:", awardId);
-
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(`${EXCHNAGE_URL}/awards/${awardId}`, {
@@ -285,7 +283,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
         error.response?.data?.message || error.message
       );
       toast.error("Error occurred while deleting");
-      // Handle error, like showing an error message to the user
     }
   };
 
@@ -314,43 +311,114 @@ export const AwardCategories = ({ setSelectedButton }) => {
     }
   }, [showSecondModal, localAwardId]);
 
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+
+  //   const formattedStartDate = editaward.is_start_date
+  //     ? new Date(editaward.start_date).toISOString().split("T")[0]
+  //     : null;
+  //   const formattedEndDate = editaward.is_end_date
+  //     ? new Date(editaward.end_date).toISOString().split("T")[0]
+  //     : null;
+
+  //   try {
+  //     await validationSchema.validate(editaward, { abortEarly: false });
+
+  //     const response = await axios.post(
+  //       `${EXCHNAGE_URL}/updateAwardCategory`,
+  //       {
+  //         awardId: localAwardId,
+  //         category_name: editaward.category_name,
+  //         category_prefix: editaward.category_prefix,
+  //         belongs_group: editaward.belongs_group,
+  //         // limit_submission: editaward.limit_submission,
+  //         limit_submission: editaward.limit_submission.toString(),
+  //         is_start_date: editaward.is_start_date ? 1 : 0,
+  //         start_date: formattedStartDate.toString(),
+
+  //         is_end_date: editaward.is_end_date ? 1 : 0,
+  //         end_date: formattedEndDate.toString(),
+
+  //         // is_endorsement: editaward.is_endorsement,
+  //         is_endorsement: editaward.is_endorsement ? 1 : 0, // Convert to 0 or 1
+  //       },
+  //       {
+  //         // Config options, including headers
+  //         headers: {
+  //           "Content-Type": "application/json", // Changed to "application/json" for simple JSON data
+  //           authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success("Category saved successfully!");
+  //       handleCloseSecondModal();
+  //       getApi();
+  //     }
+  //   } catch (error) {
+  //     if (error.name === "ValidationError") {
+  //       const errorMessages = {};
+  //       error.inner.forEach((err) => {
+  //         errorMessages[err.path] = err.message;
+  //       });
+  //       setErrors(errorMessages);
+  //     } else {
+  //       console.error("Error updating profile:", error.message);
+  //       toast.error("Error updating profile");
+  //     }
+  //   }
+  // };
+
   const handleSave = async (e) => {
     e.preventDefault();
+  
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
       : null;
     const formattedEndDate = editaward.is_end_date
       ? new Date(editaward.end_date).toISOString().split("T")[0]
       : null;
+  
     try {
       await validationSchema.validate(editaward, { abortEarly: false });
-
-      const response = await axios.post(
-        `${EXCHNAGE_URL}/updateAwardCategory`,
-        {
-          awardId: localAwardId,
-          category_name: editaward.category_name,
-          category_prefix: editaward.category_prefix,
-          belongs_group: editaward.belongs_group,
-          limit_submission: editaward.limit_submission,
-          is_start_date: editaward.is_start_date,
-          start_date: formattedStartDate,
-          is_end_date: editaward.is_end_date,
-          end_date: formattedEndDate,
-          is_endorsement: editaward.is_endorsement,
+  
+      // Construct the payload dynamically
+      const payload = {
+        awardId: localAwardId,
+        category_name: editaward.category_name,
+        category_prefix: editaward.category_prefix,
+        belongs_group: editaward.belongs_group,
+        limit_submission: editaward.limit_submission.toString(),
+        is_start_date: editaward.is_start_date ? 1 : 0,
+        is_end_date: editaward.is_end_date ? 1 : 0,
+        is_endorsement: editaward.is_endorsement ? 1 : 0,
+      };
+  
+      // Add or remove dates based on conditions
+      if (editaward.is_start_date) {
+        payload.start_date = formattedStartDate.toString();
+      } else {
+        delete payload.start_date; // Remove start_date if is_start_date is 0
+      }
+  
+      if (editaward.is_end_date) {
+        payload.end_date = formattedEndDate.toString();
+      } else {
+        delete payload.end_date; // Remove end_date if is_end_date is 0
+      }
+  
+      const response = await axios.post(`${EXCHNAGE_URL}/updateAwardCategory`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        {
-          // Config options, including headers
-          headers: {
-            "Content-Type": "application/json", // Changed to "application/json" for simple JSON data
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
+      });
+  
       if (response.status === 200) {
         toast.success("Category saved successfully!");
-        handleCloseSecondModal(); // Close the modal after successful save
+        handleCloseSecondModal();
+        getApi();
       }
     } catch (error) {
       if (error.name === "ValidationError") {
@@ -365,14 +433,14 @@ export const AwardCategories = ({ setSelectedButton }) => {
       }
     }
   };
-
+  
   const handleCloseSecondModal = () => {
     setShowSecondModal(false);
     setAwardId(null); // Reset awardId when closing modal
   };
 
   const handleShowSecondModal = (id) => {
-    setLocalAwardId(id); // Set awardId explicitly before opening the modal
+    setLocalAwardId(id);
     setShowSecondModal(true);
   };
 
@@ -406,15 +474,11 @@ export const AwardCategories = ({ setSelectedButton }) => {
       );
 
       if (response.status === 200) {
-        // Assuming response.data.data contains the table data to be exported
         const tableData = response.data.data;
-
-        // Convert the data to Excel
         exportToExcel(tableData);
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
-      // Optionally handle the error, e.g., show an alert or redirect to login
     }
   };
 
@@ -429,10 +493,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
     // Generate Excel file and trigger the download
     XLSX.writeFile(wb, "award_data.xlsx");
   };
-
-  // useEffect(() => {
-  //   exportgetApi();
-  // }, []);
 
   useEffect(() => {
     exportgetApi();
@@ -462,7 +522,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
               <IoSearchSharp />
             </div>
             <div className="award_table_icon_content">
-              {/* <input type="text" placeholder="Search here..." /> */}
               <input
                 type="text"
                 placeholder="Search here..."
@@ -486,8 +545,8 @@ export const AwardCategories = ({ setSelectedButton }) => {
               <option value="newest">Sort by : Newest</option>
               <option value="oldest">Sort by : Oldest</option>
             </SelectBorder>
+
             <GreyfilterButton className="award_filter_icon">
-              {" "}
               <LuFilter />
               Filter
             </GreyfilterButton>
@@ -536,6 +595,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   Category Name <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
                 <InputType
+              
                   name="category_name"
                   value={awardData.category_name}
                   onChange={handleData}
@@ -586,6 +646,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
                 <InputType
+                  type="number"
                   name="limit_submission"
                   value={awardData.limit_submission}
                   onChange={handleData}
@@ -755,7 +816,8 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
 
-                <InputType
+                {/* <InputType
+                  type="number"
                   name="limit_submission"
                   value={editaward.limit_submission}
                   onChange={(e) =>
@@ -764,7 +826,20 @@ export const AwardCategories = ({ setSelectedButton }) => {
                       limit_submission: e.target.value,
                     })
                   }
+                /> */}
+
+                <InputType
+                  type="number"
+                  name="limit_submission"
+                  value={editaward.limit_submission}
+                  onChange={(e) =>
+                    seteditaward({
+                      ...editaward,
+                      limit_submission: e.target.value.toString(), // Ensure the value is stored as a string
+                    })
+                  }
                 />
+
                 {errors.limit_submission && (
                   <span className="error">{errors.limit_submission}</span>
                 )}
@@ -796,14 +871,13 @@ export const AwardCategories = ({ setSelectedButton }) => {
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
-                              start_date: e.target.value,
+                              // start_date: e.target.value.toString(),
+                              start_date: e.target.value.toString(),
                             })
                           }
                         />
                       )}
-                      {errors.start_date && (
-                        <span className="error">{errors.start_date}</span>
-                      )}
+                    
                     </div>
                   </div>
                   <div className="award_label">
@@ -830,14 +904,13 @@ export const AwardCategories = ({ setSelectedButton }) => {
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
-                              end_date: e.target.value,
+                              end_date: e.target.value.toString(),
+                             
                             })
                           }
                         />
                       )}
-                      {errors.end_date && (
-                        <span className="error">{errors.end_date}</span>
-                      )}
+                    
                     </div>
                   </div>
                 </div>

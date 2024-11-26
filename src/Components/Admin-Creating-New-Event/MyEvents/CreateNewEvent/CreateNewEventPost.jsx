@@ -542,6 +542,7 @@ export const CreateNewEventPost = () => {
                         <div className="newevent_label">
                           <InputLabel>Submission Limit</InputLabel>
                           <InputType
+                           type="number"
                             name="submission_limit"
                             value={formData.submission_limit}
                             onChange={handleChange}

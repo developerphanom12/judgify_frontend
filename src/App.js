@@ -26,6 +26,8 @@ import { UserSubmissionDetails } from "./Components/User-Flow-While-Registration
 import { UserRegistrationProfile } from "./Components/User-Flow-While-Registration/UserRegistrationProfile/UserRegistrationProfile";
 import { UserDashboard } from "./Components/User-Flow-While-Registration/UserDashboard/UserDashboard";
 import { UserTitlebar } from "./Components/Global/User-Flow/UserTitleBar/UserTitleBar";
+import { UserPendingPayment } from "./Components/User-Flow-While-Registration/UserPendingPayment/UserPendingPayment";
+import { UserBottomBar } from "./Components/Global/User-Flow/UserBottomBar/UserBottomBar";
 
 function App() {
   const userCheck = useSelector((state) => state?.users?.userCheck);
@@ -46,15 +48,14 @@ function App() {
           <Route path="/otp" element={<Otp />} />
           <Route path="/register" element={<Register />} />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route path="/user-submission-details" element={<UserSubmissionDetails/>} />
+          <Route path="/user-submission-details" element={<UserSubmissionDetails/>}/>
           <Route path="/user-registration-profile" element={<UserRegistrationProfile/>} />
           <Route path="/user-dashboard" element={<UserDashboard/>} />
           <Route path="/user-titleBar" element={<UserTitlebar/>} />
-
-
+          <Route path="/user-bottom-bar" element={<UserBottomBar/>}/>
+          <Route path="/user-pending-payment" element={<UserPendingPayment/>} />
 
           {/* Protected Routes */}
-
           {isAuthenticated ? (
             <>
               <Route path="/" element={<Dashboard />} />

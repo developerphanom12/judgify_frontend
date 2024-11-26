@@ -9,13 +9,16 @@ export const UserTopBanner = () => {
     <>
       <div className="user_topbanner_main">
         <div className="user_topbanner_top">
-          <img src={previewlogo} alt="event_preview" />
+          <img src={previewlogo} alt="event_preview"/>
+
           <PrevieWhiteHeading>
             RetailME Awards KSA 2023 - Celebrating Retail Excellence
           </PrevieWhiteHeading>
-          <UserDetails/>
+
+          <UserDetails  userDetailsColor="#FFFFFF"/>
         </div>
         <div className="user_topbanner_bg"></div>
+
         <div className="user_topbanner_submit_div">
           <div className="user_topbanner_star_div">
             <div className="user_topbanner_preview_sub">

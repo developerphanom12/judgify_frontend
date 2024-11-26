@@ -51,8 +51,6 @@ const validationSchema = Yup.object({
   category_prefix: Yup.string().required("Category Prefix is required"),
   belongs_group: Yup.string().required("Belongs to Group is required"),
   limit_submission: Yup.string().required("Limit Submission is required"),
-  start_date: Yup.date().optional("Start Date is required"),
-  end_date: Yup.date().optional("End Date is required"),
 });
 
 export const AwardCategoriesPost = () => {
@@ -95,9 +93,9 @@ export const AwardCategoriesPost = () => {
     limit_submission: "",
     start_date: "",
     end_date: "",
-    is_endorsement: "",
-    is_start_date: "",
-    is_end_date: "",
+    is_endorsement: 0,
+    is_start_date: 0,
+    is_end_date: 0,
   });
 
   const [errors, setErrors] = useState({});
@@ -165,6 +163,7 @@ export const AwardCategoriesPost = () => {
       if (response.status === 200) {
         toast.success("Category Submitted Successfully");
         setCategoryErrors({}); // Reset validation errors
+        getApi();
 
         if (isSaveAndAddNew) {
           // Clear form fields
@@ -200,7 +199,6 @@ export const AwardCategoriesPost = () => {
         toast.error("Failed to submit Category. Please try again later.");
       }
     } catch (error) {
-
       if (error.inner) {
         const categoryerrors = error.inner.reduce((acc, validationError) => {
           acc[validationError.path] = validationError.message;
@@ -215,7 +213,6 @@ export const AwardCategoriesPost = () => {
         }
         console.error("API Error:", error);
       }
-      
     }
   };
 
@@ -300,7 +297,6 @@ export const AwardCategoriesPost = () => {
         error.response?.data?.message || error.message
       );
       toast.error("Error occurred while deleting");
-      // Handle error, like showing an error message to the user
     }
   };
 
@@ -329,42 +325,109 @@ export const AwardCategoriesPost = () => {
     }
   }, [showSecondModal, localAwardId]);
 
+  // const handleSave = async (e) => {
+  //   e.preventDefault();
+  //   const formattedStartDate = editaward.is_start_date
+  //     ? new Date(editaward.start_date).toISOString().split("T")[0]
+  //     : null;
+  //   const formattedEndDate = editaward.is_end_date
+  //     ? new Date(editaward.end_date).toISOString().split("T")[0]
+  //     : null;
+  //   try {
+  //     await validationSchema.validate(editaward, { abortEarly: false });
+
+  //     const response = await axios.post(
+  //       `${EXCHNAGE_URL}/updateAwardCategory`,
+  //       {
+  //         awardId: localAwardId,
+  //         category_name: editaward.category_name,
+  //         category_prefix: editaward.category_prefix,
+  //         belongs_group: editaward.belongs_group,
+  //         // limit_submission: editaward.limit_submission,
+  //         limit_submission: editaward.limit_submission.toString(),
+  //         is_start_date: editaward.is_start_date ? 1 : 0,
+  //         start_date: formattedStartDate.toString(),
+  //         is_end_date: editaward.is_end_date ? 1 : 0,
+  //         end_date: formattedEndDate.toString(),
+  //         is_endorsement: editaward.is_endorsement ? 1 : 0,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       toast.success("Category saved successfully!");
+  //       handleCloseSecondModal();
+  //       getApi();
+  //     }
+  //   } catch (error) {
+  //     if (error.name === "ValidationError") {
+  //       const errorMessages = {};
+  //       error.inner.forEach((err) => {
+  //         errorMessages[err.path] = err.message;
+  //       });
+  //       setErrors(errorMessages);
+  //     } else {
+  //       console.error("Error updating profile:", error.message);
+  //       toast.error("Error updating profile");
+  //     }
+  //   }
+  // };
+
+
   const handleSave = async (e) => {
     e.preventDefault();
+  
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
       : null;
     const formattedEndDate = editaward.is_end_date
       ? new Date(editaward.end_date).toISOString().split("T")[0]
       : null;
+  
     try {
       await validationSchema.validate(editaward, { abortEarly: false });
-
-      const response = await axios.post(
-        `${EXCHNAGE_URL}/updateAwardCategory`,
-        {
-          awardId: localAwardId,
-          category_name: editaward.category_name,
-          category_prefix: editaward.category_prefix,
-          belongs_group: editaward.belongs_group,
-          limit_submission: editaward.limit_submission,
-          is_start_date: editaward.is_start_date,
-          start_date: formattedStartDate,
-          is_end_date: editaward.is_end_date,
-          end_date: formattedEndDate,
-          is_endorsement: editaward.is_endorsement,
+  
+      // Construct the payload dynamically
+      const payload = {
+        awardId: localAwardId,
+        category_name: editaward.category_name,
+        category_prefix: editaward.category_prefix,
+        belongs_group: editaward.belongs_group,
+        limit_submission: editaward.limit_submission.toString(),
+        is_start_date: editaward.is_start_date ? 1 : 0,
+        is_end_date: editaward.is_end_date ? 1 : 0,
+        is_endorsement: editaward.is_endorsement ? 1 : 0,
+      };
+  
+      // Add or remove dates based on conditions
+      if (editaward.is_start_date) {
+        payload.start_date = formattedStartDate.toString();
+      } else {
+        delete payload.start_date; // Remove start_date if is_start_date is 0
+      }
+  
+      if (editaward.is_end_date) {
+        payload.end_date = formattedEndDate.toString();
+      } else {
+        delete payload.end_date; // Remove end_date if is_end_date is 0
+      }
+  
+      const response = await axios.post(`${EXCHNAGE_URL}/updateAwardCategory`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
+      });
+  
       if (response.status === 200) {
         toast.success("Category saved successfully!");
         handleCloseSecondModal();
+        getApi();
       }
     } catch (error) {
       if (error.name === "ValidationError") {
@@ -380,6 +443,7 @@ export const AwardCategoriesPost = () => {
     }
   };
 
+  
   const handleCloseSecondModal = () => {
     setShowSecondModal(false);
     setAwardId(null); // Reset awardId when closing modal
@@ -624,6 +688,7 @@ export const AwardCategoriesPost = () => {
                   <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
                 <InputType
+                type="number"
                   name="limit_submission"
                   value={awardData.limit_submission}
                   onChange={handleData}
@@ -794,12 +859,13 @@ export const AwardCategoriesPost = () => {
                 </InputLabel>
 
                 <InputType
+                type="number"
                   name="limit_submission"
                   value={editaward.limit_submission}
                   onChange={(e) =>
                     seteditaward({
                       ...editaward,
-                      limit_submission: e.target.value,
+                      limit_submission: e.target.value.toString(),
                     })
                   }
                 />
@@ -833,14 +899,12 @@ export const AwardCategoriesPost = () => {
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
-                              start_date: e.target.value,
+                              start_date: e.target.value.toString(), 
                             })
                           }
                         />
                       )}
-                      {/* {errors.start_date && (
-                        <span className="error">{errors.start_date}</span>
-                      )} */}
+                
                     </div>
                   </div>
                   <div className="award_label">
@@ -866,14 +930,12 @@ export const AwardCategoriesPost = () => {
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
-                              end_date: e.target.value,
+                              end_date: e.target.value.toString(), 
                             })
                           }
                         />
                       )}
-                      {/* {errors.end_date && (
-                        <span className="error">{errors.end_date}</span>
-                      )} */}
+                      
                     </div>
                   </div>
                 </div>
