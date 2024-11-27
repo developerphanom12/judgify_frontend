@@ -1,14 +1,18 @@
-import { SET_AWARD_ID, SET_EVENT_ID, SET_USER_CREDENTIALS } from "./action";
+import { SET_AWARD_ID, SET_EVENT_ID, SET_USER_CREDENTIALS, SET_USER_FLOW_CREDENTIALS } from "./action";
 
 const initialState = {
   user: {},
   userCheck: false,
+  userFlowCheck:false,
+
   role: "",
   eventIdGet: null,
   isLoading: false,
+
   email: null,
   password: null,
-  email: "",
+
+  // email: "",
   id: null,
   awardId: "", 
 };
@@ -17,27 +21,52 @@ const UseReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_EVENT_ID_GET":
       return { ...state, eventIdGet: action.payload };
+
     case SET_USER_CREDENTIALS:
       return {
         ...state,
         email: action.payload.email,
         password: action.payload.password,
       };
+
+      case SET_USER_FLOW_CREDENTIALS:
+      return {
+        ...state,
+        email: action.payload.email,
+        password: action.payload.password,
+      };
+
       case "USER_DATA":
         return {
           ...state,
           user: action.payload,
         };
+
+        case "USERFLOW_DATA":
+          return {
+            ...state,
+            user: action.payload,
+          };
+
+
         case "LOADING_DATA":
           return {
             ...state,
             isLoading: action.payload,
           };
+
+
       case "USER_CHECK":
         return {
           ...state,
           userCheck: action.payload,
         };
+
+        case "USER_FLOW_CHECK":
+          return {
+            ...state,
+            userFlowCheck: action.payload,
+          };
 
         case "SET_EMAIL":
       return {

@@ -13,12 +13,13 @@ import {
 } from "../../Global/GlobalFormElement";
 import { UserTopBanner } from "../../Global/User-Flow/UserTopBanner/UserTopBanner";
 import { UserBottomBar } from "../../Global/User-Flow/UserBottomBar/UserBottomBar";
+import { useNavigate } from "react-router-dom";
 
 export const UserSubmissionDetails = () => {
+  const navigate = useNavigate();
   return (
     <>
       <UserTopBanner />
-
       <div className="submission_form_main">
         <div className="submission_form">
           <RedMainHeading>Submission Details</RedMainHeading>
@@ -124,11 +125,17 @@ export const UserSubmissionDetails = () => {
 
       <div className="submission_form_btn_div">
         <GreyBorderButton>Cancel</GreyBorderButton>
-        <GreyBackgroundButton>Next</GreyBackgroundButton>
-        <RedBackgroundButton>Save</RedBackgroundButton>
+        <RedBackgroundButton
+          onClick={() => {
+            navigate(`/user-dashboard`);
+          }}
+        >
+          Submit
+        </RedBackgroundButton>
+        <GreyBackgroundButton>Submit & Add New</GreyBackgroundButton>
       </div>
 
-      <UserBottomBar/>
+      <UserBottomBar />
     </>
   );
 };

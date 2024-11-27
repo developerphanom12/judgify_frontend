@@ -892,7 +892,7 @@ export const AwardCategoriesPost = () => {
                         <InputLabel>Require Start Date</InputLabel>
                       </div>
 
-                      {editaward.is_start_date && (
+                      {editaward.is_start_date  ? (
                         <input
                           type="date"
                           value={formatDate(editaward.start_date || "")}
@@ -903,7 +903,7 @@ export const AwardCategoriesPost = () => {
                             })
                           }
                         />
-                      )}
+                      ): ""}
                 
                     </div>
                   </div>
@@ -923,7 +923,7 @@ export const AwardCategoriesPost = () => {
 
                         <InputLabel>Require End Date</InputLabel>
                       </div>
-                      {editaward.is_end_date && (
+                      {editaward.is_end_date ? (
                         <input
                           type="date"
                           value={formatDate(editaward.end_date || "")}
@@ -934,7 +934,7 @@ export const AwardCategoriesPost = () => {
                             })
                           }
                         />
-                      )}
+                      ):  ""}
                       
                     </div>
                   </div>

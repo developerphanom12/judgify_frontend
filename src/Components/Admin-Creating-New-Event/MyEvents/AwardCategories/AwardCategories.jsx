@@ -749,6 +749,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
             </div>
 
             <form className="award_form" onSubmit={handleSave}>
+
               <div className="award_row">
                 <InputLabel>
                   Category Name <span style={{ color: "#c32728" }}>*</span>
@@ -816,17 +817,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
 
-                {/* <InputType
-                  type="number"
-                  name="limit_submission"
-                  value={editaward.limit_submission}
-                  onChange={(e) =>
-                    seteditaward({
-                      ...editaward,
-                      limit_submission: e.target.value,
-                    })
-                  }
-                /> */}
+                
 
                 <InputType
                   type="number"
@@ -853,7 +844,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
                         <CheckboxInput
                           type="checkbox"
                           checked={editaward.is_start_date}
-                          // onChange={() => setShowStartDate(!showStartDate)}
                           onChange={() =>
                             seteditaward({
                               ...editaward,
@@ -864,19 +854,18 @@ export const AwardCategories = ({ setSelectedButton }) => {
                         <InputLabel>Require Start Date</InputLabel>
                       </div>
 
-                      {editaward.is_start_date && (
+                      {editaward.is_start_date ? (
                         <input
                           type="date"
                           value={formatDate(editaward.start_date || "")}
                           onChange={(e) =>
                             seteditaward({
                               ...editaward,
-                              // start_date: e.target.value.toString(),
                               start_date: e.target.value.toString(),
                             })
                           }
                         />
-                      )}
+                      ):""}
                     
                     </div>
                   </div>
@@ -886,7 +875,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
                         <CheckboxInput
                           type="checkbox"
                           checked={editaward.is_end_date}
-                          // onChange={() => setShowEndDate(!showEndDate)}
                           onChange={() =>
                             seteditaward({
                               ...editaward,
@@ -897,7 +885,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
                         <InputLabel>Require End Date</InputLabel>
                       </div>
-                      {editaward.is_end_date && (
+                      {editaward.is_end_date ? (
                         <input
                           type="date"
                           value={formatDate(editaward.end_date || "")}
@@ -909,7 +897,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
                             })
                           }
                         />
-                      )}
+                      ):""}
                     
                     </div>
                   </div>
@@ -939,6 +927,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
               <div className="award_btn">
                 <button className="award_modal_close">Save & Close</button>
               </div>
+
             </form>
           </div>
         </Modal.Body>

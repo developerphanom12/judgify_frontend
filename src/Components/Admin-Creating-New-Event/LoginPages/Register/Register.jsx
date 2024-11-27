@@ -38,7 +38,7 @@ const hirePortSchema = yup.object().shape({
   company: yup.string().required("Company is required"),
   mobile_number: yup
     .string()
-    
+
     .matches(/^\d{10}$/, "Phone Number must be 10 digits")
     .required("Mobile number is required"),
   country: yup.string().required("Country is required"),
@@ -107,9 +107,11 @@ export const Register = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className="register_div">
-        <LoginHeading >Your Awards Management System</LoginHeading>
+        <LoginHeading>Your Awards Management System</LoginHeading>
         <form className="form_div" onSubmit={handlesubmit}>
-          <LoginSubHeading className="sub_reg_head">Create your account</LoginSubHeading>
+          <LoginSubHeading className="sub_reg_head">
+            Create your account
+          </LoginSubHeading>
           <div className="fields_div">
             <div className="label_div">
               <InputLabel>First Name</InputLabel>

@@ -1,10 +1,17 @@
 export const SET_USER_CREDENTIALS = "SET_USER_CREDENTIALS";
+export const SET_USER_FLOW_CREDENTIALS = "SET_USER_FLOW_CREDENTIALS";
 export const SET_EMAIL = "SET_EMAIL";
 export const SET_EVENT_ID = "SET_EVENT_ID";
 export const SET_AWARD_ID = "SET_AWARD_ID";
 
 export const setUserCredentials = (email, password) => ({
   type: SET_USER_CREDENTIALS,
+  payload: { email, password },
+});
+
+
+export const setUserFlowCredentials = (email, password) => ({
+  type: SET_USER_FLOW_CREDENTIALS,
   payload: { email, password },
 });
 
@@ -22,9 +29,23 @@ export const userDataAction = (data) => {
   };
 };
 
+export const userFlowDataAction = (data) => {
+  return {
+    type: "USERFLOW_DATA",
+    payload: data,
+  };
+};
+
 export const userCheckAction = (data) => {
   return {
     type: "USER_CHECK",
+    payload: data,
+  };
+};
+
+export const userFlowCheckAction = (data) => {
+  return {
+    type: "USER_FLOW_CHECK",
     payload: data,
   };
 };

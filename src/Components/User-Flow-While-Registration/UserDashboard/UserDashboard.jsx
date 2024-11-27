@@ -6,12 +6,14 @@ import { HiMiniCurrencyDollar } from "react-icons/hi2";
 import { FaUserFriends } from "react-icons/fa";
 import { RedBackgroundButton } from "../../Global/GlobalButton";
 import { UserTitlebar } from "../../Global/User-Flow/UserTitleBar/UserTitleBar";
+import { useNavigate } from "react-router-dom";
 
 export const UserDashboard = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="user_dashboard_div">
-        <UserTitlebar title="User Dashboard" />
+        <UserTitlebar title="User Dashboard"/>
         <div className="user_dashboard_bg">
           <div className="user_price_div">
             <div className="user_dashboard_sub sub_details">
@@ -23,7 +25,9 @@ export const UserDashboard = () => {
               <HiMiniCurrencyDollar />
               <RedMainHeading>SUBMISSION DETAILS</RedMainHeading>
               <SubHeading style={{ fontWeight: 600 }}>$699</SubHeading>
-              <RedBackgroundButton>Pay Now</RedBackgroundButton>
+              <RedBackgroundButton   onClick={() => {
+            navigate(`/user-pending-payment`);
+          }}>Pay Now</RedBackgroundButton>
             </div>
             <div className="user_dashboard_sub my_profile">
               <FaUserFriends/>
