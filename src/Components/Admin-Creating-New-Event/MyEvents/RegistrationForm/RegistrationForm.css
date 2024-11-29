@@ -1,0 +1,179 @@
+
+
+.Formapp {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 50px 0;
+}
+
+   /* body {
+   background-color: #f4f4f9;
+    display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 100vh;
+     padding: 20px;
+    margin: 0;
+  } */
+  
+  .formformformformformapp {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .registratation_button{
+    display: flex;
+    justify-self: center;
+    width:100%;
+    margin-top: 20px;
+  }
+
+  .Side h2 {
+    color: #ecf0f1;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* FormCanvas Styles */
+  .form-canvas {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    overflow-y: auto;
+    /* margin-left: 250px; Leave space for the Side */
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+  
+  .form-preview {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .canvas-save {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .field-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    /* On smaller screens, collapse Side */
+    .Side {
+      position: absolute;
+      left: -250px; /* Hide Side */
+      top: 0;
+      width: 250px;
+      transition: left 0.3s ease-in-out;
+    }
+  
+    /* Show Side toggle button */
+    .Side-toggle {
+      display: block;
+    }
+  
+    /* Shift form content when Side is visible */
+    .form-canvas {
+      margin-left: 0; /* Full width for form content */
+    }
+  
+    .formformformformformapp {
+      flex-direction: column; /* Stack Side and form content vertically on mobile */
+      align-items: center;
+    }
+  
+    .form-canvas {
+      width: 100%;
+      margin-left: 0; /* No margin when Side is collapsed */
+    }
+  }
+  
+  .Side.active {
+    left: 0;
+  }
+  
+  /* Field container styles */
+  .field-container {
+    display: flex;
+    /* width: 940px; */
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    align-items: stretch;
+    justify-content: center;
+    gap:30px;
+  }
+  
+  .field-container h1,
+  .field-container label {
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: left;
+  }
+  
+  .field-container input,
+  .field-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .field-container select{
+    width: 200px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border:1px solid #ddd;
+    border-radius:5px;
+  }
+  
+  .field-container textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+
+ /* Global button styles */
+
+
+  .reg_button {
+    padding: 15px 25px;
+    background-color: #c32728;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .reg_button:hover {
+    background-color: #aa2424;
+  }
+
+
+  .registratation_button{
+    display: flex;
+     justify-content: center;
+
+  }
+  

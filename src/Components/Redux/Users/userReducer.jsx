@@ -74,6 +74,12 @@ const UseReducer = (state = initialState, action) => {
         email: action.payload,
       };
 
+      case "SET_USER_EMAIL":
+        return {
+          ...state,
+          email: action.payload,
+        };
+
       case SET_EVENT_ID:
         return {
           ...state,

@@ -13,13 +13,15 @@ import axios from "axios";
 import { USER_EXCHNAGE_URL } from "../../../../Url/Url";
 import logo from "../../../../Assets/logoaward.png";
 import { InputLabel, InputType } from "../../../Global/GlobalFormElement";
+import { useDispatch } from "react-redux";
+import { setUserEmail } from "../../../Redux/Users/action";
 export const UserForgetPassword = () => {
   const [forgetData, setforgetData] = useState({
     email: "",
   });
 
   const [porterrors, setPortErrors] = useState({});
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const hirePortSchema = yup.object().shape({
@@ -39,7 +41,7 @@ export const UserForgetPassword = () => {
           forgetData
         );
         if (response.status === 200) {
-          //dispatch(setEmail(forgetData.email));
+          dispatch(setUserEmail(forgetData.email));
           console.log("portData", response.portData);
           navigate("/user-otp");
           toast.success("Submit Successfully");

@@ -1,0 +1,67 @@
+/* Side.css */
+
+/* Side */
+.Side {
+    /* width: 250px;  */
+    width:20%;
+    background-color: #a8b5c347; /* Side background color */
+    color: white; /* Text color */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 8px;
+    /* position: fixed; */
+    top: 0;
+    /* left: 0; */
+    z-index: 999;
+    /* height: 100vh; Full viewport height  */
+    overflow-y: auto; /*Enable vertical scroll */
+  
+  }
+  
+  /* Side Button */
+  .Side .reg_button {
+    width: 100%; /* Make buttons fill the Side */
+    padding: 6px;
+    /* margin-bottom: 8px; Optional: space between buttons */
+    background-color: #C32728; /* Button color */
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .Side .reg_button:hover {
+    background-color: #922828; /* Hover effect */
+  }
+  
+  /* Toggle Button for Side on smaller screens */
+  .Side-toggle {
+    display: none; /* Hide toggle button on larger screens */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border: none;
+    font-size: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* Responsive Styles: Show toggle button on smaller screens */
+  @media (max-width: 768px) {
+    .Side {
+      width: 200px; /* Slightly smaller Side on mobile */
+      padding: 15px;
+    }
+    
+    /* Show the toggle button on smaller screens */
+    .Side-toggle {
+      display: block;
+    }
+  }
+  

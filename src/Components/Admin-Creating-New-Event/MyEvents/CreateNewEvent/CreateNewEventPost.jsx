@@ -26,6 +26,7 @@ import { useDispatch } from "react-redux";
 import { AwardCategoriesPost } from "../AwardCategories/AwardCategoriesPost";
 import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
+import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
 
 export const CreateNewEventPost = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -666,10 +667,10 @@ export const CreateNewEventPost = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategoriesPost />}
+            {selectedButton === 2 && <AwardCategoriesPost/>}
 
-            {selectedButton === 3 && <h1>3</h1>}
-            {selectedButton === 4 && <h1>4</h1>}
+            {selectedButton === 3 && <RegistrationForm/>}
+            {selectedButton === 4 && <RegistrationForm/>}
           </div>
         </div>
       </div>

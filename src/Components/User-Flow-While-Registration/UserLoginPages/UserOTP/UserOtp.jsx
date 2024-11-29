@@ -18,7 +18,7 @@ export const UserOtp = () => {
   const [porterrors, setPortErrors] = useState({});
   const navigate = useNavigate();
   const email = useSelector((state) => state.users?.email || "");
-  console.log("Email from Redux state for verfiy:", email);
+  console.log(" User Email from Redux state for verfiy:", email);
 
   const hirePortSchema = yup.object().shape({
     otp: yup.number().required("Otp is required"),

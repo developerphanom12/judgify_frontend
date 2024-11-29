@@ -33,6 +33,10 @@ import { UserBottomBar } from "./Components/Global/User-Flow/UserBottomBar/UserB
 import { UserForgetPassword } from "./Components/User-Flow-While-Registration/UserLoginPages/UserForgetPassword/UserForgetPassword";
 import { UserNewPassword } from "./Components/User-Flow-While-Registration/UserLoginPages/UserNewPassword/UserNewPassword";
 import { UserOtp } from "./Components/User-Flow-While-Registration/UserLoginPages/UserOTP/UserOtp";
+import EditFieldModal from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/EditFieldModal";
+import FormCanvas from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/FormCanvas";
+import FormPreview from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/FormPreview";
+import Side from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/Side";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -76,12 +80,11 @@ function App() {
           {isAuthenticated ? (
             <>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/my-events" element={<MyEvents />} />
-              <Route path="/admin-profile" element={<AdminProfile />} />
-              <Route path="/title-bar" element={<TitleBar />} />
-              <Route path="/registration-form" element={<RegistrationForm />} />
-              <Route path="/create-new-event" element={<CreateNewEvent />} />
+              <Route path="/dashboard" element={<Dashboard />}/>
+              <Route path="/my-events" element={<MyEvents/>}/>
+              <Route path="/admin-profile" element={<AdminProfile/>}/>
+              <Route path="/title-bar" element={<TitleBar/>}/>
+              <Route path="/create-new-event" element={<CreateNewEvent/>}/>
               <Route
                 path="/create-new-event-post"
                 element={<CreateNewEventPost />}
@@ -96,15 +99,20 @@ function App() {
                 element={<AwardCategoriesPost />}
               />
 
-              <Route path="/stripe-setting" element={<StripeSetting />} />
-              <Route path="/test" element={<Test />} />
+              <Route path="/stripe-setting" element={<StripeSetting/>}/>
+              <Route path="/test" element={<Test />}/>
               <Route
                 path="/event-live-preview"
-                element={<EventLivePreview />}
+                element={<EventLivePreview/>}
               />
-              <Route path="/sidebar" element={<Sidebar />} />
-              {/* <Route path="/form-app" element={<Formapp />} /> */}
+              <Route path="/sidebar" element={<Sidebar />}/>
+              {/* ------- */}
 
+              <Route path="/registration-form" element={<RegistrationForm/>} />
+              <Route path="/edit-field-modal" element={<EditFieldModal/>} /> 
+              <Route path="/form-canvas" element={<FormCanvas/>}/> 
+              <Route path="/form-preview" element={<FormPreview/>}/> 
+              <Route path="/side" element={<Side/>}/> 
             </>
           ) : (
             <>

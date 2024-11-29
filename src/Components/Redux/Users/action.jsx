@@ -1,6 +1,9 @@
 export const SET_USER_CREDENTIALS = "SET_USER_CREDENTIALS";
 export const SET_USER_FLOW_CREDENTIALS = "SET_USER_FLOW_CREDENTIALS";
+
 export const SET_EMAIL = "SET_EMAIL";
+export const SET_USER_EMAIL = "SET_USER_EMAIL";
+
 export const SET_EVENT_ID = "SET_EVENT_ID";
 export const SET_AWARD_ID = "SET_AWARD_ID";
 
@@ -59,6 +62,11 @@ export const LoaderAction = (data) => {
 
 export const setEmail = (email) => ({
   type: "SET_EMAIL",
+  payload: email,
+});
+
+export const setUserEmail = (email) => ({
+  type: "SET_USER_EMAIL",
   payload: email,
 });
 

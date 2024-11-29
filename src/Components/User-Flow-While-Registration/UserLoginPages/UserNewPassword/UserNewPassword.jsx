@@ -21,7 +21,7 @@ export const UserNewPassword = () => {
   const [porterrors, setPortErrors] = useState({});
 
   const email = useSelector((state) => state.users?.email || "");
-  console.log("Email from Redux state for verfiy:", email);
+  console.log("User Email from Redux state for verfiy:", email);
 
   const hirePortSchema = yup.object().shape({
     newPassword: yup
@@ -50,7 +50,7 @@ export const UserNewPassword = () => {
         );
         if (response.status === 200) {
           navigate("/user-login");
-          toast.success("OTP Verified Successfully");
+          toast.success("New Password Created Successfully");
         }
       } catch (error) {
         if (error.inner) {
@@ -61,7 +61,7 @@ export const UserNewPassword = () => {
           setPortErrors(portErrors);
         } else {
           // Handling API errors
-          toast.error("Failed to verify OTP. Please try again later.");
+          toast.error("Failed to Created New Password. Please try again later.");
           console.error("API Error:", error);
         }
       }
@@ -107,8 +107,7 @@ export const UserNewPassword = () => {
               </div>
 
               <div className="log_btn_div">
-                <Redbutton
-                >
+                <Redbutton type="submit"                >
                   RESET PASSWORD
                 </Redbutton>
               </div>

@@ -109,7 +109,7 @@ export const MyEvents = () => {
               <CreateButton
                 className="plus_content"
                 onClick={() => {
-                  navigate("/create-new-event");
+                  navigate("/create-new-event-post");
                 }}
               >
                 <IoMdAddCircleOutline />

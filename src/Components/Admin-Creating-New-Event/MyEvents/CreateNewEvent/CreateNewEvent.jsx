@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
 import { useSelector } from "react-redux";
+import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
 
 export const CreateNewEvent = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -549,11 +550,9 @@ export const CreateNewEvent = () => {
                 </div>
               </>
             )}
-
             {selectedButton === 2 && <AwardCategories  setSelectedButton={setSelectedButton}/>}
-
-            {selectedButton === 3 && <h1>3</h1>}
-            {selectedButton === 4 && <h1>4</h1>}
+            {selectedButton === 3 && <RegistrationForm/>}
+            {selectedButton === 4 && <RegistrationForm/>}
           </div>
         </div>
       </div>
