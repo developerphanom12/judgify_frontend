@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import EditFieldModal from "./EditFieldModal";
 import "./FormCanvas.css";
-import { RedBackgroundButton } from "../../../../Global/GlobalButton";
+import { RiDeleteBin4Fill } from "react-icons/ri";
+import { MdEditSquare } from "react-icons/md";
+import { InputLabel, InputType, SelectBorder } from "../../../../Global/GlobalFormElement";
 
 const FormCanvas = ({
   fields,
@@ -132,7 +134,7 @@ const FormCanvas = ({
           <div className="field-input-container">
             {/* Display the label for the field with red asterisk if required */}
             {field.type !== "file" && (
-              <label>
+              <InputLabel>
                 {field.label}
                 {field.required && <span style={{ color: "red" }}> *</span>}
                 {/* Display question mark if hoverHint exists */}
@@ -142,18 +144,22 @@ const FormCanvas = ({
                     &#63; {/* Question mark symbol */}{" "}
                   </span>
                 )}
-              </label>
+              </InputLabel>
             )}
 
+           
+          </div>
+
+          <div className="form_canvas_type_fields">
             {/* Field Renderings */}
-            {field.type === "header" && (
+            {field.type === "label" && (
               <div className="header-container">
                 <h1>{field.label}</h1>
               </div>
             )}
-            {field.type === "label" && <label>{field.label}</label>}
+            {/* {field.type === "label" && <label>{field.label}</label>} */}
             {field.type === "text" && (
-              <input
+              <InputType
                 type="text"
                 placeholder={field.defaultValue || field.label}
                 style={{ width: field.fieldSize }}
@@ -166,7 +172,7 @@ const FormCanvas = ({
               />
             )}
             {field.type === "email" && (
-              <input
+              <InputType
                 type="email"
                 placeholder={field.defaultValue || "Enter your email"}
                 style={{ width: field.fieldSize }}
@@ -179,7 +185,7 @@ const FormCanvas = ({
               />
             )}
             {field.type === "tel" && (
-              <input
+              <InputType
                 type="tel"
                 placeholder={field.defaultValue || "Enter your phone number"}
                 style={{ width: field.fieldSize }}
@@ -192,7 +198,7 @@ const FormCanvas = ({
               />
             )}
             {field.type === "date" && (
-              <input
+              <InputType
                 type="date"
                 placeholder={field.defaultValue || "Select a date"}
                 style={{ width: field.fieldSize }}
@@ -217,7 +223,7 @@ const FormCanvas = ({
               />
             )}
             {field.type === "dropdown" && (
-              <select
+              <SelectBorder
                 value={field.value || ""}
                 onChange={(e) => {
                   const updatedFields = [...fields];
@@ -230,10 +236,10 @@ const FormCanvas = ({
                     {option}
                   </option>
                 ))}
-              </select>
+              </SelectBorder>
             )}
             {field.type === "country" && (
-              <select
+              <SelectBorder
                 value={field.value || ""}
                 onChange={(e) => {
                   const updatedFields = [...fields];
@@ -248,7 +254,7 @@ const FormCanvas = ({
                     </option>
                   )
                 )}
-              </select>
+              </SelectBorder>
             )}
             {field.type === "radio" && (
               <div className="radio-btns">
@@ -263,42 +269,62 @@ const FormCanvas = ({
             {field.type === "checkbox" && (
               <div className="checkboxes">
                 {field.options.map((option, idx) => (
-                  <div key={idx}>
+                  <div key={idx}  className="input-lbl">
                     <input type="checkbox" />
                     <label>{option}</label>
                   </div>
                 ))}
               </div>
             )}
+            
             {field.type === "file" && (
               <div>
-                <label>
+                {/* <InputLabel>
                   {field.label}
                   {field.required && (
                     <span style={{ color: "red" }}> *</span>
                   )}{" "}
-                  {/* Add red asterisk here */}
+              
                   {field.hoverHint && (
                     <span
                       className="hover-hint-icon"
-                      title={field.hoverHint} // Tooltip text when hovering
+                      title={field.hoverHint} 
                     >
-                      &#63; {/* Question mark symbol */}
+                      &#63; 
                     </span>
                   )}
-                </label>
+                </InputLabel> */}
+                
                 <input
                   type="file"
+                  className="file_formcanvas"
                   onChange={(e) => handleFileChange(e, index)}
                 />
-                {selectedFile && <div>Selected File: {selectedFile.name}</div>}
+                {/* {selectedFile && <div>Selected File: {selectedFile.name}</div>} */}
               </div>
             )}
-          </div>
+
+            </div>
 
           {/* Required and Visible Checkboxes */}
-          <div className="field-options-container">
-            <div className="required-checkbox">
+        <div className="field-options-container">
+
+          <div className="field-actions">
+              {/* <RedBackgroundButton
+                className="reg_button"
+                onClick={() => openModal(field)}
+              >
+                Edit
+              </RedBackgroundButton> */}
+
+              <MdEditSquare className="form_canvas_icon" onClick={() => openModal(field)} />
+
+              {/* <RedBackgroundButton>Remove</RedBackgroundButton> */}
+
+              <RiDeleteBin4Fill  className="form_canvas_icon" onClick={() => removeField(index)} />
+          </div>
+
+          <div className="required_checkbox">
               <label>Required</label>
               <input
                 type="checkbox"
@@ -306,31 +332,19 @@ const FormCanvas = ({
                 onChange={() => handleRequiredToggle(index)}
                 disabled={disableRequiredCheckbox && field.isDefault}
               />
-            </div>
+          </div>
 
-            <div className="visible-checkbox">
+          <div className="visible_checkbox">
               <label>Visible</label>
               <input
                 type="checkbox"
                 checked={field.visible}
                 onChange={() => handleVisibleToggle(index)}
               />
-            </div>
-
-            <div className="field-actions">
-              <RedBackgroundButton
-                className="reg_button"
-                onClick={() => openModal(field)}
-              >
-                Edit
-              </RedBackgroundButton>
-              <RedBackgroundButton
-                className="reg_button"
-                onClick={() => removeField(index)}>
-                Remove
-              </RedBackgroundButton>
-            </div>
           </div>
+
+        </div>
+        
         </div>
       ))}
 

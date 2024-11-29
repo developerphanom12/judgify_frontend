@@ -1,22 +1,12 @@
 
 
-.Formapp {
+.formapp {
     width: 100%;
     display: flex;
+    flex-direction: column;
     gap: 20px;
-    justify-content: center;
-    margin: 50px 0;
 }
 
-   /* body {
-   background-color: #f4f4f9;
-    display: flex;
-   justify-content: center;
-   align-items: center;
-   min-height: 100vh;
-     padding: 20px;
-    margin: 0;
-  } */
   
   .formformformformformapp {
     display: flex;
@@ -43,19 +33,12 @@
   
   /* FormCanvas Styles */
   .form-canvas {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: white;
-    overflow-y: auto;
-    /* margin-left: 250px; Leave space for the Side */
-    box-sizing: border-box;
+    width:100%;
     border-radius: 8px;
   }
   
   .form-preview {
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
     flex-direction: column;
   }
   
@@ -64,15 +47,7 @@
     flex-direction: column;
     align-items: flex-end;
   }
-  
-  .field-actions {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-  
+
   /* Responsive Styles */
   @media (max-width: 768px) {
     /* On smaller screens, collapse Side */
@@ -110,9 +85,9 @@
   }
   
   /* Field container styles */
-  .field-container {
+  /* .field-container {
     display: flex;
-    /* width: 940px; */
+  
     border: 1px solid #ddd;
     padding: 20px;
     margin-bottom: 20px;
@@ -122,41 +97,41 @@
     justify-content: center;
     gap:30px;
   }
-  
-  .field-container h1,
+   */
+  /* .field-container h1,
   .field-container label {
     margin-bottom: 10px;
     font-size: 14px;
     text-align: left;
-  }
+  } */
   
   .field-container input,
   .field-container textarea {
-    width: 100%;
+    /* width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 5px; */
   }
 
-  .field-container select{
+  /* .field-container select{
     width: 200px;
     padding: 10px;
     margin-bottom: 10px;
     border:1px solid #ddd;
     border-radius:5px;
-  }
+  } */
   
-  .field-container textarea {
+  /* .field-container textarea {
     resize: vertical;
     min-height: 100px;
-  }
+  } */
 
 
  /* Global button styles */
 
 
-  .reg_button {
+  /* .reg_button {
     padding: 15px 25px;
     background-color: #c32728;
     color: white;
@@ -168,12 +143,8 @@
   
   .reg_button:hover {
     background-color: #aa2424;
-  }
+  } */
 
 
-  .registratation_button{
-    display: flex;
-     justify-content: center;
 
-  }
   

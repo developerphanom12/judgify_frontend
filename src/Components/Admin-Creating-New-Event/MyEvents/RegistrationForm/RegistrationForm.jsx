@@ -4,7 +4,7 @@ import FormCanvas from "./RegistrationChild/FormCanvas";
 import Side from "./RegistrationChild/Side";
 import FormPreview from "./RegistrationChild/FormPreview";
 import { RedBackgroundButton } from "../../../Global/GlobalButton";
-import './RegistrationForm.css';
+import "./RegistrationForm.css";
 
 export const RegistrationForm = () => {
   const [fields, setFields] = useState([]);
@@ -58,12 +58,12 @@ export const RegistrationForm = () => {
   // Function to add a new field
   const addField = (type) => {
     const newField = {
-      header: {
-        type: "header",
-        label: "Header Text",
-        dataName: `header-${Date.now()}`,
-        adminLabel: "Header Admin Label",
-        description: "<p>This is an HTML description for the header.</p>",
+      label: {
+        type: "label",
+        label: "label Text",
+        dataName: `label-${Date.now()}`,
+        adminLabel: "label Admin Label",
+        description: "<p>This is an HTML description for the label.</p>",
         size: "h1",
       },
       text: {
@@ -176,10 +176,10 @@ export const RegistrationForm = () => {
 
   return (
     <div>
-      <div className="Formapp">
+      <div className="formapp">
         {!isPreview ? (
           <>
-            <Side addField={addField} />
+            <Side addField={addField}/>
             <div className="canvas-save">
               <FormCanvas
                 fields={fields}
@@ -188,9 +188,9 @@ export const RegistrationForm = () => {
                 disableRequiredCheckbox={true} //Disable Required checkbox for default fields
               />
               <div className="registratation_button">
-               <RedBackgroundButton  onClick={saveForm}>
-                Save Form
-              </RedBackgroundButton>
+                <RedBackgroundButton onClick={saveForm}>
+                  Save Form
+                </RedBackgroundButton>
               </div>
             </div>
           </>
@@ -199,9 +199,7 @@ export const RegistrationForm = () => {
             <h1>Form Preview</h1>
             <FormPreview formId={formId} />{" "}
             {/* Render the form preview component */}
-            <button  onClick={() => setIsPreview(false)}>
-              Back to Builder
-            </button>
+            <button onClick={() => setIsPreview(false)}>Back to Builder</button>
           </div>
         )}
       </div>

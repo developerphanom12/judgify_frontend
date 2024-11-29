@@ -86,7 +86,7 @@ const FormPreview = ({ formId }) => {
         )}
 
         {/* Render fields based on their type */}
-        {field.type === "header" && <h1>{field.label}</h1>}
+        {field.type === "label" && <h1>{field.label}</h1>}
         {field.type === "text" && (
           <input
             type="text"

@@ -23,6 +23,7 @@
     display: flex;
     justify-content: center;
   }
+
   .award_form {
     padding: 0 130px;
     display: flex;
@@ -47,17 +48,18 @@
       }
     }
   }
+
   .start_date_div {
     display: flex;
     justify-content: space-between;
 }
-
 
   .award_btn {
     display: flex;
     gap: 10px;
     margin-top: 15px;
   }
+
   .award_modal_close {
     background: #c32728;
     font-family: Poppins;
@@ -71,6 +73,7 @@
     border-radius: 30px;
     border: 1px solid transparent;
   }
+  
 }
 
 .table_div {

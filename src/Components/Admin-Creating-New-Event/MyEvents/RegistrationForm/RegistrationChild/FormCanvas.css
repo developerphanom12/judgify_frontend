@@ -1,16 +1,146 @@
-/* Add your custom styles here for the form */
 .form-canvas {
-  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Make cursor 'move' when hovering over the field container */
 .field-container {
-  cursor: move; /* Change cursor to move when hovering */
-  transition: opacity 0.3s ease; /* Smooth transition for opacity */
+  display:flex;
+  border:1px solid #cccccc;
+  padding:8px 20px;
+  border-radius:8px;
+  align-items:center;
+  justify-content:space-between;
+  cursor: move;
+  transition: opacity 0.3s ease;
+
+  .field-input-container {
+    display: flex;
+    gap: 20px;
+    width: 15%;
+  }
+
+  .form_canvas_type_fields {
+    width: 50%;
+    .container{
+      h1{
+        color: #333333;
+      }
+    }
+    textarea{
+    border: 1px solid #66666659;
+    border-radius: 12px;
+    padding: 10px;
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+    color: #333333;
+    background-color: #f9f9f9;
+    }
+    input{
+      width: 100%;
+      background-color: #f9f9f9;
+    }
+    select{
+      width:100%;
+      background-color: #f9f9f9;
+    }
+    .radio-btns{
+      display: flex;
+      gap:40px;
+      .input-lbl{
+      display: flex;
+      gap:10px;
+      margin:5px 0;
+      input{
+        width:15px;
+      }
+     } 
+    }
+    .checkboxes{
+      display: flex;
+      gap:40px;
+      .input-lbl{
+        display: flex;
+        gap:10px;
+        margin:5px 0;
+        input{
+          width:15px;
+        }
+       } 
+    }
+.file_formcanvas{
+  background-color: transparent;
 }
+}
+
+  .field-options-container {
+    display:flex;
+    align-items:center;
+    gap:15px;
+    .required_checkbox {
+      display: flex;
+      gap: 5px;
+    }
+
+    .visible_checkbox {
+      display: flex;
+      gap: 5px;
+    }
+
+    .field-actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}
+
+
+@media (max-width: 567px) {
+  .field-container {
+    flex-direction:column;
+    align-items:unset;
+    gap:10px;
+  .field-input-container {
+      width: 100%;
+  }
+  .form_canvas_type_fields {
+    width: 100%;
+  }
+}
+
+
+
+}
+
+@media (min-width: 567px) and  (max-width: 1024px) {
+  .field-container {
+    flex-direction:column;
+    align-items:unset;
+    gap:10px;
+  .field-input-container {
+      width: 100%;
+  }
+  .form_canvas_type_fields {
+    width: 100%;
+  }
+}
+
+}
+
+
+
+
+.form_canvas_icon {
+  height: 17px;
+  width: 17px;
+  cursor: pointer;
+  color: #777777;
+}
+
+
 
 /* Optional: Keep the 'move' cursor while dragging */
 .field-container.dragging {
@@ -28,14 +158,8 @@
   color: #999;
 }
 
-.input-lbl {
-  display: flex;
-  align-items: center;
-}
 
-.input-lbl input {
-  margin-right: 10px;
-}
+
 
 .field-actions {
   display: flex;
@@ -120,78 +244,52 @@
 }
 
 /* Field options row (required, visible, actions) */
-.field-options-container {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* Add space between the elements */
-  margin-top: 10px; /* Optional: Add space above the row */
-}
 
-.required-checkbox,
-.visible-checkbox,
-.field-actions {
-  display: flex;
-  align-items: center;
-}
-.field-actions button{
+.field-actions button {
   margin-top: 0 !important;
 }
 /* Optional styling for checkbox labels */
-.required-checkbox label,
+/* .required-checkbox label,
 .visible-checkbox label {
   margin-right: 10px;
-}
+} */
 
 /* Input elements styling */
-input[type="text"],
+/* input[type="text"],
 input[type="email"],
 input[type="tel"],
 input[type="date"],
 textarea,
-select {
-  margin-top: 5px;
-  padding: 5px;
-  /* width: 100%; */
-  /* max-width: 300px;  */
-}
-
+select { */
+/* margin-top: 5px;
+  padding: 5px; */
+/* width: 100%; */
+/* max-width: 300px;  */
+/* } */
+/* 
 input[type="checkbox"],
 input[type="radio"] {
   margin-right: 5px;
-}
+} */
 
 /* Styling for radio and checkbox inputs */
-.radio-btns,
-.checkboxes {
-  display: flex;
-  flex-direction: column;
-}
 
-.radio-btns input,
+
+/* .radio-btns input,
 .checkboxes input {
   margin-right: 10px;
-}
+} */
 
-.radio-btns label,
+/* .radio-btns label,
 .checkboxes label {
   margin-left: 5px;
-}
+} */
 
-/* Optional styling for modal close button */
 .cancel:hover {
   background-color: #444444;
 }
 
-/* Field input container for label and input */
-.field-input-container {
-  display: flex;
-  flex-direction: column;
-}
-
 /* Styling for label and input elements */
-.field-input-container label {
-  margin-bottom: 5px; /* Adds some space between the label and input */
-}
 
 /* Optional styling for focused input */
 input[type="text"]:focus,

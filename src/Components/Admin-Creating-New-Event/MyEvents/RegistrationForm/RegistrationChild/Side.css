@@ -1,67 +1,57 @@
-/* Side.css */
+.side {
+  width: 100%;
+  background-color: #f9f9f9;
+  color: white;
+  padding: 5px;
+  display: flex;
+  border-radius: 8px;
+}
 
-/* Side */
-.Side {
-    /* width: 250px;  */
-    width:20%;
-    background-color: #a8b5c347; /* Side background color */
-    color: white; /* Text color */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    border-radius: 8px;
-    /* position: fixed; */
-    top: 0;
-    /* left: 0; */
-    z-index: 999;
-    /* height: 100vh; Full viewport height  */
-    overflow-y: auto; /*Enable vertical scroll */
-  
+.side .reg_button {
+  border: none;
+  color: #000000;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  gap:20px;
+  svg{
+    width: 50px;
+    height: 20px;
   }
-  
-  /* Side Button */
-  .Side .reg_button {
-    width: 100%; /* Make buttons fill the Side */
-    padding: 6px;
-    /* margin-bottom: 8px; Optional: space between buttons */
-    background-color: #C32728; /* Button color */
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
+}
+
+.side-toggle {
+  display: none; /* Hide toggle button on larger screens */
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  border: none;
+  font-size: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+@media (max-width: 567px) {
+.side {
+    overflow: auto;
+}
+}
+
+@media (min-width: 567px) and  (max-width: 1024px) {
+.side{
+    overflow: auto;
+}
+}
+
+@media (max-width: 768px) {
+  /* Show the toggle button on smaller screens */
+  .side-toggle {
+    display: block;
   }
-  
-  .Side .reg_button:hover {
-    background-color: #922828; /* Hover effect */
-  }
-  
-  /* Toggle Button for Side on smaller screens */
-  .Side-toggle {
-    display: none; /* Hide toggle button on larger screens */
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #3498db;
-    color: white;
-    padding: 10px;
-    border: none;
-    font-size: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  /* Responsive Styles: Show toggle button on smaller screens */
-  @media (max-width: 768px) {
-    .Side {
-      width: 200px; /* Slightly smaller Side on mobile */
-      padding: 15px;
-    }
-    
-    /* Show the toggle button on smaller screens */
-    .Side-toggle {
-      display: block;
-    }
-  }
-  
+}
