@@ -1,36 +1,44 @@
 /* General container styles for the form preview */
-.form-preview {
+/* .formmm-preview {
   padding: 20px;
   background-color: #f9f9f9;
   max-width: 600px;
   margin: 0 auto;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */
+.formmm-preview {
+  padding: 20px;
+  background-color: #f9f9f9;
+  width: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Header styling */
-.form-preview h1 {
+.formmm-preview h1 {
   font-size: 24px;
   color: #333;
   text-align: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 /* Label styling */
-.form-preview label {
+.formmm-preview label {
   display: block;
   font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 14px;
+  margin-bottom:5px;
+  font-size:13px;
   color: #333;
 }
 
 /* Input fields styling */
-.form-preview input[type="text"],
-.form-preview input[type="email"],
-.form-preview input[type="date"],
-.form-preview textarea,
-.form-preview select {
+.formmm-preview input[type="text"],
+.formmm-preview input[type="email"],
+.formmm-preview input[type="date"],
+.formmm-preview textarea,
+.formmm-preview select {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
@@ -38,31 +46,33 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  color:#777777;
 }
 
 /* Style for the file input field */
-.form-preview input[type="file"] {
+.formmm-preview input[type="file"] {
   padding: 5px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 4px;
   box-sizing: border-box;
+  color:#777777
 }
 
 /* Style for the radio and checkbox fields */
-.form-preview input[type="radio"],
-.form-preview input[type="checkbox"] {
+.formmm-preview input[type="radio"],
+.formmm-preview input[type="checkbox"] {
   margin-right: 5px;
 }
 
 /* Styling for text areas */
-.form-preview textarea {
+.formmm-preview textarea {
   min-height: 100px;
   resize: vertical;
 }
 
 /* Style for the submit button if needed */
-.form-preview button {
+/* .formmm-preview button {
   background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
@@ -70,22 +80,28 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-}
+} */
 
-.form-preview button:hover {
-  background-color: #45a049;
-}
+
 
 /* Error or loading state */
-.form-preview p {
+.formmm-preview p {
   text-align: center;
   font-size: 16px;
   color: #999;
 }
 
 /* Spacing for the entire form */
-.form-preview > div {
+.formmm-preview > div {
   margin-bottom: 15px;
+}
+
+.form_prev_radio{
+  margin-right: 10px;
+  color:#777777;
+}
+.previewform_radio{
+  display: flex;
 }
 
 .tooltip-trigger {
@@ -140,18 +156,33 @@
   opacity: 1;
 }
   
+
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
-  .form-preview {
+  .formmm-preview {
     padding: 15px;
     width: 100%;
   }
 
-  .form-preview input[type="text"],
-  .form-preview input[type="email"],
-  .form-preview input[type="date"],
-  .form-preview textarea,
-  .form-preview select {
+  .formmm-preview label {
+    font-size: 11px;
+}
+
+  /* .formmm-preview input[type="text"],
+  .formmm-preview input[type="email"],
+  .formmm-preview input[type="date"],
+  .formmm-preview textarea,
+  .formmm-preview select {
     font-size: 16px;
+  } */
+}
+
+@media (min-width: 600px) and (max-width: 1024px) {
+  .formmm-preview {
+    padding: 15px;
+    width: 100%;
   }
+
+
+
 }

@@ -20,6 +20,18 @@
     width: 15%;
   }
 
+  
+  .form_canvas_type_fields input[type="date"]{
+    color:#777777;
+  }
+
+
+  .form_canvas_type_fields select{
+    color:#777777;
+  }
+
+
+
   .form_canvas_type_fields {
     width: 50%;
     .container{
@@ -39,17 +51,22 @@
     color: #333333;
     background-color: #f9f9f9;
     }
+
     input{
       width: 100%;
       background-color: #f9f9f9;
     }
+
     select{
       width:100%;
       background-color: #f9f9f9;
     }
+
     .radio-btns{
       display: flex;
-      gap:40px;
+      gap:10px;
+      flex-wrap: wrap;
+      color:#777777;
       .input-lbl{
       display: flex;
       gap:10px;
@@ -59,9 +76,12 @@
       }
      } 
     }
+
     .checkboxes{
       display: flex;
-      gap:40px;
+      gap:10px;
+      flex-wrap: wrap;
+      color:#777777;
       .input-lbl{
         display: flex;
         gap:10px;
@@ -71,9 +91,11 @@
         }
        } 
     }
+
 .file_formcanvas{
   background-color: transparent;
 }
+
 }
 
   .field-options-container {
@@ -108,10 +130,11 @@
   }
   .form_canvas_type_fields {
     width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
   }
 }
-
-
 
 }
 
@@ -123,14 +146,15 @@
   .field-input-container {
       width: 100%;
   }
+
   .form_canvas_type_fields {
     width: 100%;
-  }
+    display: flex;
+    justify-content: flex-start;
 }
 
 }
-
-
+}
 
 
 .form_canvas_icon {

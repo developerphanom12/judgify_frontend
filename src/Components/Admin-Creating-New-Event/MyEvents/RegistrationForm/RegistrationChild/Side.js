@@ -12,6 +12,7 @@ import { RiMailLine, RiParagraph } from 'react-icons/ri';
 
 
 const Side = ({ addField }) => {
+  
   const fields = [
     { label: <PiTextAUnderlineBold />, type: 'label'},   //,'Header'
     { label: <ImTextWidth/>, type: 'text'},   //'Single Line Text'

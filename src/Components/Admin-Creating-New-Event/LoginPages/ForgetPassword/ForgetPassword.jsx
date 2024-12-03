@@ -16,6 +16,7 @@ import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../../../Redux/Users/action";
+import { useLoading } from "../../../LoadingContext";
 
 export const ForgetPassword = () => {
   const [forgetData, setforgetData] = useState({
@@ -23,6 +24,9 @@ export const ForgetPassword = () => {
   });
 
   const [porterrors, setPortErrors] = useState({});
+
+  const { setLoading } = useLoading();  //Loader
+
 
   const dispatch = useDispatch();
 
@@ -37,6 +41,7 @@ export const ForgetPassword = () => {
 
   const handleForgetSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
     const postApi = async () => {
       try {
         await hirePortSchema.validate(forgetData, { abortEarly: false });
@@ -62,6 +67,8 @@ export const ForgetPassword = () => {
           toast.error("Failed to submit. Please try again later.");
           console.error("API Error:", error);
         }
+      }finally {
+        setLoading(false); //Loader
       }
     };
     postApi();

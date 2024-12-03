@@ -37,6 +37,8 @@ import EditFieldModal from "./Components/Admin-Creating-New-Event/MyEvents/Regis
 import FormCanvas from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/FormCanvas";
 import FormPreview from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/FormPreview";
 import Side from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/Side";
+import LoaderDot from "./Components/LoaderDot";
+import { LoadingProvider } from "./Components/LoadingContext";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
 
   return (
     <div className="App">
+       <LoadingProvider>
+      <LoaderDot/>
       <Layout>
         <ToastContainer
           className="toast-container"
@@ -113,6 +117,8 @@ function App() {
               <Route path="/form-canvas" element={<FormCanvas/>}/> 
               <Route path="/form-preview" element={<FormPreview/>}/> 
               <Route path="/side" element={<Side/>}/> 
+              <Route path="/preview-loader" element={<LoaderDot />} />
+
             </>
           ) : (
             <>
@@ -143,6 +149,7 @@ function App() {
           )}
         </Routes>
       </Layout>
+      </LoadingProvider>
     </div>
   );
 }

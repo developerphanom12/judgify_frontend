@@ -29,6 +29,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import { setAwardId } from "../../../Redux/Users/action";
 import * as Yup from "yup";
+import { useLoading } from "../../../LoadingContext";
 
 // const validationCategorySchema = Yup.object({
 //   category_name: Yup.string().required("Category Name is required"),
@@ -53,20 +54,22 @@ const validationSchema = Yup.object({
   limit_submission: Yup.string().required("Limit Submission is required"),
 });
 
-export const AwardCategoriesPost = () => {
+export const AwardCategoriesPost = ({ setSelectedButton }) => {
   const [show, setShow] = useState(false);
   const [showTableDiv, setShowTableDiv] = useState(false);
   const [showAwardCateDiv, setShowAwardCateDiv] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
   const [isSaveAndAddNew, setIsSaveAndAddNew] = useState(false);
   const [awardTableData, setAwardTableData] = useState([]);
+  const { setLoading } = useLoading();  //Loader
+
 
   const eventIds = useSelector((state) => state.users?.id || "");
   const initialEventId = String(eventIds);
-  console.log("Stored eventId showww:posttttt", eventIds);
+  // console.log("Stored eventId showww:posttttt", eventIds);
 
   const awardId = useSelector((state) => state.users.awardId || "");
-  console.log("Award ID from Redux:", awardId);
+  // console.log("Award ID from Redux:", awardId);
 
   const [awardData, setAwardData] = useState({
     eventId: initialEventId,
@@ -131,6 +134,8 @@ export const AwardCategoriesPost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
+
 
     const dataToSend = {
       ...awardData,
@@ -213,10 +218,13 @@ export const AwardCategoriesPost = () => {
         }
         console.error("API Error:", error);
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   const getApi = async () => {
+    setLoading(true); //Loader
     try {
       let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${initialEventId}&sortOrder=${sortOrder}`;
 
@@ -267,16 +275,18 @@ export const AwardCategoriesPost = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   useEffect(() => {
     getApi();
-  }, [searchTerm, sortOrder]);
+  }, [searchTerm, sortOrder, setLoading]);
 
   const deleteAward = async (awardId) => {
     console.log("Award ID to delete:", awardId);
-
+    setLoading(true); //Loader
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(`${EXCHNAGE_URL}/awards/${awardId}`, {
@@ -297,10 +307,13 @@ export const AwardCategoriesPost = () => {
         error.response?.data?.message || error.message
       );
       toast.error("Error occurred while deleting");
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   const editgetApi = async (awardId) => {
+    setLoading(true); //Loader
     try {
       const response = await axios.get(`${EXCHNAGE_URL}/awardget/${awardId}`, {
         headers: {
@@ -315,6 +328,8 @@ export const AwardCategoriesPost = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
@@ -323,7 +338,7 @@ export const AwardCategoriesPost = () => {
       editgetApi(localAwardId);
       console.log("localAwardId", localAwardId);
     }
-  }, [showSecondModal, localAwardId]);
+  }, [showSecondModal, localAwardId, setLoading]);
 
   // const handleSave = async (e) => {
   //   e.preventDefault();
@@ -381,6 +396,7 @@ export const AwardCategoriesPost = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
   
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
@@ -440,6 +456,8 @@ export const AwardCategoriesPost = () => {
         console.error("Error updating profile:", error.message);
         toast.error("Error updating profile");
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
@@ -566,6 +584,7 @@ export const AwardCategoriesPost = () => {
                 <option value="newest">Sort by : Newest</option>
                 <option value="oldest">Sort by : Oldest</option>
               </SelectBorder>
+
               <GreyfilterButton className="award_filter_icon">
                 {" "}
                 <LuFilter />
@@ -585,15 +604,16 @@ export const AwardCategoriesPost = () => {
           <div className="award_table_btn">
             <GreyBorderButton
               onClick={() => {
-                setShowAwardCateDiv(true); // Show the award_cate_div
-                setShowTableDiv(false); // Hide the table div
+                setShowAwardCateDiv(true); //Show the award_cate_div
+                setShowTableDiv(false); //Hide the table div
               }}
             >
               Previous
             </GreyBorderButton>
             <RedBackgroundButton
               onClick={() => {
-                navigate("/event-live-preview");
+                //navigate("/event-live-preview");
+                setSelectedButton(3);
               }}
             >
               Next

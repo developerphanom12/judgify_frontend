@@ -133,7 +133,7 @@ const FormCanvas = ({
           {/* Display the label and input within a single div in column layout */}
           <div className="field-input-container">
             {/* Display the label for the field with red asterisk if required */}
-            {field.type !== "file" && (
+            {/* {field.type !== "file" && ( */}
               <InputLabel>
                 {field.label}
                 {field.required && <span style={{ color: "red" }}> *</span>}
@@ -145,7 +145,7 @@ const FormCanvas = ({
                   </span>
                 )}
               </InputLabel>
-            )}
+            {/* )} */}
 
            
           </div>
@@ -293,13 +293,14 @@ const FormCanvas = ({
                       &#63; 
                     </span>
                   )}
-                </InputLabel> */}
+                </InputLabel>  */}
                 
                 <input
                   type="file"
                   className="file_formcanvas"
                   onChange={(e) => handleFileChange(e, index)}
                 />
+                
                 {/* {selectedFile && <div>Selected File: {selectedFile.name}</div>} */}
               </div>
             )}

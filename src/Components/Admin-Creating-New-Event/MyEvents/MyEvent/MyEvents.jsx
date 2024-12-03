@@ -23,15 +23,19 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
+import { useLoading } from "../../../LoadingContext";
 
 export const MyEvents = () => {
   const [selectedButton, setSelectedButton] = useState(0);
   const navigate = useNavigate();
   const [myevents, setmyevents] = useState([]);
+  const { setLoading } = useLoading();  //Loader
+
 
   const backgroundColors = ["#FFE2E5", "#FFF4DE", "#F6F6FB", "#F3E8FF"];
 
   const getApi = async () => {
+    setLoading(true); //Loader
     try {
       const response = await axios.get(`${EXCHNAGE_URL}/MyEvents`, {
         headers: {
@@ -46,12 +50,14 @@ export const MyEvents = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   useEffect(() => {
     getApi();
-  }, []);
+  }, [setLoading]);
 
   const buttons = [
     { id: 1, label: "All", status: "all" },

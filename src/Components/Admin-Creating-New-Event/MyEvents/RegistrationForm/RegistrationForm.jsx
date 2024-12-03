@@ -5,6 +5,7 @@ import Side from "./RegistrationChild/Side";
 import FormPreview from "./RegistrationChild/FormPreview";
 import { RedBackgroundButton } from "../../../Global/GlobalButton";
 import "./RegistrationForm.css";
+import { SubHeading } from "../../../Global/GlobalText";
 
 export const RegistrationForm = () => {
   const [fields, setFields] = useState([]);
@@ -195,11 +196,15 @@ export const RegistrationForm = () => {
             </div>
           </>
         ) : (
-          <div className="form-preview">
-            <h1>Form Preview</h1>
-            <FormPreview formId={formId} />{" "}
+          <div className="formmm-preview">
+            <div className="form_preview_heading">
+                 <SubHeading style={{color:"#c32728", fontWeight:600}}>Form Preview</SubHeading>
+            </div>
+            <FormPreview formId={formId}/>
             {/* Render the form preview component */}
-            <button onClick={() => setIsPreview(false)}>Back to Builder</button>
+            {/* <button onClick={() => setIsPreview(false)}>Back to Builder</button> */}
+             <RedBackgroundButton onClick={() => setIsPreview(false)}>Back to Builder</RedBackgroundButton> 
+
           </div>
         )}
       </div>

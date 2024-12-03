@@ -16,10 +16,13 @@ import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../Url/Url";
 import { useDispatch } from "react-redux";
 import { setEventIdGet } from "../../Redux/Users/action";
+import { useLoading } from "../../LoadingContext";
 
 export const Dashboard = () => {
   const [dashboard, setDashboard] = useState([]);
   const [eventsToShow, setEventsToShow] = useState(8); // Start by showing 10 events
+
+  const { setLoading } = useLoading();  //Loader
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,6 +31,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const getApi = async () => {
+      setLoading(true); //Loader
       try {
         const response = await axios.get(`${EXCHNAGE_URL}/dashboardEvents`, {
           headers: {
@@ -42,11 +46,13 @@ export const Dashboard = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error.message);
+      }finally {
+        setLoading(false); //Loader
       }
     };
 
     getApi();
-  }, []); // Run only once when the component mounts
+  }, [setLoading]); // Run only once when the component mounts
 
   const loadMoreEvents = () => {
     setEventsToShow(eventsToShow + 8); // Increase the number of events to show

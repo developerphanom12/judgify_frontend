@@ -65,7 +65,7 @@ font-family: Poppins;
 font-size: 16px;
 font-weight: 500;
 line-height: 24px;
-text-align: left;
+/* text-align: left; */
 color: #FFFFFF;
 padding: 10px 20px;
 cursor: pointer;

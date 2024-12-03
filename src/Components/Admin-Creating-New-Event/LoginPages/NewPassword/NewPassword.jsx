@@ -15,12 +15,15 @@ import axios from "axios";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useLoading } from "../../../LoadingContext";
 
 export const NewPassword = () => {
   const [newPass, setNewPassword] = useState({
     newPassword: "",
     confirmPassword: ""
   });
+  const { setLoading } = useLoading();  //Loader
+
 
   const [porterrors, setPortErrors] = useState({});
 
@@ -40,6 +43,7 @@ export const NewPassword = () => {
 
   const handleforgetPswrd = (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
     const postApi = async () => {
       try {
         await hirePortSchema.validate(newPass, { abortEarly: false });
@@ -65,7 +69,10 @@ export const NewPassword = () => {
           toast.error("Failed to Created New Password. Please try again later.");
           console.error("API Error:", error);
         }
+      }finally {
+        setLoading(false); //Loader
       }
+
     };
     postApi();
   };

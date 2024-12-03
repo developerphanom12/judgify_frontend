@@ -45,7 +45,6 @@ export const CreateNewEvent = () => {
   });
 
   useEffect(() => {
-    
     const getApi = async () => {
       try {
         const response = await axios.get(
@@ -85,8 +84,7 @@ export const CreateNewEvent = () => {
         // Optionally handle the error, e.g., show an alert or redirect to login
       }
     };
-
-    getApi();
+  getApi();
   }, []);
 
   const navigate = useNavigate();

@@ -28,6 +28,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import { setAwardId } from "../../../Redux/Users/action";
 import * as Yup from "yup";
+import { useLoading } from "../../../LoadingContext";
 
 const validationCategorySchema = Yup.object({
   category_name: Yup.string().required("Category Name is required"),
@@ -73,6 +74,8 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
+  const { setLoading } = useLoading();  //Loader
+
 
   const [showSecondModal, setShowSecondModal] = useState(false);
 
@@ -121,6 +124,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
 
     const dataToSend = {
       ...awardData,
@@ -205,10 +209,13 @@ export const AwardCategories = ({ setSelectedButton }) => {
         }
         console.error("API Error:", error);
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   const getApi = async () => {
+    setLoading(true); //Loader
     try {
       let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${initialEventId}&sortOrder=${sortOrder}`;
       if (searchTerm) {
@@ -254,15 +261,18 @@ export const AwardCategories = ({ setSelectedButton }) => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   useEffect(() => {
     getApi();
-  }, [searchTerm, sortOrder]);
+  }, [searchTerm, sortOrder,setLoading]);
 
   const deleteAward = async (awardId) => {
     console.log("Award ID to delete:", awardId);
+    setLoading(true); //Loader
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(`${EXCHNAGE_URL}/awards/${awardId}`, {
@@ -283,10 +293,13 @@ export const AwardCategories = ({ setSelectedButton }) => {
         error.response?.data?.message || error.message
       );
       toast.error("Error occurred while deleting");
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   const editgetApi = async (awardId) => {
+    setLoading(true); //Loader
     try {
       const response = await axios.get(`${EXCHNAGE_URL}/awardget/${awardId}`, {
         headers: {
@@ -301,6 +314,8 @@ export const AwardCategories = ({ setSelectedButton }) => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
@@ -309,70 +324,12 @@ export const AwardCategories = ({ setSelectedButton }) => {
       editgetApi(localAwardId);
       console.log("localAwardId", localAwardId);
     }
-  }, [showSecondModal, localAwardId]);
-
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-
-  //   const formattedStartDate = editaward.is_start_date
-  //     ? new Date(editaward.start_date).toISOString().split("T")[0]
-  //     : null;
-  //   const formattedEndDate = editaward.is_end_date
-  //     ? new Date(editaward.end_date).toISOString().split("T")[0]
-  //     : null;
-
-  //   try {
-  //     await validationSchema.validate(editaward, { abortEarly: false });
-
-  //     const response = await axios.post(
-  //       `${EXCHNAGE_URL}/updateAwardCategory`,
-  //       {
-  //         awardId: localAwardId,
-  //         category_name: editaward.category_name,
-  //         category_prefix: editaward.category_prefix,
-  //         belongs_group: editaward.belongs_group,
-  //         // limit_submission: editaward.limit_submission,
-  //         limit_submission: editaward.limit_submission.toString(),
-  //         is_start_date: editaward.is_start_date ? 1 : 0,
-  //         start_date: formattedStartDate.toString(),
-
-  //         is_end_date: editaward.is_end_date ? 1 : 0,
-  //         end_date: formattedEndDate.toString(),
-
-  //         // is_endorsement: editaward.is_endorsement,
-  //         is_endorsement: editaward.is_endorsement ? 1 : 0, // Convert to 0 or 1
-  //       },
-  //       {
-  //         // Config options, including headers
-  //         headers: {
-  //           "Content-Type": "application/json", // Changed to "application/json" for simple JSON data
-  //           authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success("Category saved successfully!");
-  //       handleCloseSecondModal();
-  //       getApi();
-  //     }
-  //   } catch (error) {
-  //     if (error.name === "ValidationError") {
-  //       const errorMessages = {};
-  //       error.inner.forEach((err) => {
-  //         errorMessages[err.path] = err.message;
-  //       });
-  //       setErrors(errorMessages);
-  //     } else {
-  //       console.error("Error updating profile:", error.message);
-  //       toast.error("Error updating profile");
-  //     }
-  //   }
-  // };
+  }, [showSecondModal, localAwardId, setLoading]);
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
+    setLoading(true); //Loader
+    
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
       : null;
@@ -431,6 +388,8 @@ export const AwardCategories = ({ setSelectedButton }) => {
         console.error("Error updating profile:", error.message);
         toast.error("Error updating profile");
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
   
@@ -566,12 +525,15 @@ export const AwardCategories = ({ setSelectedButton }) => {
         </div>
 
         <div className="award_table_btn">
+          
           <GreyBorderButton onClick={() => setSelectedButton(1)}>
             Previous
           </GreyBorderButton>
+
           <RedBackgroundButton
             onClick={() => {
-              navigate("/event-live-preview");
+              // navigate("/event-live-preview");
+              setSelectedButton(3);
             }}
           >
             Next

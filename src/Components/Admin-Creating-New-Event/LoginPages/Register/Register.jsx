@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { useDispatch } from "react-redux";
 import { setUserCredentials } from "../../../Redux/Users/action";
+import { useLoading } from "../../../LoadingContext";
 
 // Define the validation schema
 const hirePortSchema = yup.object().shape({
@@ -46,6 +47,7 @@ const hirePortSchema = yup.object().shape({
 
 export const Register = () => {
   const dispatch = useDispatch();
+
   const [portData, setPortData] = useState({
     first_name: "",
     last_name: "",
@@ -55,7 +57,11 @@ export const Register = () => {
     mobile_number: "",
     country: "",
   });
+
   const [portErrors, setPortErrors] = useState({});
+  
+  const { setLoading } = useLoading();  //Loader
+
   const navigate = useNavigate();
 
   const handlePortData = (e) => {
@@ -64,6 +70,7 @@ export const Register = () => {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
     try {
       await hirePortSchema.validate(portData, { abortEarly: false });
       const response = await axios.post(`${EXCHNAGE_URL}/register`, portData, {
@@ -98,6 +105,8 @@ export const Register = () => {
         }
         console.error("API Error:", error);
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
 

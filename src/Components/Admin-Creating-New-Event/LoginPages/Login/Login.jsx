@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { useDispatch, useSelector } from "react-redux";
 import { userCheckAction, userDataAction } from "../../../Redux/Users/action";
+import { useLoading } from "../../../LoadingContext";
 
 // Define the validation schema
 const loginSchema = yup.object().shape({
@@ -41,6 +42,8 @@ export const Login = () => {
     password: password || "",
   });
 
+  const { setLoading } = useLoading();
+
   console.log("Email from Redux: ", email);
   console.log("Password from Redux: ", password);
 
@@ -55,6 +58,7 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await loginSchema.validate(loginData, { abortEarly: false });
 
@@ -90,6 +94,8 @@ export const Login = () => {
         }
         console.error("API Error:", error);
       }
+    }finally {
+      setLoading(false); 
     }
   };
 

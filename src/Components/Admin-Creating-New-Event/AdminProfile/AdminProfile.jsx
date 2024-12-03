@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 // import moment from "moment-timezone"; // Only if you're using moment-timezone
 import TimezoneSelect from "react-timezone-select"; // Import TimezoneSelect
+import { useLoading } from "../../LoadingContext";
 
 // const timezoneList = moment.tz.names();
 
@@ -54,6 +55,8 @@ export const AdminProfile = () => {
 
   const [selectedButton, setSelectedButton] = useState(1); // Initial state as 1 to show "Your Profile"
 
+  const { setLoading } = useLoading();  //Loader
+
   const [adminProfile, setAdminProfile] = useState({
     first_name: "",
     last_name: "",
@@ -79,6 +82,7 @@ export const AdminProfile = () => {
   const [selectedTimezone, setSelectedTimezone] = useState(null); // State for the selected time zone
 
   const getApi = async () => {
+    setLoading(true); //Loader
     try {
       const response = await axios.get(`${EXCHNAGE_URL}/getprofile`, {
         headers: {
@@ -86,7 +90,6 @@ export const AdminProfile = () => {
           authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       if (response.status === 200) {
         console.log("Fetched Data:", response.data.data);
         const profileData = response.data.data[0]; // Extract the first object from the array
@@ -103,14 +106,17 @@ export const AdminProfile = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
   useEffect(() => {
     getApi();
-  }, []);
+  }, [setLoading]);
 
   const handleSave = async () => {
+    setLoading(true); //Loader
     try {
       await validationSchema.validate(adminProfile, { abortEarly: false });
 
@@ -156,6 +162,8 @@ export const AdminProfile = () => {
         console.error("Error updating profile:", error.message);
         toast.error("Error updating profile");
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
@@ -183,6 +191,7 @@ export const AdminProfile = () => {
   };
 
   const handlePasswordChange = async () => {
+    setLoading(true); //Loader
     try {
       await validationPasswordSchema.validate(passwordData, {
         abortEarly: false,
@@ -221,11 +230,11 @@ export const AdminProfile = () => {
       } else {
         toast.error("Error updating password");
       }
+    }finally {
+      setLoading(false); //Loader
     }
   };
-
   const navigate = useNavigate();
-
   return (
     <div>
       <div className="adminprof_div">

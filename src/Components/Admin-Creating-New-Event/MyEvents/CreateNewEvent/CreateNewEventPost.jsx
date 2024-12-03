@@ -27,6 +27,7 @@ import { AwardCategoriesPost } from "../AwardCategories/AwardCategoriesPost";
 import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
 import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
+import { useLoading } from "../../../LoadingContext";
 
 export const CreateNewEventPost = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -54,8 +55,8 @@ export const CreateNewEventPost = () => {
     additional_email: [],
   });
 
+  const { setLoading } = useLoading();  //Loader
   const [errors, setErrors] = useState({});
-
   const validateForm = () => {
     const newErrors = {};
     if (!formData.event_name) newErrors.event_name = "Event name is required.";
@@ -112,6 +113,7 @@ export const CreateNewEventPost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
 
     const validationErrors = validateForm();
     setErrors(validationErrors);
@@ -167,6 +169,8 @@ export const CreateNewEventPost = () => {
     } catch (error) {
       console.error("Error creating event", error.response || error);
       toast.error("An error occurred while creating the event");
+    }finally {
+      setLoading(false); //Loader
     }
   };
 
@@ -667,7 +671,7 @@ export const CreateNewEventPost = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategoriesPost/>}
+            {selectedButton === 2 && <AwardCategoriesPost setSelectedButton={setSelectedButton}/>}
 
             {selectedButton === 3 && <RegistrationForm/>}
             {selectedButton === 4 && <RegistrationForm/>}

@@ -15,6 +15,7 @@ import axios from "axios";
 import { EXCHNAGE_URL } from "../../../../Url/Url";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useLoading } from "../../../LoadingContext";
   
 export const Otp = () => {
   const [otpData, setotpData] = useState({
@@ -22,6 +23,8 @@ export const Otp = () => {
   });
 
   const [porterrors, setPortErrors] = useState({});
+  const { setLoading } = useLoading();  //Loader
+
 
   const navigate = useNavigate();
 
@@ -35,6 +38,7 @@ export const Otp = () => {
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); //Loader
     const postApi = async () => {
       try {
         await hirePortSchema.validate(otpData, { abortEarly: false });
@@ -60,6 +64,8 @@ export const Otp = () => {
           toast.error("Failed to verify OTP. Please try again later.");
           console.error("API Error:", error);
         }
+      }finally {
+        setLoading(false); //Loader
       }
     };
     postApi();

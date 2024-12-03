@@ -8,20 +8,19 @@ const FormPreview = ({ formId }) => {
   // Fetch the form data when the formId changes
   useEffect(() => {
     if (!formId) return; // Exit if formId is not provided
-  
     axios
       .get(`http://localhost:5000/api/form/${formId}`)
       .then((response) => {
         console.log("Raw form_schema:", response.data.form_schema);
-  
+
         try {
           let schema = response.data.form_schema;
-  
+
           // Parse only if form_schema is a string
           if (typeof schema === "string") {
             schema = JSON.parse(schema);
           }
-  
+
           // Ensure it's an array before setting the state
           if (Array.isArray(schema)) {
             setFormSchema(schema);
@@ -40,9 +39,9 @@ const FormPreview = ({ formId }) => {
       });
   }, [formId]);
 
-   // Run this effect whenever formId changes
+  // Run this effect whenever formId changes
   // Function to render individual fields based on their type
-  
+
   const renderField = (field) => {
     const labelPositionLeft = field.labelPosition === "left"; // Check if label should be to the left
 
@@ -55,12 +54,13 @@ const FormPreview = ({ formId }) => {
       flexDirection: labelPositionLeft ? "row" : "column", // Change layout based on label position
       alignItems: labelPositionLeft ? "center" : "flex-start", // Align items differently for left/right vs top/bottom
       marginBottom: "15px",
+    
     };
 
     const labelStyle = {
       marginBottom: labelPositionLeft ? "0" : "8px", // No bottom margin if label is on the left
       marginRight: labelPositionLeft ? "10px" : "0", // Add right margin if label is on the left
-      width: labelPositionLeft ? "150px" : "auto", // Fixed width for left labels
+      width: labelPositionLeft ? "120px" : "auto", // Fixed width for left labels
       textAlign: labelPositionLeft ? "left" : "center", // Align text based on position
     };
 
@@ -72,7 +72,7 @@ const FormPreview = ({ formId }) => {
     return (
       <div key={field.dataName} style={fieldStyle}>
         {/* Render label with required asterisk and hover hint */}
-        {field.type !== "file" && (
+        {/* {field.type !== "file" && ( */}
           <label style={labelStyle}>
             {field.label}
             {field.required && <span style={{ color: "red" }}> *</span>}{" "}
@@ -83,7 +83,7 @@ const FormPreview = ({ formId }) => {
               </span>
             )}
           </label>
-        )}
+        {/* )} */}
 
         {/* Render fields based on their type */}
         {field.type === "label" && <h1>{field.label}</h1>}
@@ -118,20 +118,31 @@ const FormPreview = ({ formId }) => {
           </select>
         )}
         {field.type === "file" && <input type="file" style={inputStyle} />}
-        {field.type === "radio" &&
-          field.options.map((option, index) => (
-            <div key={index}>
-              <input type="radio" name={field.dataName} />
-              <label>{option}</label>
-            </div>
-          ))}
-        {field.type === "checkbox" &&
-          field.options.map((option, index) => (
-            <div key={index}>
-              <input type="checkbox" name={field.dataName} />
-              <label>{option}</label>
-            </div>
-          ))}
+
+        <div className="previewform_radio">
+          {field.type === "radio" &&
+            field.options.map((option, index) => (
+              <div className="form_prev_radio">
+                <div key={index}>
+                  <input type="radio" name={field.dataName} />
+                  <label>{option}</label>
+                </div>
+              </div>
+            ))}
+        </div>
+
+        <div className="previewform_radio">
+          {field.type === "checkbox" &&
+            field.options.map((option, index) => (
+              <div className="form_prev_radio">
+                <div key={index}>
+                  <input type="checkbox" name={field.dataName} />
+                  <label>{option}</label>
+                </div>
+              </div>
+            ))}
+        </div>
+
         {field.type === "dropdown" && (
           <select style={inputStyle}>
             {field.options.map((option, index) => (
