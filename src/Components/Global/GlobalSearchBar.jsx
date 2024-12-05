@@ -11,7 +11,6 @@ export const GlobalSearchBar = ({search }) => {
     <div className="search_div">
       <div className="icon_div">
       <IoSearchOutline/>
-
       </div>
 
       <div className="icon_content">

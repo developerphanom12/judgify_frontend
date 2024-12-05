@@ -64,7 +64,7 @@ export const Dashboard = () => {
   return (
     <div>
       <div className="dashboard_div">
-        <TitleBar title="Dashboard" />
+        <TitleBar title="Dashboard"/>
         <div className="dashboard_white_bg">
           <DescriptionContent>
             Start running your awards event now

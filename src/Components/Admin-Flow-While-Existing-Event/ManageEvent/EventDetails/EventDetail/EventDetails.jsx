@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./CreateNewEvent.scss";
-import { TitleBar } from "../../../Global/TitleBar/TitleBar";
+import "./EventDetails.scss";
+import { TitleBar } from "../../../../Global/TitleBar/TitleBar";
 import { SlArrowRight } from "react-icons/sl";
 import {
   CheckboxInput,
   CheckboxLabel,
   InputLabel,
   InputType,
-} from "../../../Global/GlobalFormElement";
-import { Description, EventHeading } from "../../../Global/GlobalText";
-import { MdInfo } from "react-icons/md";
-import {
-  GreyBackgroundButton,
-  GreyBorderButton,
-  RedBackgroundButton,
-} from "../../../Global/GlobalButton";
-import { AwardCategories } from "../AwardCategories/AwardCategories";
+} from "../../../../Global/GlobalFormElement";
+import { SubmissionId } from "../SumbissionId/SubmissionId";
+import { BackdoorAccess } from "../BackdoorAccess/BackdoorAccess";
+import { AwardDirectory } from "../AwardDirectory/AwardDirectory";
 import { useNavigate } from "react-router-dom";
+import { EXCHNAGE_URL, IMAGES_URL } from "../../../../../Url/Url";
 import axios from "axios";
-import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
 import { useSelector } from "react-redux";
-import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
+import { MdInfo } from "react-icons/md";
+import { Description, EventHeading } from "../../../../Global/GlobalText";
+import { GreyBorderButton, RedBackgroundButton } from "../../../../Global/GlobalButton";
 
-export const CreateNewEvent = () => {
+export const EventDetails = () => {
   const [selectedButton, setSelectedButton] = useState(1);
-  
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet);
   console.log("unknown", eventIdGet);
 
@@ -85,16 +81,17 @@ export const CreateNewEvent = () => {
         // Optionally handle the error, e.g., show an alert or redirect to login
       }
     };
-  getApi();
+    getApi();
   }, []);
 
   const navigate = useNavigate();
 
   const buttons = [
-    { id: 1, label: "Event details" },
-    { id: 2, label: "Award Categories" },
-    { id: 3, label: "Registration Form" },
-    { id: 4, label: "Entry Form" },
+    { id: 1, label: "General" },
+    { id: 2, label: "Event Page" },
+    { id: 3, label: "Submission ID" },
+    { id: 4, label: "Backdoor Access" },
+    { id: 5, label: "Award Directory" },
   ];
 
   const handleClick = (id) => {
@@ -104,7 +101,7 @@ export const CreateNewEvent = () => {
   return (
     <div>
       <div className="newevent_div">
-        <TitleBar title="Create New Event" />
+        <TitleBar title="Event Details" />
         <div className="newevent_bg">
           <div className="btn_radio">
             <div className="newevent_btn_click">
@@ -121,7 +118,7 @@ export const CreateNewEvent = () => {
                 </React.Fragment>
               ))}
             </div>
-            {selectedButton === 1 && (
+            {/* {selectedButton === 1 && (
               <div className="radio_btn">
                 <InputLabel>
                   Plan <span style={{ color: "#c32728" }}>*</span>
@@ -139,13 +136,11 @@ export const CreateNewEvent = () => {
                   id="changeColor"
                   name="radio"
                   value="Paid"
-                  onClick={() => {
-                    navigate("/stripe-setting");
-                  }}
+                  
                 />
                 <Description>Paid</Description>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="newevent_content">
@@ -177,7 +172,6 @@ export const CreateNewEvent = () => {
                           <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
 
-                        
                         <InputType
                           placeholder="Industry Type"
                           value={
@@ -223,21 +217,18 @@ export const CreateNewEvent = () => {
                           {/* <div className="time">{eventData.closing_time}</div>
                            */}
 
-                           <InputType
-                          name="closing_time"
-                          placeholder="Closing Time"
-                          value={eventData.closing_time}
-                          onChange={(e) =>
-                            setEventData({
-                              ...eventData,
-                              closing_time: e.target.value,
-                            })
-                          }
-                        />
-                          
-                        </div> 
-
-                        
+                          <InputType
+                            name="closing_time"
+                            placeholder="Closing Time"
+                            value={eventData.closing_time}
+                            onChange={(e) =>
+                              setEventData({
+                                ...eventData,
+                                closing_time: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
                       </div>
                       <div className="newevent_label">
                         <InputLabel>
@@ -443,103 +434,18 @@ export const CreateNewEvent = () => {
                       </div>
                     </div>
 
-                    <div className="newevent_row">
-                      <div className="newevent_label">
-                        <InputLabel>Event Logo (2MB Max)</InputLabel>
-
-                        <div className="myevent_img">
-                          <div className="logo_get">
-                            <img
-                              src={`${IMAGES_URL}${eventData.event_logo}`}
-                              alt="Logo"
-                            />
-                          </div>
-
-                          <Description>Browse File</Description>
-                          <CheckboxLabel style={{ textAlign: "center" }}>
-                            This option allows entrants to edit the submission
-                            details.
-                          </CheckboxLabel>
-                        </div>
-                      </div>
-
-                      <div className="newevent_label">
-                        <InputLabel>Event Banner (2MB Max)</InputLabel>
-
-                        <div className="myevent_img">
-                          <div className="logo_get">
-                            <img
-                              src={`${IMAGES_URL}${eventData.event_banner}`}
-                              alt="Logo"
-                            />
-                          </div>
-
-                          <Description>Browse File</Description>
-                          <CheckboxLabel style={{ textAlign: "center" }}>
-                            This option allows entrants to edit the submission
-                            details.
-                          </CheckboxLabel>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="newevent_row">
-                      <div className="newevent_label_lg">
-                        <div className="event_label_cont">
-                          <InputLabel>
-                            Event Description
-                            <span style={{ color: "#c32728" }}>*</span>
-                          </InputLabel>
-                        </div>
-                        <InputType
-                          name="event_description"
-                          rows="5"
-                          value={eventData.event_description}
-                          onChange={(e) =>
-                            setEventData({
-                              ...eventData,
-                              event_description: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-
                     <div className="newevent_btndiv">
                       <GreyBorderButton
                         onClick={() => {
-                          navigate("/my-events");
+                          // navigate("/my-events");
                         }}
                       >
                         Cancel
                       </GreyBorderButton>
-                      <GreyBackgroundButton
-                        onClick={() => {
-                          console.log("Navigating with event ID:", eventIdGet);
 
-                          navigate(
-                            setSelectedButton(2)
-                            // , {
-                            //   state: { eventIdGet: eventIdGet }, // Pass eventId in state
-                            // }
-                          );
-                        }}
-                      >
-                        Next
-                      </GreyBackgroundButton>
                       <RedBackgroundButton
                         onClick={() => {
-                          console.log(
-                            "Navigating with event ID: award ",
-                            eventIdGet
-                          );
-
-                          navigate(
-                            setSelectedButton(2)
-                            // , {
-                            //   state: { eventIdGet: eventIdGet },
-                            // }
-                          );
+                          navigate(setSelectedButton(2));
                         }}
                       >
                         Save
@@ -549,9 +455,126 @@ export const CreateNewEvent = () => {
                 </div>
               </>
             )}
-            {selectedButton === 2 && <AwardCategories  setSelectedButton={setSelectedButton}/>}
-            {selectedButton === 3 && <RegistrationForm/>}
-            {selectedButton === 4 && <RegistrationForm/>}
+            {selectedButton === 2 && (
+              <>
+                <form className="newevent_form">
+                  <div className="newevent_row">
+                    <div className="newevent_label">
+                      <InputLabel>Event Logo (2MB Max)</InputLabel>
+
+                      <div className="myevent_img">
+                        <div className="logo_get">
+                          <img
+                            src={`${IMAGES_URL}${eventData.event_logo}`}
+                            alt="Logo"
+                          />
+                        </div>
+
+                        <Description>Browse File</Description>
+                        <CheckboxLabel style={{ textAlign: "center" }}>
+                          JPG, GIF, or PNG format, not exceeding 2MB, fitting in
+                          area of 120px x 75px
+                        </CheckboxLabel>
+                      </div>
+                    </div>
+
+                    <div className="newevent_label">
+                      <InputLabel>Event Banner (2MB Max)</InputLabel>
+
+                      <div className="myevent_img">
+                        <div className="logo_get">
+                          <img
+                            src={`${IMAGES_URL}${eventData.event_banner}`}
+                            alt="Logo"
+                          />
+                        </div>
+
+                        <Description>Browse File</Description>
+                        <CheckboxLabel style={{ textAlign: "center" }}>
+                          This option allows entrants to edit the submission
+                          details.
+                        </CheckboxLabel>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="newevent_row">
+                    <div className="newevent_label_lg">
+                      <div className="event_label_cont">
+                        <InputLabel>Event Description</InputLabel>
+                      </div>
+                      <InputType
+                        name="event_description"
+                        rows="5"
+                        value={eventData.event_description}
+                        onChange={(e) =>
+                          setEventData({
+                            ...eventData,
+                            event_description: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="newevent_row">
+                    <div className="newevent_label_lg">
+                      <div className="event_label_cont">
+                        <InputLabel>Closing Message</InputLabel>
+                      </div>
+                      <InputType placeholder="Enter Closing Message" />
+                    </div>
+                  </div>
+
+                  <div className="newevent_row">
+                    <div className="newevent_label_lg">
+                      <div className="event_label_cont">
+                        <InputLabel>Jury Welcome Message</InputLabel>
+                      </div>
+                      <InputType placeholder="Enter Closing Message" />
+                    </div>
+                  </div>
+
+                  <div className="eventdetails_radio">
+                    <input
+                      type="radio"
+                      id="changeColor"
+                      name="radio"
+                      value="Yes"
+                    />
+                    <InputLabel> Yes </InputLabel>
+                    <input
+                      type="radio"
+                      id="changeColor"
+                      name="radio"
+                      value="No"
+                    />
+                    <InputLabel>No</InputLabel>
+                  </div>
+
+                  <div className="newevent_btndiv">
+                    <GreyBorderButton
+                      onClick={() => {
+                        navigate(setSelectedButton(1));
+                      }}
+                    >
+                      Cancel
+                    </GreyBorderButton>
+
+                    <RedBackgroundButton
+                      onClick={() => {
+                        navigate(setSelectedButton(3));
+                      }}
+                    >
+                      Save
+                    </RedBackgroundButton>
+                  </div>
+                </form>
+              </>
+            )}
+            {selectedButton === 3 && <SubmissionId  setSelectedButton={setSelectedButton}/>}
+            {selectedButton === 4 && <BackdoorAccess setSelectedButton={setSelectedButton}/>}
+            {selectedButton === 5 && <AwardDirectory setSelectedButton={setSelectedButton}/>}
           </div>
         </div>
       </div>

@@ -39,6 +39,14 @@ import FormPreview from "./Components/Admin-Creating-New-Event/MyEvents/Registra
 import Side from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/RegistrationChild/Side";
 import LoaderDot from "./Components/LoaderDot";
 import { LoadingProvider } from "./Components/LoadingContext";
+
+import { Coupans } from "./Components/Admin-Flow-While-Existing-Event/Coupans/Coupans";
+import { TopBar } from "./Components/Admin-Flow-While-Existing-Event/TopBar/TopBar";
+import { Forms } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/Forms/Forms/Forms";
+import { EventDetails } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/EventDetail/EventDetails";
+import { SubmissionId } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/SumbissionId/SubmissionId";
+import { BackdoorAccess } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/BackdoorAccess/BackdoorAccess";
+import { AwardDirectory } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/AwardDirectory/AwardDirectory";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -52,103 +60,114 @@ function App() {
 
   return (
     <div className="App">
-       <LoadingProvider>
-      <LoaderDot/>
-      <Layout>
-        <ToastContainer
-          className="toast-container"
-          toastClassName="toast-message"
-        />
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgetpassword" element={<ForgetPassword />} />
-          <Route path="/otp" element={<Otp />} />
-          <Route path="/new-password" element={<NewPassword />} />
-          <Route path="/user-login" element={<UserLogin />} />
-          <Route path="/user-register" element={<UserRegister />} />
-          <Route
-            path="/user-forget-password"
-            element={<UserForgetPassword />}
+      <LoadingProvider>
+        <LoaderDot />
+        <Layout>
+          <ToastContainer
+            className="toast-container"
+            toastClassName="toast-message"
           />
-          <Route path="/user-otp" element={<UserOtp />} />
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/otp" element={<Otp />} />
+            <Route path="/new-password" element={<NewPassword />} />
+            <Route path="/user-login" element={<UserLogin />} />
+            <Route path="/user-register" element={<UserRegister />} />
+            <Route
+              path="/user-forget-password"
+              element={<UserForgetPassword />}
+            />
+            <Route path="/user-otp" element={<UserOtp />} />
 
-          <Route path="/user-new-password" element={<UserNewPassword />} />
+            <Route path="/user-new-password" element={<UserNewPassword />} />
 
-          <Route
-            path="/user-submission-details"
-            element={<UserSubmissionDetails />}
-          />
+            <Route
+              path="/user-submission-details"
+              element={<UserSubmissionDetails />}
+            />
 
-          {isAuthenticated ? (
-            <>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/dashboard" element={<Dashboard />}/>
-              <Route path="/my-events" element={<MyEvents/>}/>
-              <Route path="/admin-profile" element={<AdminProfile/>}/>
-              <Route path="/title-bar" element={<TitleBar/>}/>
-              <Route path="/create-new-event" element={<CreateNewEvent/>}/>
-              <Route
-                path="/create-new-event-post"
-                element={<CreateNewEventPost />}
-              />
-              <Route
-                path="/create-new-event/:id"
-                element={<CreateNewEvent />}
-              />
-              <Route path="/award-categories" element={<AwardCategories />} />
-              <Route
-                path="/award-categories-post"
-                element={<AwardCategoriesPost />}
-              />
+            {isAuthenticated ? (
+              <>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/my-events" element={<MyEvents />} />
+                <Route path="/admin-profile" element={<AdminProfile />} />
+                <Route path="/title-bar" element={<TitleBar />} />
+                <Route path="/create-new-event" element={<CreateNewEvent />} />
+                <Route
+                  path="/create-new-event-post"
+                  element={<CreateNewEventPost />}
+                />
+                <Route
+                  path="/create-new-event/:id"
+                  element={<CreateNewEvent />}
+                />
+                <Route path="/award-categories" element={<AwardCategories />} />
+                <Route
+                  path="/award-categories-post"
+                  element={<AwardCategoriesPost />}
+                />
 
-              <Route path="/stripe-setting" element={<StripeSetting/>}/>
-              <Route path="/test" element={<Test />}/>
-              <Route
-                path="/event-live-preview"
-                element={<EventLivePreview/>}
-              />
-              <Route path="/sidebar" element={<Sidebar />}/>
-              {/* ------- */}
+                <Route path="/stripe-setting" element={<StripeSetting />} />
+                <Route path="/test" element={<Test />} />
+                <Route
+                  path="/event-live-preview"
+                  element={<EventLivePreview />}
+                />
+                <Route path="/sidebar" element={<Sidebar />} />
+                {/* ------- */}
 
-              <Route path="/registration-form" element={<RegistrationForm/>} />
-              <Route path="/edit-field-modal" element={<EditFieldModal/>} /> 
-              <Route path="/form-canvas" element={<FormCanvas/>}/> 
-              <Route path="/form-preview" element={<FormPreview/>}/> 
-              <Route path="/side" element={<Side/>}/> 
-              <Route path="/preview-loader" element={<LoaderDot />} />
+                <Route
+                  path="/registration-form"
+                  element={<RegistrationForm />}
+                />
+                <Route path="/edit-field-modal" element={<EditFieldModal />} />
+                <Route path="/form-canvas" element={<FormCanvas />} />
+                <Route path="/form-preview" element={<FormPreview />} />
+                <Route path="/side" element={<Side />} />
+                <Route path="/preview-loader" element={<LoaderDot />} />
 
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<Navigate to="/login" />} />
-              <Route path="/" element={<Navigate to="/login" />} />
-            </>
-          )}
+                {/* Admin Flow While Existing Event ------- */}
+                <Route path="/event-details" element={<EventDetails />} />
+                <Route path="/submissionid" element={<SubmissionId />} />
+                <Route path="/backdoor-access" element={<BackdoorAccess />} />
+                <Route path="/award-directory" element={<AwardDirectory />} />
+                <Route path="/forms" element={<Forms />} />
+                <Route path="/coupans" element={<Coupans />} />
+                <Route path="/top-bar" element={<TopBar />} />
+              </>
+            ) : (
+              <>
+                <Route path="/login" element={<Navigate to="/login" />} />
+                <Route path="/" element={<Navigate to="/login" />} />
+              </>
+            )}
 
-          {userFlowAuthenticated ? (
-            <>
-              <Route
-                path="/user-registration-profile"
-                element={<UserRegistrationProfile />}
-              />
-              <Route path="/user-dashboard" element={<UserDashboard />} />
-              <Route path="/user-titleBar" element={<UserTitlebar />} />
-              <Route path="/user-bottom-bar" element={<UserBottomBar />} />
-              <Route
-                path="/user-pending-payment"
-                element={<UserPendingPayment />}
-              />
-            </>
-          ) : (
-            <>
-              <Route path="/user-login" element={<UserLogin />} />
-              <Route path="/user-register" element={<UserRegister />} />
-            </>
-          )}
-        </Routes>
-      </Layout>
+            {userFlowAuthenticated ? (
+              <>
+                <Route
+                  path="/user-registration-profile"
+                  element={<UserRegistrationProfile />}
+                />
+                <Route path="/user-dashboard" element={<UserDashboard />} />
+                <Route path="/user-titleBar" element={<UserTitlebar />} />
+                <Route path="/user-bottom-bar" element={<UserBottomBar />} />
+                <Route
+                  path="/user-pending-payment"
+                  element={<UserPendingPayment />}
+                />
+              </>
+            ) : (
+              <>
+                <Route path="/user-login" element={<UserLogin />} />
+                <Route path="/user-register" element={<UserRegister />} />
+              </>
+            )}
+          </Routes>
+        </Layout>
       </LoadingProvider>
     </div>
   );

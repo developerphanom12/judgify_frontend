@@ -65,6 +65,16 @@ color: #C32728;
 margin:0
 `;
 
+
+export const FormHeading = styled.h4`
+font-family: Poppins;
+font-size: 16px;
+font-weight: 500;
+line-height: 24px;
+text-align: left;
+color:#777777;
+`;
+
 export const RegisterGreyHeading = styled.h4`
 font-family: Poppins;
 font-size: 18px;

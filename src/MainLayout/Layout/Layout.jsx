@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { Sidebar } from "../Sidebar/Sidebar";
 import "./Layout.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../Assets/logoaward.png";
 import { RxDashboard } from "react-icons/rx";
 import { Sidemenu } from "../../Components/Global/GlobalText";
@@ -29,9 +29,9 @@ export const Layout = ({ children }) => {
   const [selectedLink, setSelectedLink] = useState("dashboard");
   const [userselectedLink, setUserSelectedLink] = useState("dashboard");
 
-  // const location = useLocation(); // Get the current route
-  // const isUserSubmissionDetails =
-  //   location.pathname === "/user-submission-details"; //
+  const location = useLocation(); // Get the current route
+  const isUserSubmissionDetails =
+    location.pathname === "/user-submission-details"; //
 
   const navigate = useNavigate();
 
@@ -126,7 +126,7 @@ export const Layout = ({ children }) => {
 
          {userFlowCheck && userFlowtoken ? ( 
           <>
-            {/* {!isUserSubmissionDetails && ( */}
+            {!isUserSubmissionDetails && (
 
               <div className="sideBar">
                 <div className="logo_img">
@@ -149,15 +149,15 @@ export const Layout = ({ children }) => {
                     </Link>
 
                     <Link
-                      to="/user-submission-details"
+                      to="/"
                       className={
-                        userselectedLink === "usersubmissiondetails"
+                        userselectedLink === "/"
                           ? "selected"
-                          : ""
+                          : "/"
                       }
-                      onClick={() =>
-                        handleUserLinkClick("usersubmissiondetails")
-                      }
+                      // onClick={() =>
+                      //   handleUserLinkClick("dashboard")
+                      // }
                     >
                       <img src={event} alt="event_icon" />
                       <span>
@@ -167,7 +167,7 @@ export const Layout = ({ children }) => {
                       </span>
                     </Link>
 
-                    <Link
+                    {/* <Link
                       to="/user-registration-profile"
                       className={
                         userselectedLink === "userregistrationprofile"
@@ -183,7 +183,9 @@ export const Layout = ({ children }) => {
                       <span>
                         <Sidemenu>My Profile</Sidemenu>
                       </span>
-                    </Link>
+                    </Link> */}
+
+
                   </div>
 
                   <div className="Logout_main_div">
@@ -205,7 +207,7 @@ export const Layout = ({ children }) => {
                 </div>
               </div>
               
-            {/* )} */}
+           )} 
 
 
           </>

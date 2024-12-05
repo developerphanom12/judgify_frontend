@@ -1,0 +1,51 @@
+.newevent_form {
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    .submissionid_format {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      .submission_id_radio {
+        display: flex;
+        gap: 10px;
+      }
+    }
+
+    .awarddirectory_visible{
+        display: flex;
+        gap:10px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        .awarddirectory_visible_btn{
+            display: flex;
+            gap:10px;
+            span{
+                display: flex;
+                gap:10px;
+                align-items: center;
+            }
+        }
+        
+    }
+
+    .newevent_btndiv {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+
+  @media (max-width: 567px) {
+
+  }
+  
+  
+  @media (min-width: 567px) and (max-width: 1024px) {
+  
+  
+    
+  }
+  

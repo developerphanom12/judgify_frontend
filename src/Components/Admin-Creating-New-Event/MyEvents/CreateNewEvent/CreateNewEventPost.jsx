@@ -57,6 +57,8 @@ export const CreateNewEventPost = () => {
 
   const { setLoading } = useLoading();  //Loader
   const [errors, setErrors] = useState({});
+
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.event_name) newErrors.event_name = "Event name is required.";
@@ -118,10 +120,15 @@ export const CreateNewEventPost = () => {
     const validationErrors = validateForm();
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length > 0) {
-      return; // Stop the form submission if there are errors
-    }
+    // if (Object.keys(validationErrors).length > 0) {
+    //   return; // Stop the form submission if there are errors
+    // }
 
+    if (Object.keys(validationErrors).length > 0) {
+      setLoading(false); // Hide loader when there are validation errors
+      return; // Stop the form submission
+    }
+  
     const form = new FormData();
     form.append("event_name", formData.event_name);
     form.append("closing_date", formData.closing_date);
@@ -169,6 +176,7 @@ export const CreateNewEventPost = () => {
     } catch (error) {
       console.error("Error creating event", error.response || error);
       toast.error("An error occurred while creating the event");
+
     }finally {
       setLoading(false); //Loader
     }

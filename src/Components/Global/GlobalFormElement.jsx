@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const InputLabel = styled.label`
 font-family: Poppins;
 font-size: 16px;
-font-weight: 400;
+/* font-weight: 400; */
+font-weight: 500;
 line-height: 24px;
 text-align: left;
 color: #333333;

@@ -87,6 +87,20 @@ border-radius: 30px;
 border: 1px solid transparent
 `;
 
+export const GreylessradiusButton = styled.button`
+background-color:#333333;
+font-family:Poppins;
+font-size:16px;
+font-weight:500;
+line-height:24px;
+text-align:left;
+color:#FFFFFF;
+padding:10px 20px;
+cursor: pointer;
+border-radius: 10px;
+border: 1px solid transparent
+`;
+
 export const GreyfilterButton = styled.button`
 border-radius:8px;
 padding:0px 20px;

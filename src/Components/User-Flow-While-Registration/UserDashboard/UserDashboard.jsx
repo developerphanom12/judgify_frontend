@@ -29,10 +29,10 @@ export const UserDashboard = () => {
             navigate(`/user-pending-payment`);
           }}>Pay Now</RedBackgroundButton>
             </div>
-            <div className="user_dashboard_sub my_profile">
+            {/* <div className="user_dashboard_sub my_profile">
               <FaUserFriends/>
               <RedMainHeading>My Profile</RedMainHeading>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

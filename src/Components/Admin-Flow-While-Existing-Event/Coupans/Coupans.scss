@@ -1,0 +1,63 @@
+.coupans_div {
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    padding:20px;
+    .coupans_white_bg {
+        background-color:#fff;
+        padding:20px;
+        border-radius:12px;
+        display:flex;
+        flex-direction:column;
+        gap:25px;
+
+        .coupan_form {
+            display: flex;
+            flex-direction: column;
+            gap:20px;
+            .coupans_row {
+                display: flex;
+                gap: 50px;
+                .coupans_label_lg {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 5px;
+                  width: 100%;
+                  .coupan_select_input{
+                    display: flex;
+                    gap:20px;
+                    justify-content: space-between;
+                    select{
+                      flex:1;
+
+                    }
+                    input{
+                      flex:1;
+                    }
+                  }
+                  .coupans_label_cont {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .cont_icon {
+                      display: flex;
+                      align-items: center;
+                      svg {
+                        width: 20px;
+                        height: 15px;
+                        color: #777777;
+                      }
+                    }
+                  }
+                }
+             }
+
+             .coupans_btndiv {
+              display: flex;
+              gap: 10px;
+           }
+        
+        }
+    
+    }
+    }
