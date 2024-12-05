@@ -21,6 +21,7 @@ import axios from "axios";
 import { EXCHNAGE_URL, IMAGES_URL } from "../../../../Url/Url";
 import { useSelector } from "react-redux";
 import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
+import { EntryForm } from "../EntryForm/EntryForm";
 
 export const CreateNewEvent = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -550,8 +551,8 @@ export const CreateNewEvent = () => {
               </>
             )}
             {selectedButton === 2 && <AwardCategories  setSelectedButton={setSelectedButton}/>}
-            {selectedButton === 3 && <RegistrationForm/>}
-            {selectedButton === 4 && <RegistrationForm/>}
+            {selectedButton === 3 && <RegistrationForm setSelectedButton={setSelectedButton}/>}
+            {selectedButton === 4 && <EntryForm/>}
           </div>
         </div>
       </div>

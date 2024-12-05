@@ -7,11 +7,13 @@ export const SET_USER_EMAIL = "SET_USER_EMAIL";
 export const SET_EVENT_ID = "SET_EVENT_ID";
 export const SET_AWARD_ID = "SET_AWARD_ID";
 
-export const setUserCredentials = (email, password) => ({
-  type: SET_USER_CREDENTIALS,
-  payload: { email, password },
-});
+export const SET_REGISTRATION_FORM_ID = "SET_REGISTRATION_FORM_ID"; // New action type
 
+
+export const setUserCredentials = (email, password, first_name) => ({
+  type: SET_USER_CREDENTIALS,
+  payload: { email, password, first_name },
+});
 
 export const setUserFlowCredentials = (email, password) => ({
   type: SET_USER_FLOW_CREDENTIALS,
@@ -96,3 +98,11 @@ export const setAwardId = (awardId) => ({
   type: "SET_AWARD_ID",
   payload: awardId,
 });
+
+
+// Registration Form ID Actions (New)
+export const setRegistrationFormId = (id) => ({
+  type: SET_REGISTRATION_FORM_ID,
+  payload: id, // Set registrationFormId in the payload
+});
+

@@ -83,7 +83,7 @@ export const Register = () => {
         toast.success("Form submitted successfully");
 
         // Dispatch email and password to Redux
-        dispatch(setUserCredentials(portData.email, portData.password));
+        dispatch(setUserCredentials(portData.email, portData.password, portData.first_name));
         navigate("/login");
       } else {
         toast.error(

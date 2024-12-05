@@ -28,17 +28,17 @@
 .formmm-preview label {
   display: block;
   font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 13px;
+  margin-bottom:5px;
+  font-size:13px;
   color: #333;
 }
 
 /* Input fields styling */
 .form_preview_section input[type="text"],
-.form_preview_section input[type="email"],
+.form_preview_section  input[type="email"],
 .form_preview_section input[type="date"],
 .form_preview_section textarea,
-.form_preview_section  select {
+.form_preview_section select {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -46,8 +46,7 @@
   border: 1px solid #66666659;
   border-radius: 12px;
   box-sizing: border-box;
-  color: #777777;
-  
+  color:#777777;
 }
 
 /* Style for the file input field */
@@ -57,8 +56,7 @@
   /* border: 1px solid #ccc; */
   border-radius: 4px;
   box-sizing: border-box;
-  color: #777777;
-
+  color:#777777
 }
 
 /* Style for the radio and checkbox fields */
@@ -84,6 +82,8 @@
   font-size: 16px;
 } */
 
+
+
 /* Error or loading state */
 .formmm-preview p {
   text-align: center;
@@ -96,11 +96,12 @@
   margin-bottom: 15px;
 }
 
-.form_prev_radio {
+.form_prev_radio{
   margin-right: 10px;
-  color: #777777;
+  color:#777777;
 }
-.previewform_radio {
+
+.previewform_radio{
   display: flex;
 }
 
@@ -120,7 +121,7 @@
   z-index: 1;
   bottom: 100%;
   left: 50%;
-  margin-left: -60px; /* Center the tooltip */
+  margin-left: -60px;  /* Center the tooltip */
   opacity: 0;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
@@ -129,6 +130,7 @@
   visibility: visible;
   opacity: 1;
 }
+
 .tooltip-preview {
   position: relative;
   display: inline-block;
@@ -156,12 +158,11 @@
   opacity: 1;
 }
 
-
-
 .form_preview_heading {
   display: flex;
   justify-content: center;
 }
+
 
 .form_preview_radio {
   display: flex;
@@ -188,6 +189,7 @@
     
   }
 }
+  
 
 /* Responsive design for smaller screens */
 @media (max-width: 567px) {
@@ -196,15 +198,14 @@
     width: 100%;
   }
 
-  .form_preview_section {
-    padding: 0 ;
-   
-}
-
   .formmm-preview label {
     font-size: 11px;
-  }
+}
 
+.form_preview_section {
+  padding: 0 ;
+ 
+}
   /* .formmm-preview input[type="text"],
   .formmm-preview input[type="email"],
   .formmm-preview input[type="date"],
@@ -222,6 +223,7 @@
 
   .form_preview_section {
     padding: 0 ;
+   
   }
-  
+
 }

@@ -21,7 +21,7 @@ import { useLoading } from "../../LoadingContext";
 export const Dashboard = () => {
   const [dashboard, setDashboard] = useState([]);
   const [eventsToShow, setEventsToShow] = useState(8); // Start by showing 10 events
-
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const { setLoading } = useLoading();  //Loader
 
   const dispatch = useDispatch();
@@ -42,6 +42,7 @@ export const Dashboard = () => {
 
         if (response.status === 200) {
           setDashboard(response.data.data);
+          setFilteredEvents(response.data.data);
           console.log("setData", response.data.data);
         }
       } catch (error) {
@@ -54,6 +55,17 @@ export const Dashboard = () => {
     getApi();
   }, [setLoading]); // Run only once when the component mounts
 
+
+  const handleSearch = (query) => {
+    if (query) {
+      const filtered = dashboard.filter((event) =>
+        event.event_name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredEvents(filtered);
+    } else {
+      setFilteredEvents(dashboard); // Reset to all events if query is empty
+    }
+  };
   const loadMoreEvents = () => {
     setEventsToShow(eventsToShow + 8); // Increase the number of events to show
   };
@@ -64,7 +76,7 @@ export const Dashboard = () => {
   return (
     <div>
       <div className="dashboard_div">
-        <TitleBar title="Dashboard"/>
+        <TitleBar title="Dashboard" onSearch={handleSearch} />
         <div className="dashboard_white_bg">
           <DescriptionContent>
             Start running your awards event now
@@ -131,7 +143,7 @@ export const Dashboard = () => {
           </div>
 
           {/* Only show the 'View More' button if there are more events to display */}
-          {dashboard.length > eventsToShow && (
+          {filteredEvents.length > eventsToShow && (
             <div className="load-more-btn">
               <ViewMoreButton onClick={loadMoreEvents}>
                 Load More

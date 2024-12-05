@@ -1,0 +1,261 @@
+.registration_edit {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  .registration_edit_heading {
+    display: flex;
+    justify-content: center;
+  }
+  .registration_edit_form {
+    padding: 0 130px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .registration_edit_row {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+      .registration_edit_ckeck {
+        display: flex;
+        gap: 20px;
+      }
+    }
+
+    .registration_edit_btn {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .registration_edit_remove {
+    
+      color: #c32728;
+      height: 50px;
+      width: 30px;
+          cursor: pointer;
+    }
+    .registration_edit_addoption {
+      border: 1px solid #777777;
+      border-radius: 30px;
+      font-family: Poppins;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      text-align: left;
+      color: #333333;
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: transparent;
+      max-width: 140px;
+    }
+  }
+
+
+    .registration_edit_option{
+      display:flex;
+      justify-content: space-between;
+      gap:20px;
+      margin:10px 0;
+      input{
+        width:100%;
+      }
+    }
+
+
+}
+
+
+
+/* Modal title styling */
+
+/* .modal-content h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+} */
+
+/* Form group styling */
+/* .form-group {
+  margin-bottom: 15px;
+} */
+
+/* .form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: left;
+} */
+
+/* .form-group {
+  .reg_radio {
+    display: flex;
+    width: 100%;
+    input {
+      width: 5% !important;
+    }
+    p {
+      margin: 0;
+    }
+  }
+} */
+
+/* Input field styling */
+/* .form-group input[type="text"],
+.form-group input[type="radio"],
+.form-group input[type="checkbox"],
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+} */
+
+/* Style for textarea */
+/* .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  height: 100px;
+  box-sizing: border-box;
+} */
+
+/* Button styling inside modal */
+/* .modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+} */
+
+/* Common button styling */
+/* .modal-actions button {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  transition: opacity 0.3s ease;
+} */
+
+/* Cancel button styling */
+/* .modal-actions button:first-child {
+  background-color: #f44336;
+  color: white;
+} */
+
+/* Save button styling */
+/* .modal-actions button:last-child {
+  background-color: #4caf50;
+  color: white;
+} */
+
+/* Hover effect for buttons */
+/* .modal-actions button:hover {
+  opacity: 0.8;
+} */
+
+/* Style for option input fields */
+/* .option-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+} */
+
+/* .remove-btn {
+  background-color: red;
+  color: white;
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+} */
+
+/* .add-value-btn {
+  background-color: green;
+  color: white;
+  margin-top: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+} */
+
+/* Styling for modal actions buttons */
+/* .modal-actions button {
+  width: 48%;
+}
+
+.modal-actions button:first-child {
+  background-color: #f44336;
+}
+
+.modal-actions button:last-child {
+  background-color: #4caf50;
+} */
+
+/* Tooltip preview on the side of the field */
+.tooltip-preview {
+  margin-top: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tooltip-text {
+  background-color: #333;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 200px;
+  /* Optional to limit the tooltip width */
+}
+
+/* Optional: Tooltip position (position the tooltip to the side of the field) */
+.tooltip-preview {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 10px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+.cancel {
+  background-color: #f44336;
+}
+.cancel:hover {
+  background-color: darkred;
+}
+
+
+
+
+@media (max-width: 567px) {
+  .registration_edit {
+    .registration_edit_form {
+        padding: 0;
+    }
+}
+
+
+
+}
+
+
+@media (min-width: 567px) and (max-width: 1024px){
+  .registration_edit {
+    .registration_edit_form {
+        padding: 0;
+    }
+}
+
+
+
+}

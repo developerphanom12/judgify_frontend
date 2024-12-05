@@ -28,6 +28,7 @@ import TimePicker from "react-time-picker";
 import "react-time-picker/dist/TimePicker.css";
 import { RegistrationForm } from "../RegistrationForm/RegistrationForm";
 import { useLoading } from "../../../LoadingContext";
+import { EntryForm } from "../EntryForm/EntryForm";
 
 export const CreateNewEventPost = () => {
   const [selectedButton, setSelectedButton] = useState(1);
@@ -682,7 +683,7 @@ export const CreateNewEventPost = () => {
             {selectedButton === 2 && <AwardCategoriesPost setSelectedButton={setSelectedButton}/>}
 
             {selectedButton === 3 && <RegistrationForm/>}
-            {selectedButton === 4 && <RegistrationForm/>}
+            {selectedButton === 4 && <EntryForm/>}
           </div>
         </div>
       </div>

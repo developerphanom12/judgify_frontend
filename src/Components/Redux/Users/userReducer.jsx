@@ -11,6 +11,7 @@ const initialState = {
 
   email: null,
   password: null,
+  first_name:null,
 
   // email: "",
   id: null,
@@ -27,6 +28,7 @@ const UseReducer = (state = initialState, action) => {
         ...state,
         email: action.payload.email,
         password: action.payload.password,
+        first_name: action.payload.first_name,
       };
 
       case SET_USER_FLOW_CREDENTIALS:

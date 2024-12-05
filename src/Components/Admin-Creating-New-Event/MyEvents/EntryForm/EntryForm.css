@@ -7,7 +7,6 @@
     gap: 20px;
 }
 
-  
   .formformformformformapp {
     display: flex;
     flex-direction: row;
@@ -21,8 +20,8 @@
   .registratation_button{
     display: flex;
     justify-self: center;
-    gap:20px;
     width:100%;
+    gap:20px;
     margin-top: 40px;
   }
 
@@ -112,14 +111,14 @@
     text-align: left;
   } */
   
-  .field-container input,
+  /* .field-container input,
   .field-container textarea {
     /* width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px; */
-  }
+  /* } */ 
 
   /* .field-container select{
     width: 200px;

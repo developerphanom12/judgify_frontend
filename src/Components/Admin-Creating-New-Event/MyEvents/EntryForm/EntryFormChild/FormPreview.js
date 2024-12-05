@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap"; // Import Modal and Button
+import { Modal, Button } from "react-bootstrap"; // Import Modal and Button
 import "./FormPreview.css";
-import { GreyBackgroundButton, GreyBorderButton } from "../../../../Global/GlobalButton";
 import { SubHeading } from "../../../../Global/GlobalText";
+import { GreyBorderButton } from "../../../../Global/GlobalButton";
 
 const FormPreview = ({ formSchema, showModal, handleClose }) => {
   const [formData, setFormData] = useState({});
@@ -139,8 +139,7 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
           />
         )}
 
-      <div className="form_preview_radio">
-
+<div className="form_preview_radio">
         {field.type === "radio" &&
           field.options.map((option, index) => (
             <div key={index} className="sub_form_preview_radio">
@@ -154,12 +153,14 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
               <label>{option}</label>
             </div>
           ))}
-      </div>
 
-      <div className="form_preview_radio">
+</div>
+
+
+<div className="form_preview_radio">
         {field.type === "checkbox" &&
           field.options.map((option, index) => (
-            <div key={index} className="sub_form_preview_radio">
+            <div key={index}  className="sub_form_preview_radio">
               <input
                 type="checkbox"
                 name={field.dataName}
@@ -170,7 +171,8 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
               <label>{option}</label>
             </div>
           ))}
-      </div>
+
+</div>
 
         {field.type === "dropdown" && (
           <select
@@ -203,10 +205,11 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
   return (
     <Modal show={showModal} onHide={handleClose} size="lg">
       <Modal.Header closeButton>
+     
       </Modal.Header>
       <Modal.Body>
       <div class="form_preview_heading">
-          <SubHeading>Registration Form</SubHeading>
+          <SubHeading>Entry Form</SubHeading>
       </div>
 
       <div className="form_preview_section">
@@ -215,16 +218,16 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
           ) : (
             formSchema.map((field) => renderField(field))
           )}
-          <div className="formpreview_button" >
+            <div className="formpreview_button" >
           <GreyBorderButton  onClick={handleClose}>
             Close
           </GreyBorderButton>
         </div>
-      </div>
-
-        
+        </div>
       </Modal.Body>
-      <Modal.Footer></Modal.Footer>
+      <Modal.Footer>
+       
+      </Modal.Footer>
     </Modal>
   );
 };

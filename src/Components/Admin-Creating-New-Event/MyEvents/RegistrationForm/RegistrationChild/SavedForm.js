@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { Modal } from "react-bootstrap"; // Import Modal and Button
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./FormPreview.css";
-import { GreyBackgroundButton, GreyBorderButton } from "../../../../Global/GlobalButton";
-import { SubHeading } from "../../../../Global/GlobalText";
 
-const FormPreview = ({ formSchema, showModal, handleClose }) => {
-  const [formData, setFormData] = useState({});
+const SavedForm = ({ formId }) => {
+  const [formData, setFormData] = useState({}); // State to hold form data
+  const [formSchema, setFormSchema] = useState([]); // State to hold form schema
 
-  // Handle input changes for text, email, date, dropdown, etc.
   const handleInputChange = (fieldName, value) => {
     setFormData({
       ...formData,
@@ -15,7 +13,6 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
     });
   };
 
-  // Handle changes for checkboxes
   const handleCheckboxChange = (fieldName, value) => {
     setFormData((prevData) => {
       const currentValue = prevData[fieldName] || [];
@@ -33,7 +30,6 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
     });
   };
 
-  // Handle changes for radio buttons
   const handleRadioChange = (fieldName, value) => {
     setFormData({
       ...formData,
@@ -41,7 +37,34 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
     });
   };
 
-  // Function to render individual fields based on their type
+  // Fetch form schema when formId changes
+  useEffect(() => {
+    if (!formId) return; // Exit if formId is not provided
+    axios
+      .get(`http://localhost:5000/api/form/${formId}`)
+      .then((response) => {
+        let schema = response.data.form_schema;
+
+        // Parse the schema if it's a string
+        if (typeof schema === "string") {
+          schema = JSON.parse(schema);
+        }
+
+        // Ensure it's an array before setting the state
+        if (Array.isArray(schema)) {
+          setFormSchema(schema);
+        } else {
+          console.warn("form_schema is not an array:", schema);
+          setFormSchema([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching form data:", error);
+        setFormSchema([]);
+      });
+  }, [formId]);
+
+  // Render individual fields based on their type
   const renderField = (field) => {
     const labelPositionLeft = field.labelPosition === "left"; // Check if label should be to the left
 
@@ -52,7 +75,7 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
       display: "flex",
       flexDirection: labelPositionLeft ? "row" : "column", // Change layout based on label position
       alignItems: labelPositionLeft ? "center" : "flex-start", // Align items differently for left/right vs top/bottom
-      // marginBottom: "15px",
+      marginBottom: "15px",
     };
 
     const labelStyle = {
@@ -131,19 +154,11 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
           </select>
         )}
 
-        {field.type === "file" && (
-          <input
-            type="file"
-            style={inputStyle}
-            onChange={(e) => handleInputChange(field.dataName, e.target.files)}
-          />
-        )}
-
-      <div className="form_preview_radio">
+        {field.type === "file" && <input type="file" style={inputStyle} />}
 
         {field.type === "radio" &&
           field.options.map((option, index) => (
-            <div key={index} className="sub_form_preview_radio">
+            <div key={index}>
               <input
                 type="radio"
                 name={field.dataName}
@@ -154,12 +169,10 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
               <label>{option}</label>
             </div>
           ))}
-      </div>
 
-      <div className="form_preview_radio">
         {field.type === "checkbox" &&
           field.options.map((option, index) => (
-            <div key={index} className="sub_form_preview_radio">
+            <div key={index}>
               <input
                 type="checkbox"
                 name={field.dataName}
@@ -170,7 +183,6 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
               <label>{option}</label>
             </div>
           ))}
-      </div>
 
         {field.type === "dropdown" && (
           <select
@@ -185,48 +197,19 @@ const FormPreview = ({ formSchema, showModal, handleClose }) => {
             ))}
           </select>
         )}
-
-        {/* Add the phone field type handling */}
-        {field.type === "tel" && (
-          <input
-            type="tel"
-            placeholder={field.placeholder || "Enter phone number"}
-            style={inputStyle}
-            value={formData[field.dataName] || ""}
-            onChange={(e) => handleInputChange(field.dataName, e.target.value)}
-          />
-        )}
       </div>
     );
   };
 
   return (
-    <Modal show={showModal} onHide={handleClose} size="lg">
-      <Modal.Header closeButton>
-      </Modal.Header>
-      <Modal.Body>
-      <div class="form_preview_heading">
-          <SubHeading>Registration Form</SubHeading>
-      </div>
-
-      <div className="form_preview_section">
-          {formSchema.length === 0 ? (
-            <p>Loading form...</p> // Display loading message if form schema is empty
-          ) : (
-            formSchema.map((field) => renderField(field))
-          )}
-          <div className="formpreview_button" >
-          <GreyBorderButton  onClick={handleClose}>
-            Close
-          </GreyBorderButton>
-        </div>
-      </div>
-
-        
-      </Modal.Body>
-      <Modal.Footer></Modal.Footer>
-    </Modal>
+    <div className="form_saved"><h3>Saved Formn</h3>
+      {formSchema.length === 0 ? (
+        <p>Loading form...</p>
+      ) : (
+        formSchema.map((field) => renderField(field))
+      )}
+    </div>
   );
 };
 
-export default FormPreview;
+export default SavedForm;

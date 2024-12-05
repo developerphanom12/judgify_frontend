@@ -1,16 +1,23 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import FormCanvas from "./RegistrationChild/FormCanvas";
 import Side from "./RegistrationChild/Side";
 import FormPreview from "./RegistrationChild/FormPreview";
-import { RedBackgroundButton } from "../../../Global/GlobalButton";
+import { GreyBackgroundButton, GreyBorderButton, RedBackgroundButton } from "../../../Global/GlobalButton";
 import "./RegistrationForm.css";
-import { SubHeading } from "../../../Global/GlobalText";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_REGISTRATION_FORM_ID } from "../../../Redux/Users/action";
+import { EXCHNAGE_URL } from "../../../../Url/Url";
 
-export const RegistrationForm = () => {
-  const [fields, setFields] = useState([]);
-  const [formId, setFormId] = useState(null); // State to store the form ID after saving
-  const [isPreview, setIsPreview] = useState(false); // State to toggle between builder and preview
+export const RegistrationForm = ({setSelectedButton}) => {
+  const [fields, setFields] = useState([]); // Holds the fields schema (form data)
+  const [registrationFormId, setRegistrationFormId] = useState(null); // State to store the form ID after saving
+  const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
+  const dispatch = useDispatch(); // Initialize dispatch
+  const eventIdGet = useSelector((state) => state?.users?.eventIdGet);  
+  console.log("eventID", eventIdGet);
+  const initialEventId = String(eventIdGet); // Ensure it's a string
+  const eventId = initialEventId;
 
   // Default fields to be added before user selects any field
   const defaultFields = [
@@ -19,40 +26,40 @@ export const RegistrationForm = () => {
       label: "First Name",
       dataName: `firstName-${Date.now()}`,
       placeholder: "Enter first name...",
-      required: true, // Make First Name required
+      required: true,
       charLimitRequired: false,
       wordLimit: "",
       fieldSize: "100%",
       defaultValue: "",
-      isDefault: true, // Flag to indicate it's a default field
+      isDefault: true,
     },
     {
       type: "text",
       label: "Last Name",
       dataName: `lastName-${Date.now()}`,
       placeholder: "Enter last name...",
-      required: true, // Make Last Name required
+      required: true,
       charLimitRequired: false,
       wordLimit: "",
       fieldSize: "100%",
       defaultValue: "",
-      isDefault: true, // Flag to indicate it's a default field
+      isDefault: true,
     },
     {
       type: "email",
       label: "Email",
       dataName: `email-${Date.now()}`,
       placeholder: "Enter email...",
-      required: true, // Make Email required
-      isDefault: true, // Flag to indicate it's a default field
+      required: true,
+      isDefault: true,
     },
     {
       type: "country",
       label: "Country",
       dataName: `country-${Date.now()}`,
       options: ["USA", "India", "Canada"],
-      required: true, // Make Country required
-      isDefault: true, // Flag to indicate it's a default field
+      required: true,
+      isDefault: true,
     },
   ];
 
@@ -61,9 +68,9 @@ export const RegistrationForm = () => {
     const newField = {
       label: {
         type: "label",
-        label: "label Text",
+        label: "Label Text",
         dataName: `label-${Date.now()}`,
-        adminLabel: "label Admin Label",
+        adminLabel: "Label Admin Label",
         description: "<p>This is an HTML description for the label.</p>",
         size: "h1",
       },
@@ -147,9 +154,7 @@ export const RegistrationForm = () => {
   // Function to remove a field (prevent removal of default fields)
   const removeField = (index) => {
     const fieldToRemove = fields[index];
-    if (
-      fieldToRemove.isDefault // Check if it's a default field
-    ) {
+    if (fieldToRemove.isDefault) {
       alert("This field cannot be removed.");
     } else {
       setFields(fields.filter((_, i) => i !== index));
@@ -158,19 +163,67 @@ export const RegistrationForm = () => {
 
   // Function to save the form and switch to preview
   const saveForm = () => {
-    axios
-      .post("http://localhost:5000/api/form", {
-        name: "Sample Form",
-        schema: fields,
-      })
-      .then((response) => {
-        setFormId(response.data.id); // Store the form ID for preview
-        setIsPreview(true); // Switch to preview mode
-      })
-      .catch((error) => console.error(error));
+    if (!eventId) {
+      console.error("Event ID is missing.");
+      alert("Event ID is missing. Please check and try again.");
+      return;
+    }
+
+    const formPayload = { form_schema: fields, eventId }; // Include eventId in the payload
+
+    if (registrationFormId) {
+      // If registrationFormId exists, fetch the existing form
+      axios
+        // .get(`http://localhost:3600/api/admin/registrationForm/${eventId}/?registrationFormId=${registrationFormId}`)
+        .get(`${EXCHNAGE_URL}/registrationForm/${eventId}/?registrationFormId=${registrationFormId}`)
+        .then((response) => {
+          const existingForm = response.data;
+
+          // Compare existing schema with current schema
+          if (JSON.stringify(existingForm.form_schema) !== JSON.stringify(fields)) {
+            // If the form schema is different, update the existing form
+            axios
+              .put(`${EXCHNAGE_URL}/registrationForm/${eventId}/?registrationFormId=${registrationFormId}`, formPayload)
+
+              // .put(`http://localhost:3600/api/admin/registrationForm/${eventId}/?registrationFormId=${registrationFormId}`, formPayload)
+              .then(() => {
+                setShowModal(true); // Open modal after updating the form
+                alert("Form updated successfully.");
+              })
+              .catch((error) => {
+                console.error("Error updating form:", error);
+                alert("Error updating form. Please try again.");
+              });
+          } else {
+            setShowModal(true); // Open modal without changes if the schema is the same
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching existing form data:", error);
+          alert("Error fetching existing form. Please try again.");
+        });
+    } else {
+      // If no registrationFormId exists (new form), create a new entry
+      axios
+        .post(`${EXCHNAGE_URL}/registrationForm`, formPayload) // Send formPayload with eventId in the body
+
+        // .post("http://localhost:3600/api/admin/registrationForm", formPayload)
+
+        .then((response) => {
+          const newRegistrationFormId = response.data.id; // Get the new form ID from the response
+          setRegistrationFormId(newRegistrationFormId); // Dispatch the action to store the ID in Redux
+          dispatch({ type: SET_REGISTRATION_FORM_ID, payload: newRegistrationFormId });
+          setShowModal(true); // Open modal after saving the new form
+          alert("Form saved successfully.");
+        })
+        .catch((error) => {
+          console.error("Error creating form:", error);
+          alert("Error creating form. Please try again.");
+        });
+    }
   };
 
-  // Initially set the default fields
+  // Initially set the default fields only once
   useEffect(() => {
     setFields([...defaultFields]); // Set default fields when the component mounts
   }, []);
@@ -178,36 +231,31 @@ export const RegistrationForm = () => {
   return (
     <div>
       <div className="formapp">
-        {!isPreview ? (
-          <>
-            <Side addField={addField}/>
-            <div className="canvas-save">
-              <FormCanvas
-                fields={fields}
-                updateField={updateField}
-                removeField={removeField}
-                disableRequiredCheckbox={true} //Disable Required checkbox for default fields
-              />
-              <div className="registratation_button">
-                <RedBackgroundButton onClick={saveForm}>
-                  Save Form
-                </RedBackgroundButton>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="formmm-preview">
-            <div className="form_preview_heading">
-                 <SubHeading style={{color:"#c32728", fontWeight:600}}>Form Preview</SubHeading>
-            </div>
-            <FormPreview formId={formId}/>
-            {/* Render the form preview component */}
-            {/* <button onClick={() => setIsPreview(false)}>Back to Builder</button> */}
-             <RedBackgroundButton onClick={() => setIsPreview(false)}>Back to Builder</RedBackgroundButton> 
-
+        <Side addField={addField} />
+        <div className="canvas-save">
+          <FormCanvas
+            fields={fields}
+            updateField={updateField}
+            removeField={removeField}
+            disableRequiredCheckbox={true} // Disable the "required" checkbox for default fields
+          />
+          <div className="registratation_button">
+          <GreyBackgroundButton onClick={() => setShowModal(true)}>Preview </GreyBackgroundButton>
+          <RedBackgroundButton onClick={saveForm}>Save </RedBackgroundButton>
+          <GreyBorderButton onClick={() => setSelectedButton(4)}>Next</GreyBorderButton>
+   
+       
+        
           </div>
-        )}
+        </div>
       </div>
+
+      {/* {/ Form Preview Modal/} */}
+      <FormPreview
+        formSchema={fields}
+        showModal={showModal}
+        handleClose={() => setShowModal(false)} // Close modal
+      />
     </div>
   );
 };

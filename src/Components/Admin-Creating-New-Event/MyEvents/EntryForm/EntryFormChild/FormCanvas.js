@@ -48,18 +48,28 @@ const FormCanvas = ({
     }
   };
 
-  // Handle required checkbox toggle
   const handleRequiredToggle = (fieldIndex) => {
     const updatedFields = [...fields];
-    if (!updatedFields[fieldIndex].isDefault) {
-      updatedFields[fieldIndex].required = !updatedFields[fieldIndex].required;
-      updateField(updatedFields);
+    const field = updatedFields[fieldIndex];
+  
+    // Prevent toggling required for Category or Title fields
+    if (field.label === "Category" || field.label === "Title of the Entry") {
+      return; // Prevent action if it's Category or Title
     }
+  
+    updatedFields[fieldIndex].required = !updatedFields[fieldIndex].required;
+    updateField(updatedFields);
   };
-
-  // Handle visible checkbox toggle
+  
   const handleVisibleToggle = (fieldIndex) => {
     const updatedFields = [...fields];
+    const field = updatedFields[fieldIndex];
+  
+    // Prevent toggling visibility for Category field
+    if (field.label === "Category") {
+      return; // Prevent action if it's Category
+    }
+  
     updatedFields[fieldIndex].visible = !updatedFields[fieldIndex].visible;
     updateField(updatedFields);
   };
