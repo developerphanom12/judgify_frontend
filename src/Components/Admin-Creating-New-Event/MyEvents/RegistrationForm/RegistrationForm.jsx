@@ -19,6 +19,9 @@ export const RegistrationForm = ({setSelectedButton}) => {
   const initialEventId = String(eventIdGet); // Ensure it's a string
   const eventId = initialEventId;
 
+  const eventRegistration = useSelector((state) => state?.users?.id); 
+  console.log("eventRegistration", eventRegistration); 
+
   // Default fields to be added before user selects any field
   const defaultFields = [
     {
@@ -224,14 +227,40 @@ export const RegistrationForm = ({setSelectedButton}) => {
   };
 
   // Initially set the default fields only once
-  useEffect(() => {
-    setFields([...defaultFields]); // Set default fields when the component mounts
-  }, []);
 
+  // useEffect(() => {
+  //   setFields([...defaultFields]); 
+  // }, []);
+  useEffect(() => {
+    const registrationFormId = "27"; // Hardcoded registrationFormId = 3
+  
+    // Fetch the form data based on hardcoded values
+    axios
+      .get(`http://localhost:3600/api/admin/registrationForm?eventId=${eventId}&registrationFormId=${registrationFormId}`)
+      .then((response) => {
+        const fetchedFields = response.data?.data?.form_schema; // Get the stringified form_schema
+        
+        if (fetchedFields) {
+          // Parse the stringified JSON into an array
+          const parsedFields = JSON.parse(fetchedFields);
+          setFields(parsedFields); // Set the parsed fields to state
+        } else {
+          console.error("No form schema data available.");
+          // alert("Error: No form schema data available.");
+          setFields(defaultFields); // Fallback to default fields
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching form data:", error);
+        // alert("Error fetching form data. Please try again.");
+        setFields(defaultFields); // Fallback to default fields in case of error
+      });
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+  
   return (
     <div>
       <div className="formapp">
-        <Side addField={addField} />
+        <Side addField={addField}/>
         <div className="canvas-save">
           <FormCanvas
             fields={fields}
@@ -240,12 +269,9 @@ export const RegistrationForm = ({setSelectedButton}) => {
             disableRequiredCheckbox={true} // Disable the "required" checkbox for default fields
           />
           <div className="registratation_button">
-          <GreyBackgroundButton onClick={() => setShowModal(true)}>Preview </GreyBackgroundButton>
-          <RedBackgroundButton onClick={saveForm}>Save </RedBackgroundButton>
-          <GreyBorderButton onClick={() => setSelectedButton(4)}>Next</GreyBorderButton>
-   
-       
-        
+           <GreyBackgroundButton onClick={() => setShowModal(true)}>Preview</GreyBackgroundButton>
+           <RedBackgroundButton onClick={saveForm}>Save</RedBackgroundButton>
+           <GreyBorderButton onClick={() => setSelectedButton(4)}>Next</GreyBorderButton>
           </div>
         </div>
       </div>
@@ -259,3 +285,6 @@ export const RegistrationForm = ({setSelectedButton}) => {
     </div>
   );
 };
+
+
+

@@ -1,4 +1,4 @@
-import { SET_AWARD_ID, SET_EVENT_ID, SET_USER_CREDENTIALS, SET_USER_FLOW_CREDENTIALS } from "./action";
+import { SET_AWARD_ID, SET_EVENT_ID, SET_REGISTRATION_FORM_ID, SET_USER_CREDENTIALS, SET_USER_FLOW_CREDENTIALS } from "./action";
 
 const initialState = {
   user: {},
@@ -99,6 +99,13 @@ const UseReducer = (state = initialState, action) => {
     //       ...state,
     //       appDetails: action.payload,
     //     };
+
+
+    case SET_REGISTRATION_FORM_ID:
+      return {
+        ...state,
+        id: action.payload, 
+      };
 
     default:
       return state;

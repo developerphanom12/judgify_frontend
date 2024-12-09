@@ -156,7 +156,7 @@ font-family: Poppins;
 font-size: 12px;
 font-weight: 400;
 line-height: 19.2px;
-text-align: center;
+/* text-align: center; */
 color: #333333;
 margin:0;
 `;
@@ -166,7 +166,6 @@ font-family: Poppins;
 font-size: 13px;
 font-weight: 400;
 line-height: 19.2px;
-
 color: #777777;
 margin:0;
 
@@ -264,4 +263,23 @@ line-height: 32px;
 text-align: left;
 color: #00AC4F;
 margin:0;
+`;
+
+export const GreenContent = styled.span`
+font-family: Poppins;
+font-size: 16px;
+font-weight: 400;
+line-height: 16px;
+text-align: left;
+color: #00AC4F;
+margin:0;
+`;
+
+
+export const RedContent = styled.span`
+font-family: Poppins;
+font-size: 14px;
+font-weight: 400;
+line-height: 21px;
+color:#C32728;
 `;

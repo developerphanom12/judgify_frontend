@@ -47,6 +47,9 @@ import { EventDetails } from "./Components/Admin-Flow-While-Existing-Event/Manag
 import { SubmissionId } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/SumbissionId/SubmissionId";
 import { BackdoorAccess } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/BackdoorAccess/BackdoorAccess";
 import { AwardDirectory } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/AwardDirectory/AwardDirectory";
+import { JuryRound } from "./Components/Admin-Flow-While-Existing-Event/JuryRounds/JuryRound";
+import { JuryRoundExistingData } from "./Components/Admin-Flow-While-Existing-Event/JuryRoundExistingData/JuryRoundExistingData";
+import { CreateJuryRound } from "./Components/Admin-Flow-While-Existing-Event/CreateJuryRound/CreateJuryRound";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -96,10 +99,10 @@ function App() {
                 <Route path="/my-events" element={<MyEvents />} />
                 <Route path="/admin-profile" element={<AdminProfile />} />
                 <Route path="/title-bar" element={<TitleBar />} />
-                <Route path="/create-new-event" element={<CreateNewEvent />} />
+                <Route path="/create-new-event" element={<CreateNewEvent />}/>
                 <Route
                   path="/create-new-event-post"
-                  element={<CreateNewEventPost />}
+                  element={<CreateNewEventPost/>}
                 />
                 <Route
                   path="/create-new-event/:id"
@@ -112,7 +115,7 @@ function App() {
                 />
 
                 <Route path="/stripe-setting" element={<StripeSetting />} />
-                <Route path="/test" element={<Test />} />
+                <Route path="/test" element={<Test/>} />
                 <Route
                   path="/event-live-preview"
                   element={<EventLivePreview />}
@@ -131,13 +134,17 @@ function App() {
                 <Route path="/preview-loader" element={<LoaderDot />} />
 
                 {/* Admin Flow While Existing Event ------- */}
-                <Route path="/event-details" element={<EventDetails />} />
+                <Route path="/event-details" element={<EventDetails />}/>
                 <Route path="/submissionid" element={<SubmissionId />} />
-                <Route path="/backdoor-access" element={<BackdoorAccess />} />
-                <Route path="/award-directory" element={<AwardDirectory />} />
-                <Route path="/forms" element={<Forms />} />
-                <Route path="/coupans" element={<Coupans />} />
-                <Route path="/top-bar" element={<TopBar />} />
+                <Route path="/backdoor-access" element={<BackdoorAccess />}/>
+                <Route path="/award-directory" element={<AwardDirectory />}/>
+                <Route path="/forms" element={<Forms />}/>
+                <Route path="/coupans" element={<Coupans/>}/>
+                <Route path="/top-bar" element={<TopBar/>}/>
+                <Route path="/jury-round" element={<JuryRound/>}/>
+                <Route path="/jury-round-data" element={<JuryRoundExistingData/>}/>
+                <Route path="/create-jury-round" element={<CreateJuryRound/>}/>
+
               </>
             ) : (
               <>

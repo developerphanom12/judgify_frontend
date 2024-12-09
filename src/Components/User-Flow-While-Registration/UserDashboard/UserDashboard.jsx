@@ -3,7 +3,6 @@ import "./UserDashboard.scss";
 import { LuFileEdit } from "react-icons/lu";
 import { RedMainHeading, SubHeading } from "../../Global/GlobalText";
 import { HiMiniCurrencyDollar } from "react-icons/hi2";
-import { FaUserFriends } from "react-icons/fa";
 import { RedBackgroundButton } from "../../Global/GlobalButton";
 import { UserTitlebar } from "../../Global/User-Flow/UserTitleBar/UserTitleBar";
 import { useNavigate } from "react-router-dom";

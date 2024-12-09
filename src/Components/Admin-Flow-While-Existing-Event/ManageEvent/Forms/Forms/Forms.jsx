@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import "./Forms.scss";
-import { useNavigate } from "react-router-dom";
 import { CreateButton, GreyBorderButton } from "../../../../Global/GlobalButton";
 import { FormHeading, RegisterGreyHeading } from "../../../../Global/GlobalText";
 import { TitleBar } from "../../../../Global/TitleBar/TitleBar";
 
 export const Forms = () => {
-  const navigate = useNavigate();
   const [showFormOne, setShowFormOne] = useState(true);
 
   return (

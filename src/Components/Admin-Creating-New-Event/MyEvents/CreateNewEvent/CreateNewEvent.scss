@@ -50,7 +50,6 @@
         align-items: center;
       }
     }
-
     .newevent_content {
       .newevent_form {
         display: flex;
@@ -64,8 +63,6 @@
             flex-direction: column;
             gap: 5px;
             width: 50%;
-
-       
 
             .timezone_div {
               border-radius: 12px;
@@ -136,10 +133,10 @@
               gap: 5px;
 
               .react-time-picker__wrapper {
-                border-radius: 12px!important;
-                border: 1px solid rgba(102, 102, 102, 0.3490196078)!important;
-                padding: 10px!important;
-            }
+                border-radius: 12px !important;
+                border: 1px solid rgba(102, 102, 102, 0.3490196078) !important;
+                padding: 10px !important;
+              }
               // .clos_time {
               //   display: flex;
               //   gap: 10px;
@@ -183,7 +180,6 @@
         }
       }
     }
-
     .error {
       color: #c32728;
       text-align: left;

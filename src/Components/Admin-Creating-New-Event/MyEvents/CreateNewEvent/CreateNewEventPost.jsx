@@ -56,9 +56,8 @@ export const CreateNewEventPost = () => {
     additional_email: [],
   });
 
-  const { setLoading } = useLoading();  //Loader
+  const { setLoading } = useLoading(); //Loader
   const [errors, setErrors] = useState({});
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -129,7 +128,7 @@ export const CreateNewEventPost = () => {
       setLoading(false); // Hide loader when there are validation errors
       return; // Stop the form submission
     }
-  
+
     const form = new FormData();
     form.append("event_name", formData.event_name);
     form.append("closing_date", formData.closing_date);
@@ -177,8 +176,7 @@ export const CreateNewEventPost = () => {
     } catch (error) {
       console.error("Error creating event", error.response || error);
       toast.error("An error occurred while creating the event");
-
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
@@ -329,9 +327,26 @@ export const CreateNewEventPost = () => {
                           style={{ height: "45px" }}
                         >
                           <option value="">Select Industry Type</option>
-                          <option value="Fashion">Fashion</option>
-                          <option value="Skin Care">Skin Care</option>
-                          <option value="Beauty">Beauty</option>
+                          {[
+                            {
+                              value: "MICE",
+                              label:
+                                "MICE (Meetings, Incentives, Conferencing, Exhibitions)",
+                            },
+                            { value: "NonProfit", label: "Non Profit" },
+                            { value: "Corporate", label: "Corporate" },
+                            { value: "Government", label: "Government" },
+                            { value: "Association", label: "Association" },
+                            { value: "Media", label: "Media" },
+                            { value: "Startup", label: "Start Up" },
+                            { value: "Education", label: "Education" },
+                            { value: "Health", label: "Health" },
+                            { value: "Others", label: "Others" },
+                          ].map((industry) => (
+                            <option key={industry.value} value={industry.value}>
+                              {industry.label}
+                            </option>
+                          ))}
                         </SelectBorder>
 
                         {errors.industry_type && (
@@ -429,17 +444,14 @@ export const CreateNewEventPost = () => {
                           Timezone <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
 
-                         <TimezoneSelect
+                        <TimezoneSelect
                           value={selectedTimezone}
                           onChange={setSelectedTimezone}
-                        /> 
-
+                        />
 
                         {/* {errors.time_zone && (
                           <span className="error">{errors.time_zone}</span>
                         )}{" "}  */}
-
-                  
                       </div>
                     </div>
 
@@ -556,7 +568,7 @@ export const CreateNewEventPost = () => {
                         <div className="newevent_label">
                           <InputLabel>Submission Limit</InputLabel>
                           <InputType
-                           type="number"
+                            type="number"
                             name="submission_limit"
                             value={formData.submission_limit}
                             onChange={handleChange}
@@ -680,10 +692,12 @@ export const CreateNewEventPost = () => {
               </>
             )}
 
-            {selectedButton === 2 && <AwardCategoriesPost setSelectedButton={setSelectedButton}/>}
+            {selectedButton === 2 && (
+              <AwardCategoriesPost setSelectedButton={setSelectedButton} />
+            )}
 
-            {selectedButton === 3 && <RegistrationForm/>}
-            {selectedButton === 4 && <EntryForm/>}
+            {selectedButton === 3 && <RegistrationForm setSelectedButton={setSelectedButton}/>}
+            {selectedButton === 4 && <EntryForm />}
           </div>
         </div>
       </div>

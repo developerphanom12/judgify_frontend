@@ -489,30 +489,56 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
     "Actions",
   ];
 
-  const exportgetApi = async () => {
+  // const exportgetApi = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${EXCHNAGE_URL}/download?eventId=${initialEventId}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       const tableData = response.data.data;
+
+  //       exportToExcel(tableData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error.message);
+  //   }
+  // };
+ 
+
+  const exportgetApi = async (eventId) => {
     try {
-      const response = await axios.get(
-        `${EXCHNAGE_URL}/download?eventId=${initialEventId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        // Assuming response.data.data contains the table data to be exported
-        const tableData = response.data.data;
-
-        // Convert the data to Excel
-        exportToExcel(tableData);
-      }
+      // Ensure eventId is passed correctly into the API URL
+      const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${initialEventId}`, {
+        responseType: 'blob', // Handle the response as a binary blob
+        headers: {
+          "Content-Type": "application/json",  // Content type for the request
+          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Authentication token
+        },
+      });
+  
+      // Create a URL for the binary blob (Excel file)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'products.xlsx'); // Filename for download
+      document.body.appendChild(link)
+;
+      link.click(); // Trigger the download
+      document.body.removeChild(link)
+; // Clean up the DOM element
     } catch (error) {
-      console.error("Error fetching data:", error.message);
-      // Optionally handle the error, e.g., show an alert or redirect to login
+      console.error('Error downloading file:', error);
     }
   };
+
+
 
   const exportToExcel = (data) => {
     // Convert the data into a worksheet
@@ -526,9 +552,9 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
     XLSX.writeFile(wb, "award_data.xlsx");
   };
 
-  useEffect(() => {
-    exportgetApi();
-  });
+ 
+    
+
 
   const navigate = useNavigate();
 

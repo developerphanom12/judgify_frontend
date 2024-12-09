@@ -1,0 +1,129 @@
+.create-jury-round_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .create-jury-round_white_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .create-jury-round_click {
+      background-color: #f6f8f9;
+      border: 1px solid #777777;
+      border-radius: 8px;
+      display: flex;
+      padding: 5px;
+      width: 30%;
+      button {
+        font-family: Poppins;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 16px;
+        border: 1px solid transparent;
+        color: #777777;
+        background-color: transparent;
+        padding: 15px 18px;
+        border-radius: 8px;
+        &.selected {
+          background-color: #c32728;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .create_jury_row {
+      display: flex;
+      .create_jury_label {
+        width: 100%;
+        gap: 5px;
+        .create_jury_cont {
+          flex-direction: column;
+          span {
+            text-align: left;
+          }
+        }
+      }
+      .create_jury_closing_label {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        .create_jury_clos_label {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          gap:10px;
+          .create_jury_date_time {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            gap:20px;
+            input {
+              width: 40%;
+            }
+            .react-time-picker {
+                width: 40% !important;
+            }
+            .react-time-picker__wrapper {
+              border-radius: 12px !important;
+              border: 1px solid rgba(102, 102, 102, 0.3490196078) !important;
+              padding: 10px !important;
+            }
+          }
+        }
+
+        .clos_label {
+          width: 100%;
+        }
+      }
+    }
+
+    .create_jury_content_one {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .create_jury_content_row {
+        display: flex;
+        gap: 30px;
+        .create_jury_content_column {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          width: 50%;
+          .create_jury_check {
+            display: flex;
+            gap: 10px;
+          }
+        }
+      }
+    }
+
+    .create_overall_score {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 50%;
+      .create_overall {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        input {
+          width: 80%;
+        }
+        svg {
+          width: 20px;
+          height: 20px;
+          color: #777777;
+        }
+      }
+    }
+
+    .create_jury_btndiv {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}

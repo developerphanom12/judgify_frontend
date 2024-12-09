@@ -48,3 +48,14 @@ color: #333333;
 text-align: left;
 `;
 
+
+export const CheckLabel = styled.label`
+font-family: Poppins;
+font-size: 14px;
+font-weight: 400;
+line-height: 18px;
+color: #333333;
+text-align: left;
+`;
+
+
