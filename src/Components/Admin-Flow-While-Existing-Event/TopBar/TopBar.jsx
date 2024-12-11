@@ -22,7 +22,7 @@ export const TopBar = ({titleheading}) => {
                 </div>
 
                 <div className='topbar_entry_div'>
-                    <DescriptionContent>Total Completed Entry Form</DescriptionContent>
+                    <DescriptionContent>Total Completed submissions</DescriptionContent>
                     <IconContent className='topbar_outof'>0 of 0</IconContent>
                 </div>
 

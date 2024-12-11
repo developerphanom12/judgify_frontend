@@ -1,14 +1,14 @@
 import React from "react";
 import "./JuryRound.scss";
-import { TitleBar } from "../../Global/TitleBar/TitleBar";
-import { TopBar } from "../TopBar/TopBar";
-import { CreateButton } from "../../Global/GlobalButton";
+import { TitleBar } from "../../../../Global/TitleBar/TitleBar";
+import { TopBar } from "../../../TopBar/TopBar";
+import { CreateButton } from "../../../../Global/GlobalButton";
 import {
   RedMainHeading,
   RegisterGreyHeading,
   StatusContent,
-} from "../../Global/GlobalText";
-import law from "../../../Assets/law.png";
+} from "../../../../Global/GlobalText";
+import law from "../../../../../Assets/law.png";
 import { useNavigate } from "react-router-dom";
 
 export const JuryRound = () => {
@@ -22,7 +22,7 @@ export const JuryRound = () => {
           <div className="jury_round_btn">
             <CreateButton 
              onClick={() => {
-              navigate("/create-jury-round");
+              navigate("/create-jury-round-post");
             }}
             
             >Create New Round</CreateButton>

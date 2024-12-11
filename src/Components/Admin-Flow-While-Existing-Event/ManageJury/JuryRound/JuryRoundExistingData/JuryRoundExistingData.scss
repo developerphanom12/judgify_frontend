@@ -1,14 +1,14 @@
 .jury_existing_data_div {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-  .jury_existing_data_white_bg {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  padding:20px;
+  .jury_existing_data_white_bg{
+    background-color:#fff;
+    padding:20px;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
     gap:20px;
     .jury_existing_data_btn {
       display: flex;
@@ -22,7 +22,6 @@
       background-color: #F6F8F9;
     }
 
-
     .jury_existing_date_div{
         display:flex;
         justify-content:space-between;
@@ -33,6 +32,7 @@
                 display:flex;
                 gap:5px;
                 align-items: center;
+                cursor: pointer;
                 svg{
                     width: 25px;
                     height: 23px;
@@ -63,6 +63,7 @@
               display:flex;
               gap:5px;
               align-items: center;
+              cursor:pointer;
               svg{
                   width: 25px;
                   height: 23px;
@@ -85,6 +86,7 @@
             }
         }
       }
+
       .jury_existing_submission_div{
         display: flex;
         gap:20px;

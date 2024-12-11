@@ -42,8 +42,7 @@ const validationSchema = Yup.object({
   category_prefix: Yup.string().required("Category Prefix is required"),
   belongs_group: Yup.string().required("Belongs to Group is required"),
   limit_submission: Yup.string().required("Limit Submission is required"),
-  // start_date: Yup.date().optional("Start Date is required"),
-  // end_date: Yup.date().optional("End Date is required"),
+
 });
 
 export const AwardCategories = ({ setSelectedButton }) => {

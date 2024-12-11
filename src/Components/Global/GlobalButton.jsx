@@ -124,7 +124,24 @@ line-height: 24px;
 text-align: left;
 padding:10px 20px;
 cursor: pointer;
+
 `
+
+
+export const RedBordButton = styled.button`
+border: 1px solid #C32728;
+font-family: Poppins;
+font-size: 12px;
+font-weight: 500;
+line-height: 18px;
+padding:10px 15px;
+cursor: pointer;
+color:#C32728;
+background-color: transparent;
+border-radius: 8px;
+`
+
+
 
 export const GreenBackgroundButton = styled.button`
 background: #00AC4F;

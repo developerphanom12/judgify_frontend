@@ -47,9 +47,19 @@ import { EventDetails } from "./Components/Admin-Flow-While-Existing-Event/Manag
 import { SubmissionId } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/SumbissionId/SubmissionId";
 import { BackdoorAccess } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/BackdoorAccess/BackdoorAccess";
 import { AwardDirectory } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/EventDetails/AwardDirectory/AwardDirectory";
-import { JuryRound } from "./Components/Admin-Flow-While-Existing-Event/JuryRounds/JuryRound";
-import { JuryRoundExistingData } from "./Components/Admin-Flow-While-Existing-Event/JuryRoundExistingData/JuryRoundExistingData";
-import { CreateJuryRound } from "./Components/Admin-Flow-While-Existing-Event/CreateJuryRound/CreateJuryRound";
+import { JuryRound } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/JuryRounds/JuryRound";
+import { JuryRoundExistingData } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/JuryRoundExistingData/JuryRoundExistingData";
+// import { CreateJuryRound } from "./Components/Admin-Flow-While-Existing-Event/CreateJuryRound/CreateJuryRound";
+// import { CreateJuryRoundPost } from "./Components/Admin-Flow-While-Existing-Event/CreateJuryRound/CreateJuryRoundPost";
+
+import { ViewGroup } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/ViewGroup/ViewGroup";
+import { ShortListEntryForm } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/ShortListEntryForm/ShortListEntryForm";
+import { CreateJuryRoundPost } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/CreateJuryRound/CreateJuryRoundPost";
+import { CreateJuryRound } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/CreateJuryRound/CreateJuryRound";
+import { JuryAssignment } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryAssignment/JuryAssignment";
+import { CustomiseAllocation } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/CustomiseAllocation/CustomiseAllocation";
+import { Nominee } from "./Components/Admin-Flow-While-Existing-Event/Manage Entry Form/Nominee/Nominee";
+import { Orders } from "./Components/Admin-Flow-While-Existing-Event/Manage Entry Form/Orders/Orders";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -99,10 +109,10 @@ function App() {
                 <Route path="/my-events" element={<MyEvents />} />
                 <Route path="/admin-profile" element={<AdminProfile />} />
                 <Route path="/title-bar" element={<TitleBar />} />
-                <Route path="/create-new-event" element={<CreateNewEvent />}/>
+                <Route path="/create-new-event" element={<CreateNewEvent />} />
                 <Route
                   path="/create-new-event-post"
-                  element={<CreateNewEventPost/>}
+                  element={<CreateNewEventPost />}
                 />
                 <Route
                   path="/create-new-event/:id"
@@ -115,7 +125,7 @@ function App() {
                 />
 
                 <Route path="/stripe-setting" element={<StripeSetting />} />
-                <Route path="/test" element={<Test/>} />
+                <Route path="/test" element={<Test />} />
                 <Route
                   path="/event-live-preview"
                   element={<EventLivePreview />}
@@ -132,18 +142,40 @@ function App() {
                 <Route path="/form-preview" element={<FormPreview />} />
                 <Route path="/side" element={<Side />} />
                 <Route path="/preview-loader" element={<LoaderDot />} />
-
                 {/* Admin Flow While Existing Event ------- */}
                 <Route path="/event-details" element={<EventDetails />}/>
-                <Route path="/submissionid" element={<SubmissionId />} />
+                <Route path="/submissionid" element={<SubmissionId />}/>
                 <Route path="/backdoor-access" element={<BackdoorAccess />}/>
                 <Route path="/award-directory" element={<AwardDirectory />}/>
                 <Route path="/forms" element={<Forms />}/>
-                <Route path="/coupans" element={<Coupans/>}/>
-                <Route path="/top-bar" element={<TopBar/>}/>
-                <Route path="/jury-round" element={<JuryRound/>}/>
-                <Route path="/jury-round-data" element={<JuryRoundExistingData/>}/>
-                <Route path="/create-jury-round" element={<CreateJuryRound/>}/>
+                <Route path="/coupans" element={<Coupans />}/>
+                <Route path="/top-bar" element={<TopBar />}/>
+                <Route path="/jury-round" element={<JuryRound />}/>
+                <Route
+                  path="/jury-round-data"
+                  element={<JuryRoundExistingData />}
+                />
+
+                <Route
+                  path="/create-jury-round-post"
+                  element={<CreateJuryRoundPost />}
+                />
+
+                <Route
+                  path="/create-jury-round"
+                  element={<CreateJuryRound />}
+                />
+
+                <Route
+                  path="/shortlist-entry-form"
+                  element={<ShortListEntryForm/>}
+                />
+                <Route path="/view-group" element={<ViewGroup/>}/>
+                <Route path="/jury-assignment" element={<JuryAssignment/>}/>
+                <Route path="/customise-allocation" element={<CustomiseAllocation/>}/>
+
+                <Route path="/nominee-listing" element={<Nominee/>}/>
+                <Route path="/order-list" element={<Orders/>}/>
 
               </>
             ) : (

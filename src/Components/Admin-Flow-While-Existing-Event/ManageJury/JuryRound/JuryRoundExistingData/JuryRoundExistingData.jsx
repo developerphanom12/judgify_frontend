@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./JuryRoundExistingData.scss";
-import { TitleBar } from "../../Global/TitleBar/TitleBar";
-import { TopBar } from "../TopBar/TopBar";
-import { CreateButton, GreyfilterButton } from "../../Global/GlobalButton";
+import { TitleBar } from "../../../../Global/TitleBar/TitleBar";
+import { TopBar } from "../../../TopBar/TopBar";
+import { CreateButton, GreyfilterButton } from "../../../../Global/GlobalButton";
 import { MdEditSquare, MdOutlineRefresh, MdOutlineSettings } from "react-icons/md";
 import {
   DescriptionContent,
@@ -11,14 +11,15 @@ import {
   JuryRound,
   RedContent,
   RedMainHeading,
-} from "../../Global/GlobalText";
+} from "../../../../Global/GlobalText";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { PiPlusCircleBold } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { IoSearchSharp } from "react-icons/io5";
 import { LuFilter } from "react-icons/lu";
-import { GlobalSecondTable } from "../../Global/GlobalSecondTable/GlobalSecondTable";
+import { GlobalSecondTable } from "../../../../Global/GlobalSecondTable/GlobalSecondTable";
+import { useNavigate } from "react-router-dom";
 
 export const JuryRoundExistingData = () => {
   const [selectedRows, setSelectedRows] = useState([]);
@@ -60,14 +61,18 @@ export const JuryRoundExistingData = () => {
     console.log("Selected row:", row); // You can replace this with your desired logic
   };
 
+  const navigate = useNavigate();
+
   return (
     <div>
       <div className="jury_existing_data_div">
-        <TitleBar title="Jury Round" />
+        <TitleBar title="Jury Round"/>
         <div className="jury_existing_data_white_bg">
-          <TopBar titleheading="Jury Rounds" />
+          <TopBar titleheading="Jury Rounds"/>
           <div className="jury_existing_data_btn">
-            <CreateButton>
+            <CreateButton  onClick={() => {
+              navigate("/create-jury-round");
+            }}>
               Round 1 <MdEditSquare />{" "}
             </CreateButton>
             <GreenContent>Active</GreenContent>
@@ -80,8 +85,10 @@ export const JuryRoundExistingData = () => {
             <div className="jury_existing_scorecard">
               <RedContent>Scorecards(1)</RedContent>
 
-              <GreenContent className="jury_existing_plus_icon">
-                <PiPlusCircleBold />
+              <GreenContent className="jury_existing_plus_icon" onClick={() => {
+              navigate("/shortlist-entry-form");
+            }}>
+                <PiPlusCircleBold  />
                 Shortlist Entry Form
               </GreenContent>
             </div>
@@ -104,9 +111,11 @@ export const JuryRoundExistingData = () => {
                   Create New Jury Group(s)
                 </RedContent>
 
-                <RedContent className="jury_existing_icon">
+                <RedContent className="jury_existing_icon" onClick={() => {
+              navigate("/view-group");
+            }}>
                 <MdOutlineSettings />
-                  View Jury Group(s)
+                    View Jury Group(s)
                 </RedContent>
               </div>
             </div>
@@ -117,10 +126,11 @@ export const JuryRoundExistingData = () => {
               className="jury_existing_sub_icon"
               style={{ color: "#777777" }}
             >
-              <MdOutlineRefresh />
+              <MdOutlineRefresh/>
               <DescriptionContent e={{ color: "#777777" }}>
                 Generate Shortlist ID{" "}
               </DescriptionContent>
+
             </div>
 
             <div
