@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import "./JuryRoundExistingData.scss";
 import { TitleBar } from "../../../../Global/TitleBar/TitleBar";
 import { TopBar } from "../../../TopBar/TopBar";
-import { CreateButton, GreyfilterButton } from "../../../../Global/GlobalButton";
-import { MdEditSquare, MdOutlineRefresh, MdOutlineSettings } from "react-icons/md";
+import {
+  CreateButton,
+  GreyfilterButton,
+} from "../../../../Global/GlobalButton";
+import {
+  MdEditSquare,
+  MdOutlineRefresh,
+  MdOutlineSettings,
+} from "react-icons/md";
 import {
   DescriptionContent,
   EventHeading,
@@ -23,6 +30,8 @@ import { useNavigate } from "react-router-dom";
 
 export const JuryRoundExistingData = () => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedButton, setSelectedButton] = useState(0);
+
   const columns = [
     "Submission ID",
     "Category",
@@ -61,18 +70,24 @@ export const JuryRoundExistingData = () => {
     console.log("Selected row:", row); // You can replace this with your desired logic
   };
 
+  const handleClick = (index) => {
+    setSelectedButton(index);
+  };
+
   const navigate = useNavigate();
 
   return (
     <div>
       <div className="jury_existing_data_div">
-        <TitleBar title="Jury Round"/>
+        <TitleBar title="Jury Round" />
         <div className="jury_existing_data_white_bg">
-          <TopBar titleheading="Jury Rounds"/>
+          <TopBar titleheading="Jury Rounds" />
           <div className="jury_existing_data_btn">
-            <CreateButton  onClick={() => {
-              navigate("/create-jury-round");
-            }}>
+            <CreateButton
+              onClick={() => {
+                navigate("/create-jury-round");
+              }}
+            >
               Round 1 <MdEditSquare />{" "}
             </CreateButton>
             <GreenContent>Active</GreenContent>
@@ -85,10 +100,13 @@ export const JuryRoundExistingData = () => {
             <div className="jury_existing_scorecard">
               <RedContent>Scorecards(1)</RedContent>
 
-              <GreenContent className="jury_existing_plus_icon" onClick={() => {
-              navigate("/shortlist-entry-form");
-            }}>
-                <PiPlusCircleBold  />
+              <GreenContent
+                className="jury_existing_plus_icon"
+                onClick={() => {
+                  navigate("/shortlist-entry-form");
+                }}
+              >
+                <PiPlusCircleBold />
                 Shortlist Entry Form
               </GreenContent>
             </div>
@@ -107,15 +125,18 @@ export const JuryRoundExistingData = () => {
 
               <div className="jury_existing_btn_div">
                 <RedContent className="jury_existing_icon">
-                  <PiPlusCircleBold/>
+                  <PiPlusCircleBold />
                   Create New Jury Group(s)
                 </RedContent>
 
-                <RedContent className="jury_existing_icon" onClick={() => {
-              navigate("/view-group");
-            }}>
-                <MdOutlineSettings />
-                    View Jury Group(s)
+                <RedContent
+                  className="jury_existing_icon"
+                  onClick={() => {
+                    navigate("/view-group");
+                  }}
+                >
+                  <MdOutlineSettings />
+                  View Jury Group(s)
                 </RedContent>
               </div>
             </div>
@@ -126,11 +147,10 @@ export const JuryRoundExistingData = () => {
               className="jury_existing_sub_icon"
               style={{ color: "#777777" }}
             >
-              <MdOutlineRefresh/>
+              <MdOutlineRefresh />
               <DescriptionContent e={{ color: "#777777" }}>
                 Generate Shortlist ID{" "}
               </DescriptionContent>
-
             </div>
 
             <div
@@ -169,7 +189,10 @@ export const JuryRoundExistingData = () => {
           <div className="jury_existing_submission_div">
             <div
               className="jury_existing_sub_submission"
-              style={{ backgroundColor: "#FFE2E5" }}
+              style={{
+                backgroundColor: selectedButton === 0 ? "#FFE2E5" : "#F6F8F9",
+              }}
+              onClick={() => handleClick(0)}
             >
               <RedMainHeading>Viewing: 5 submissions</RedMainHeading>
               <JuryRound>Select all submissions</JuryRound>
@@ -177,7 +200,10 @@ export const JuryRoundExistingData = () => {
 
             <div
               className="jury_existing_sub_submission"
-              style={{ backgroundColor: "#F6F8F9" }}
+              style={{
+                backgroundColor: selectedButton === 1 ? "#FFE2E5" : "#F6F8F9",
+              }}
+              onClick={() => handleClick(1)}
             >
               <RedMainHeading>Selected: 0 submissions</RedMainHeading>
               <JuryRound>Deselect all selected submissions</JuryRound>
@@ -203,13 +229,25 @@ export const JuryRoundExistingData = () => {
             </GreyfilterButton>
           </div>
 
-          <GlobalSecondTable
-            data={data}
-            columns={columns}
-            selectedRows={selectedRows} // Ensure this is always an array
-            onCheckboxChange={handleCheckboxChange}
-            onRowClick={setSelectedRow}
-          />
+          {selectedButton === 0 && (
+            <GlobalSecondTable
+              data={data}
+              columns={columns}
+              selectedRows={selectedRows} // Ensure this is always an array
+              onCheckboxChange={handleCheckboxChange}
+              onRowClick={setSelectedRow}
+            />
+          )}
+
+          {selectedButton === 1 && (
+            <GlobalSecondTable
+              data={data}
+              columns={columns}
+              selectedRows={selectedRows} // Ensure this is always an array
+              onCheckboxChange={handleCheckboxChange}
+              onRowClick={setSelectedRow}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -24,10 +24,10 @@ export const CreateButton = styled.button`
   line-height: 21px;
   text-align: left;
   color: #ffffff;
-  padding: 0px 20px;
+  padding: 10px 20px;
   cursor: pointer;
   border: 1px solid transparent;
-  height:40px;
+ 
 `;
 
 export const ViewMoreButton = styled.button`

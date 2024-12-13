@@ -9,9 +9,12 @@
     background-color: #000000;
     padding: 20px;
     overflow: hidden;
+    // overflow: auto;
     cursor: pointer;
     color: #000;
     height: 100%;
+  //   scrollbar-width: none;  /* Firefox */
+  // -ms-overflow-style: none; 
     .logo_img {
       display: flex;
       justify-content: flex-start;
@@ -29,10 +32,10 @@
       .menu_click_div {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
         a {
-          padding: 17px 25px;
-          display: flex;
+          padding:5px 25px;
+          display:flex;
           gap: 10px;
           align-items: center;
           border-radius: 8px;
@@ -52,7 +55,7 @@
       }
 
       .Logout_main_div {
-        height: 50vh;
+        // height: 50vh;
         display: flex;
         align-items: flex-end;
         .logout_div {
@@ -72,6 +75,13 @@
       }
     }
   }
+
+
+.sideBar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+
   .main_body {
     width: 100%;
 

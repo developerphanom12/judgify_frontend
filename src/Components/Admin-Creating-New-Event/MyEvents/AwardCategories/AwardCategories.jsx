@@ -4,7 +4,7 @@ import {
   CreateButton,
   GreyBorderButton,
   GreyfilterButton,
-  RedBackgroundButton,
+
   ViewMoreButton,
 } from "../../../Global/GlobalButton";
 import "./AwardCategories.scss";
@@ -545,7 +545,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
           )}
         </div>
 
-        <div className="award_table_btn">
+        {/* <div className="award_table_btn">
           
           <GreyBorderButton onClick={() => setSelectedButton(1)}>
             Previous
@@ -559,7 +559,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
           >
             Next
           </RedBackgroundButton>
-        </div>
+        </div> */}
       </div>
 
       <Modal show={show} onHide={handleClose} size="lg">

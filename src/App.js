@@ -60,6 +60,13 @@ import { JuryAssignment } from "./Components/Admin-Flow-While-Existing-Event/Man
 import { CustomiseAllocation } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/CustomiseAllocation/CustomiseAllocation";
 import { Nominee } from "./Components/Admin-Flow-While-Existing-Event/Manage Entry Form/Nominee/Nominee";
 import { Orders } from "./Components/Admin-Flow-While-Existing-Event/Manage Entry Form/Orders/Orders";
+import { Entrants } from "./Components/Admin-Flow-While-Existing-Event/Manage Entry Form/Entrants/Entrants";
+import { FinanceReport } from "./Components/Admin-Flow-While-Existing-Event/ManageReports/FinanceReport/FinanceReport";
+import { JuryScoreReport } from "./Components/Admin-Flow-While-Existing-Event/ManageReports/JuryScoreReport/JuryScoreReport";
+import { EntryFormReport } from "./Components/Admin-Flow-While-Existing-Event/ManageReports/EntryFormReport/EntryFormReport";
+import { SuccessfullyCreateJudgeRound } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/SuccessfullyCreateJudgeRound/SuccessfullyCreateJudgeRound";
+import { EventOverview } from "./Components/Admin-Flow-While-Existing-Event/EventOverview/EventOverview";
+import { AwardCategory } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/AwardCategory/AwardCategory";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -125,28 +132,35 @@ function App() {
                 />
 
                 <Route path="/stripe-setting" element={<StripeSetting />} />
-                <Route path="/test" element={<Test />} />
+                <Route path="/test" element={<Test />}/>
+
                 <Route
                   path="/event-live-preview"
                   element={<EventLivePreview />}
                 />
-                <Route path="/sidebar" element={<Sidebar />} />
+
+                <Route path="/sidebar" element={<Sidebar />}/>
                 {/* ------- */}
 
                 <Route
                   path="/registration-form"
                   element={<RegistrationForm />}
                 />
-                <Route path="/edit-field-modal" element={<EditFieldModal />} />
+                <Route path="/edit-field-modal" element={<EditFieldModal />}/>
                 <Route path="/form-canvas" element={<FormCanvas />} />
                 <Route path="/form-preview" element={<FormPreview />} />
                 <Route path="/side" element={<Side />} />
                 <Route path="/preview-loader" element={<LoaderDot />} />
+
                 {/* Admin Flow While Existing Event ------- */}
-                <Route path="/event-details" element={<EventDetails />}/>
-                <Route path="/submissionid" element={<SubmissionId />}/>
-                <Route path="/backdoor-access" element={<BackdoorAccess />}/>
-                <Route path="/award-directory" element={<AwardDirectory />}/>
+
+             
+                <Route path="/event-overview" element={<EventOverview/>}/>
+                <Route path="/event-details" element={<EventDetails/>}/>
+                <Route path="/submissionid" element={<SubmissionId/>}/>
+                <Route path="/backdoor-access" element={<BackdoorAccess/>}/>
+                <Route path="/award-directory" element={<AwardDirectory/>}/>
+                <Route path="/award-category" element={<AwardCategory/>}/>
                 <Route path="/forms" element={<Forms />}/>
                 <Route path="/coupans" element={<Coupans />}/>
                 <Route path="/top-bar" element={<TopBar />}/>
@@ -166,6 +180,10 @@ function App() {
                   element={<CreateJuryRound />}
                 />
 
+            <Route
+                  path="/successfully-created-judge-round"
+                  element={<SuccessfullyCreateJudgeRound />}
+                />
                 <Route
                   path="/shortlist-entry-form"
                   element={<ShortListEntryForm/>}
@@ -173,9 +191,15 @@ function App() {
                 <Route path="/view-group" element={<ViewGroup/>}/>
                 <Route path="/jury-assignment" element={<JuryAssignment/>}/>
                 <Route path="/customise-allocation" element={<CustomiseAllocation/>}/>
-
                 <Route path="/nominee-listing" element={<Nominee/>}/>
                 <Route path="/order-list" element={<Orders/>}/>
+                <Route path="/entrants-list" element={<Entrants/>}/>
+                <Route path="/finance-report" element={<FinanceReport/>}/>
+                <Route path="/jury-score-report" element={<JuryScoreReport/>}/>
+                <Route path="/entry-form-report" element={<EntryFormReport/>}/>
+
+                {/* Admin Flow While Existing Event ------- */}
+             
 
               </>
             ) : (

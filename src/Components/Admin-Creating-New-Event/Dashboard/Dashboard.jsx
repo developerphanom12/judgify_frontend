@@ -118,7 +118,7 @@ export const Dashboard = () => {
                 onClick={() => {
                   dispatch(setEventIdGet(event.id));
                   console.log("Navigating with event ID:", event.id);
-                  navigate("/create-new-event");
+                  navigate("/event-overview");
                 }}
               >
                 <div className="dash_logo_status">

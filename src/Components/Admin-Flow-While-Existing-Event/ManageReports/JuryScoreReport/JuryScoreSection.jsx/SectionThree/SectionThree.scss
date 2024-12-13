@@ -1,0 +1,33 @@
+.section_one_three{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    .sectionthree_mainradio{
+        display: flex;
+        flex-direction: column;
+        gap:10px;
+
+        .section_three_radio{
+            display:flex;
+            gap:10px;
+        }
+
+        .section_three_check{
+            display:flex;
+            gap:15px;
+            margin-left:20px;
+            .section_three_checkbox{
+                display: flex;
+                gap: 5px;
+            }
+        }
+
+        .section_three_btn{
+            display:flex;
+            justify-content:flex-start;
+            gap:20px;
+            margin-top:40px;
+        }
+    
+    }
+}

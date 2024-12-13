@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-
 import { JuryRound, RedMainHeading } from "../../../../Global/GlobalText";
 import { IoSearchSharp } from "react-icons/io5";
-
 import { LuFilter } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import "./ShortListEntryForm.scss";
