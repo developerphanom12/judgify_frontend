@@ -1,0 +1,97 @@
+.shortlistentry_data_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    .shortlistentry_data_white_bg {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction:column;
+      gap:20px;
+
+    .shortlistentry_submission_div{
+        display:flex;
+        gap:20px;
+        .shortlistentry_sub_submission{
+            width: 50%;
+            border:1px solid transparent;
+            border-radius: 10px;
+            text-align: left;
+            padding:20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap:10px;
+        }
+    
+    }
+
+    .shortlistentry__table_div {
+        border: 0.5px solid #cccccc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        
+        .shortlistentry__table_search {
+          border: 1px solid #e5e1e1;
+          background-color: #ffffff;
+          height: 40px;
+          display: flex;
+          gap: 15px;
+          align-items: center;
+          padding: 0 20px;
+          border-radius: 8px;
+          width: 25%;
+          .shortlistentry__table_icon {
+            width: 3%;
+            svg {
+              color: #777777;
+              width: 20px;
+              height: 20px;
+            }
+          }
+    
+          .shortlistentry__table_icon_content {
+            width: 97%;
+            cursor: pointer;
+            input[type="text"] {
+              width: 100%;
+              border: none;
+              font-family: poppins;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 21px;
+              padding: 0 10px;
+              border-radius: 40px;
+              outline: none;
+              color: #777777;
+            }
+    
+            input[type="text"]::placeholder {
+              color: #666666;
+            }
+          }
+        }
+
+        .shortlistentry__filter_icon {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            svg {
+              width: 15px;
+              height: 15px;
+            }
+          }
+    }
+
+    .shortlist_butt {
+        display: flex;
+        gap: 20px;
+    }
+
+    }
+}

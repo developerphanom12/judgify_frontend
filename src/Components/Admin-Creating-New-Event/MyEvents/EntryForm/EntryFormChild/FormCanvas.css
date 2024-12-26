@@ -1,0 +1,336 @@
+.form-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field-container {
+  display:flex;
+  border:1px solid #cccccc;
+  padding:8px 20px;
+  border-radius:8px;
+  align-items:center;
+  justify-content:space-between;
+  cursor: move;
+  transition: opacity 0.3s ease;
+
+  .field-input-container {
+    display: flex;
+    gap: 20px;
+    width: 15%;
+  }
+
+  
+  .form_canvas_type_fields input[type="date"]{
+    color:#777777;
+  }
+
+
+  .form_canvas_type_fields select{
+    color:#777777;
+  }
+
+
+
+  .form_canvas_type_fields {
+    width: 50%;
+    .container{
+      h1{
+        color: #333333;
+      }
+    }
+    textarea{
+    border: 1px solid #66666659;
+    border-radius: 12px;
+    padding: 10px;
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+    color: #333333;
+    background-color: #f9f9f9;
+    }
+
+    input{
+      width: 100%;
+      background-color: #f9f9f9;
+    }
+
+    select{
+      width:100%;
+      background-color: #f9f9f9;
+    }
+
+    .radio-btns{
+      display: flex;
+      gap:10px;
+      flex-wrap: wrap;
+      color:#777777;
+      .input-lbl{
+      display: flex;
+      gap:10px;
+      margin:5px 0;
+      input{
+        width:15px;
+      }
+     } 
+    }
+
+    .checkboxes{
+      display: flex;
+      gap:10px;
+      flex-wrap: wrap;
+      color:#777777;
+      .input-lbl{
+        display: flex;
+        gap:10px;
+        margin:5px 0;
+        input{
+          width:15px;
+        }
+       } 
+    }
+
+.file_formcanvas{
+  background-color: transparent;
+}
+
+}
+
+  .field-options-container {
+    display:flex;
+    align-items:center;
+    gap:15px;
+    .required_checkbox {
+      display: flex;
+      gap: 5px;
+    }
+
+    .visible_checkbox {
+      display: flex;
+      gap: 5px;
+    }
+
+    .field-actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}
+
+
+@media (max-width: 567px) {
+  .field-container {
+    flex-direction:column;
+    align-items:unset;
+    gap:10px;
+  .field-input-container {
+      width: 100%;
+  }
+  .form_canvas_type_fields {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+  }
+}
+
+}
+
+@media (min-width: 567px) and  (max-width: 1024px) {
+  .field-container {
+    flex-direction:column;
+    align-items:unset;
+    gap:10px;
+  .field-input-container {
+      width: 100%;
+  }
+
+  .form_canvas_type_fields {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+}
+}
+
+
+.form_canvas_icon {
+  height: 17px;
+  width: 17px;
+  cursor: pointer;
+  color: #777777;
+}
+
+
+
+/* Optional: Keep the 'move' cursor while dragging */
+.field-container.dragging {
+  cursor: move; /* Ensure that the cursor is 'move' when dragging */
+  opacity: 0.5; /* Reduce opacity during the drag */
+}
+
+/* When the element is active (clicked and being dragged) */
+.field-container:active {
+  cursor: grabbing; /* Changes the cursor to 'grabbing' when actively dragging */
+}
+
+.add-fields-placeholder {
+  font-style: italic;
+  color: #999;
+}
+
+
+
+
+.field-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.file-preview {
+  margin-top: 10px;
+}
+
+/* .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+} */
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-actions button {
+  margin-top: 10px;
+}
+
+/* Hover hint icon */
+.hover-hint-icon {
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-left: 5px;
+  color: #007bff; /* Change color as needed */
+  position: relative;
+}
+
+.hover-hint-icon:hover::after {
+  content: attr(title); /* Display the hoverHint content as tooltip */
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+}
+
+.hover-hint-icon::after {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.require-visible {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.cancel {
+  background-color: #777777;
+}
+
+.cancel:hover {
+  background-color: #444444;
+}
+
+/* Field options row (required, visible, actions) */
+
+.field-actions button {
+  margin-top: 0 !important;
+}
+/* Optional styling for checkbox labels */
+/* .required-checkbox label,
+.visible-checkbox label {
+  margin-right: 10px;
+} */
+
+/* Input elements styling */
+/* input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+textarea,
+select { */
+/* margin-top: 5px;
+  padding: 5px; */
+/* width: 100%; */
+/* max-width: 300px;  */
+/* } */
+/* 
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 5px;
+} */
+
+/* Styling for radio and checkbox inputs */
+
+
+/* .radio-btns input,
+.checkboxes input {
+  margin-right: 10px;
+} */
+
+/* .radio-btns label,
+.checkboxes label {
+  margin-left: 5px;
+} */
+
+.cancel:hover {
+  background-color: #444444;
+}
+
+/* Styling for label and input elements */
+
+/* Optional styling for focused input */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Styling for buttons */
+button {
+  /* width: 100%; */
+  padding: 10px;
+}
+
+/* Styling for cancel button in modal */
+.cancel:hover {
+  background-color: #444444;
+}

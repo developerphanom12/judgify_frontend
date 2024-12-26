@@ -1,0 +1,139 @@
+.userflow_bg_color {
+  background-image: radial-gradient(circle, #460000, #0c0000);
+  padding: 20px;
+
+  .userflow_logo_div {
+    display: flex;
+    justify-content: flex-start;
+    img {
+      width: 70px;
+    }
+  }
+  .userflow_register_div {
+    border-radius: 12px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      font-size: 25px;
+    }
+
+    .userflow_form_div {
+      width: 40%;
+      background-color: white;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      .sub_reg_head {
+        font-size: 25px;
+      }
+      .userflow_fields_div {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .userflow_label_div {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          .error {
+            margin: 0;
+            text-align: left;
+            color: #c32728;
+          }
+        }
+        .checkdiv {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+        .userflow_already_account {
+          display: flex;
+          gap: 5px;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+.userflow_modal{
+  display: flex;
+  flex-direction: column;
+  gap:30px;
+  .user_flow_icon{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    align-items: center;
+    svg{
+      width: 70px;
+      height: 50px;
+      color:#00AC4F;
+    }
+
+  }
+  .user_flow_content{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    align-items: center;
+  }
+  .userflow_comfirm_button{
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 567px) {
+  .userflow_bg_color .userflow_register_div {
+    gap: 0;
+    h1 {
+      line-height: 1.8;
+      margin: 10px 0;
+    }
+  }
+
+  .main_bg_color .userflow_logo_div img {
+    width: 70px;
+  }
+
+  .userflow_bg_color .userflow_register_div .userflow_form_div {
+    width: 100%;
+  }
+
+  .userflow_bg_color .userflow_register_div .userflow_form_div {
+    h4 {
+      line-height: unset;
+    }
+
+    .userflow_fields_div {
+      width: 100%;
+    }
+  }
+
+  .userflow_bg_color .userflow_register_div .userflow_form_div .userflow_fields_div .userflow_already_account {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+  .userflow_bg_color .userflow_register_div {
+    gap: 10px;
+    h1 {
+      line-height: 1.8;
+      margin: 10px 0;
+    }
+  }
+
+  .userflow_bg_color .userflow_register_div .userflow_form_div {
+    width: 70%;
+    .userflow_fields_div {
+      width: 100%;
+    }
+  }
+}

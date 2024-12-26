@@ -1,0 +1,15 @@
+event_overview_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  
+    .event_overview_white_bg {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+}

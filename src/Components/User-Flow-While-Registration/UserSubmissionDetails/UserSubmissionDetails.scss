@@ -1,0 +1,96 @@
+.user_submission_main {
+  .user_submission_top {
+    padding: 20px;
+    background-color: #020202;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .user_submission_div {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50px;
+      }
+      span {
+        font-family: Poppins;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 21px;
+        text-align: left;
+        color: #ffffff;
+      }
+      svg {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .user_submission_bg {
+    height: 300px;
+    width: 100%;
+    background-image: url("../../../Assets/prev.png");
+    background-size: 100% 100%;
+  }
+
+  .user_submission_submit_div {
+    padding: 20px 30px;
+    background-color: #c327281a;
+
+    display: flex;
+    justify-content: space-between;
+    .user_submission_star_div {
+      display: flex;
+      gap: 40px;
+      .user_submission_preview_sub {
+        display: flex;
+        gap: 10px;
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+}
+
+.submission_form_main {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .submission_form {
+    display: flex;
+    justify-content: center;
+  }
+  .submission_form_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 140px;
+    .submission_form_row {
+      display: flex;
+      gap: 30px;
+
+      .submission_form_label {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+    }
+  }
+}
+
+.submission_form_btn_div {
+  margin: 30px 0;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+
+
+

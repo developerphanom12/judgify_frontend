@@ -1,0 +1,26 @@
+.create-jury-round_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    .create-jury-round_white_bg {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .createjury_round_comfirm{
+        display: flex;
+        flex-direction: column;
+        gap:20px;
+        align-items: center;
+        padding:50px 0;
+        .jury_round_comfirm{
+          display: flex;
+          gap:20px;
+        }
+      }
+    }
+}

@@ -1,0 +1,14 @@
+.section_five_main{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    align-items: center;
+    margin: 40px 0;
+}
+
+.section_five_btn{
+    display:flex;
+    gap:20px;
+    justify-content:flex-start;
+    margin-top:10px;
+}

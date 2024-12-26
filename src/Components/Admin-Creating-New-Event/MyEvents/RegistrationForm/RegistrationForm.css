@@ -1,0 +1,156 @@
+
+
+.formapp {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+.formformformformformapp {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.registratation_button{
+  display: flex;
+  justify-self: center;
+  gap:20px;
+  width:100%;
+  margin-top: 40px;
+}
+
+.Side h2 {
+  color: #ecf0f1;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* FormCanvas Styles */
+.form-canvas {
+  width:100%;
+  border-radius: 8px;
+}
+
+.form-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+.form_preview_heading{
+  display: flex;
+  justify-content: center;
+}
+.canvas-save {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  /* On smaller screens, collapse Side */
+  .Side {
+    position: absolute;
+    left: -250px; /* Hide Side */
+    top: 0;
+    width: 250px;
+    transition: left 0.3s ease-in-out;
+  }
+
+  /* Show Side toggle button */
+  .Side-toggle {
+    display: block;
+  }
+
+  /* Shift form content when Side is visible */
+  .form-canvas {
+    margin-left: 0; /* Full width for form content */
+  }
+
+  .formformformformformapp {
+    flex-direction: column; /* Stack Side and form content vertically on mobile */
+    align-items: center;
+  }
+
+  .form-canvas {
+    width: 100%;
+    margin-left: 0; /* No margin when Side is collapsed */
+  }
+}
+
+.Side.active {
+  left: 0;
+}
+
+/* Field container styles */
+/* .field-container {
+  display: flex;
+
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  align-items: stretch;
+  justify-content: center;
+  gap:30px;
+}
+ */
+/* .field-container h1,
+.field-container label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: left;
+} */
+
+/* .field-container input, */
+/* .field-container textarea { */
+  /* width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px; */
+/* } */
+
+/* .field-container select{
+  width: 200px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border:1px solid #ddd;
+  border-radius:5px;
+} */
+
+/* .field-container textarea {
+  resize: vertical;
+  min-height: 100px;
+} */
+
+
+/* Global button styles */
+
+
+/* .reg_button {
+  padding: 15px 25px;
+  background-color: #c32728;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.reg_button:hover {
+  background-color: #aa2424;
+} */
+
+
+

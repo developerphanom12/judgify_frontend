@@ -1,0 +1,289 @@
+.newevent_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .newevent_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    min-height: 400px;
+    .btn_radio {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #c32728;
+
+      .newevent_btn_click {
+        display: flex;
+        gap: 10px;
+
+        justify-content: flex-start;
+        align-items: center;
+
+        padding-bottom: 10px;
+        button {
+          font-family: Poppins;
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 16px;
+          border: 1px solid transparent;
+          color: #777777;
+          background-color: transparent;
+          border-radius: 8px;
+
+          &.selected {
+            color: #c32728;
+          }
+        }
+        svg {
+          font-size: 15px;
+          color: #777777;
+        }
+      }
+
+      .radio_btn {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+    .newevent_content {
+      .newevent_form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .newevent_row {
+          display: flex;
+          gap: 20px;
+          .newevent_label {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 50%;
+
+            .timezone_div {
+              border-radius: 12px;
+              border: 1px solid #66666659;
+              padding: 10px;
+            }
+            .event_label_cont {
+              display: flex;
+              justify-content: space-between;
+            }
+            .css-13cymwt-control {
+              min-height: 47px;
+
+              border-radius: 12px;
+              border: 1px solid #66666659;
+              color: #777777;
+              .css-1dimb5e-singleValue {
+                color: #777777;
+                font-size: 14px;
+                font-weight: 400;
+                text-align: left;
+              }
+            }
+            .newevent_check {
+              display: flex;
+              gap: 10px;
+            }
+
+            .myevent_img {
+              border: 2px dashed #cccccc;
+              border-radius: 3px;
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              padding: 20px;
+              align-items: center;
+              margin-top: 20px;
+              width: 90%;
+              cursor: pointer;
+              position: relative;
+              .preview_img {
+                height: 100px;
+              }
+              .logo_get {
+                img {
+                  height: 100px;
+                }
+              }
+              .file_input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+              }
+            }
+          }
+          .newevent_closing_label {
+            display: flex;
+            gap: 20px;
+            width: 50%;
+            .clos_label {
+              width: 50%;
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+
+              .react-time-picker__wrapper {
+                border-radius: 12px !important;
+                border: 1px solid rgba(102, 102, 102, 0.3490196078) !important;
+                padding: 10px !important;
+              }
+              // .clos_time {
+              //   display: flex;
+              //   gap: 10px;
+              //   align-items: center;
+              //   .time_select {
+              //     width: 38%;
+              //     height: 50px;
+              //   }
+              // }
+              .calender {
+                border-radius: 12px;
+                border: 1px solid #66666659;
+                padding: 12px;
+              }
+            }
+          }
+          .newevent_label_lg {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+            .event_label_cont {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .cont_icon {
+                display: flex;
+                align-items: center;
+                svg {
+                  width: 20px;
+                  height: 15px;
+                  color: #777777;
+                }
+              }
+            }
+          }
+        }
+        .newevent_btndiv {
+          display: flex;
+          gap: 10px;
+        }
+      }
+    }
+    .error {
+      color: #c32728;
+      text-align: left;
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .newevent_div {
+    padding: 20px 8px;
+
+    .newevent_bg .btn_radio {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      .newevent_btn_click {
+        flex-wrap: wrap;
+        button {
+          flex: 1;
+        }
+      }
+    }
+  }
+  .newevent_div .newevent_bg .newevent_content .newevent_form .newevent_row {
+    flex-direction: column;
+    .newevent_label {
+      width: 100%;
+      gap: 5px;
+      .event_label_cont {
+        flex-direction: column;
+        span {
+          text-align: left;
+        }
+      }
+    }
+    .newevent_closing_label {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      flex-direction: column;
+      .clos_label {
+        width: 100%;
+      }
+    }
+    .newevent_label_lg .event_label_cont {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+      .cont_icon {
+        span {
+          text-align: left;
+          flex: 1;
+        }
+      }
+    }
+
+    .newevent_label .myevent_img {
+      width: 100%;
+      label {
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+  .newevent_div .newevent_bg .btn_radio {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    .newevent_btn_click {
+      flex-wrap: wrap;
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  .newevent_div .newevent_bg .newevent_content .newevent_form .newevent_row {
+    flex-direction: column;
+    .newevent_closing_label {
+      width: 100%;
+    }
+    .newevent_label {
+      width: 100%;
+    }
+    .newevent_label_lg .event_label_cont {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: column;
+      .cont_icon {
+        span {
+          text-align: left;
+          flex: 1;
+        }
+      }
+    }
+  }
+}
+
+// @media (max-width: 567px) {
+// }
+
+// @media (min-width: 567px) and (max-width: 1024px) {
+// }

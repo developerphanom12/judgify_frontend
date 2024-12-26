@@ -1,0 +1,221 @@
+.jury_assignment_data_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .jury_assignment_white_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .jury_assign_round_btn{
+        display: flex;
+        justify-content: flex-start;
+        .jury_assignment_btn {
+            border: 0.5px solid #66666659;
+            padding: 5px;
+            border-radius: 8px;
+            background-color: #f6f8f9;
+          }
+    }
+
+    .jury_assignment_date_div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .jury_assignment_pluscontent {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        svg {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+
+    .jury_existing__table_div {
+        border: 0.5px solid #cccccc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        
+        .jury_existing__table_search {
+          border: 1px solid #e5e1e1;
+          background-color: #ffffff;
+          height: 40px;
+          display: flex;
+          gap: 15px;
+          align-items: center;
+          padding: 0 20px;
+          border-radius: 8px;
+          width: 25%;
+          .jury_existing__table_icon {
+            width: 3%;
+            svg {
+              color: #777777;
+              width: 20px;
+              height: 20px;
+            }
+          }
+    
+          .jury_existing__table_icon_content {
+            width: 97%;
+            cursor: pointer;
+            input[type="text"] {
+              width: 100%;
+              border: none;
+              font-family: poppins;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 21px;
+              padding: 0 10px;
+              border-radius: 40px;
+              outline: none;
+              color: #777777;
+            }
+    
+            input[type="text"]::placeholder {
+              color: #666666;
+            }
+          }
+        }
+
+        .jury_existing__filter_icon {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            svg {
+              width: 15px;
+              height: 15px;
+            }
+          }
+    }
+
+    .jury_assignment_table_div {
+        border: 0.5px solid #cccccc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        
+        .jury_assignment_table_search {
+          border: 1px solid #e5e1e1;
+          background-color: #ffffff;
+          height: 40px;
+          display: flex;
+          gap: 15px;
+          align-items: center;
+          padding: 0 20px;
+          border-radius: 8px;
+          width: 25%;
+          .jury_assignment_table_icon {
+            width: 3%;
+            svg {
+              color: #777777;
+              width: 20px;
+              height: 20px;
+            }
+          }
+    
+          .jury_assignment_table_icon_content {
+            width: 97%;
+            cursor: pointer;
+            input[type="text"] {
+              width: 100%;
+              border: none;
+              font-family: poppins;
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 21px;
+              padding: 0 10px;
+              border-radius: 40px;
+              outline: none;
+              color: #777777;
+            }
+    
+            input[type="text"]::placeholder {
+              color: #666666;
+            }
+          }
+        }
+        .jury_assignment_filter_btn {
+          display: flex;
+          gap: 10px;
+          .jury_assignment_filter_icon {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            svg {
+              width: 15px;
+              height: 15px;
+            }
+          }
+        }
+      }
+
+    .jury_assignment_table_btn{
+        display:flex;
+        gap:20px;
+      }
+
+  }
+
+ 
+}
+
+
+.juryassign_cont {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    .juryassign_heading {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .juryassign_form {
+      padding: 0 130px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .juryassign_row {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        .juryassign_label {
+          display:flex;
+          justify-content:space-between;
+          .juryassign_check{
+            display:flex;
+            gap:5px;
+            flex-direction:column;
+            .juryassign_date{
+              display:flex;
+              gap:10px;
+            }
+          }
+        }
+      }
+    }
+  
+    .juryassign_check_div {
+      display: flex;
+      justify-content: space-between;
+  }
+  
+.juryassign_btn{
+    display: flex;
+    gap:20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+  
+
+    
+  }

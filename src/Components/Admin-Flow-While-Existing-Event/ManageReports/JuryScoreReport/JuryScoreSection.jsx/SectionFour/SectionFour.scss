@@ -1,0 +1,50 @@
+.section_four_main{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    
+
+   .section_four_row_div{
+    display: flex;
+    gap:20px;
+    align-items: center;
+
+    .section_four_label{
+        width:30%;
+    }
+    .section_four_input{
+        width:30%;
+    }
+
+    svg{
+        width: 20px;
+        height: 20px;
+        color:#C32728;
+        cursor: pointer;
+    }
+
+    }
+
+    .section_four_filter_btn{
+        display: flex;
+        justify-content: flex-start;
+        .jury_assignment_pluscontent {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            svg {
+              width: 15px;
+              height: 15px;
+            }
+          }
+
+    }
+
+    .section_four_btn{
+        display:flex;
+        gap:20px;
+        justify-content:flex-start;
+        margin-top:10px;
+     
+    }
+}

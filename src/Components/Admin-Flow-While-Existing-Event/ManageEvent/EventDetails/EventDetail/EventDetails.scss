@@ -1,0 +1,477 @@
+.newevent_div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    .newevent_bg {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      min-height: 400px;
+      .btn_radio {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #c32728;
+  
+        .newevent_btn_click {
+          display: flex;
+          gap: 10px;
+  
+          justify-content: flex-start;
+          align-items: center;
+  
+          padding-bottom: 10px;
+          button {
+            font-family: Poppins;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 16px;
+            border: 1px solid transparent;
+            color: #777777;
+            background-color: transparent;
+            border-radius: 8px;
+  
+            &.selected {
+              color: #c32728;
+            }
+          }
+          svg {
+            font-size: 15px;
+            color: #777777;
+          }
+        }
+  
+        .radio_btn {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+      }
+  
+      .newevent_content {
+        .newevent_form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          .newevent_row {
+            display: flex;
+            gap: 20px;
+            .newevent_label {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              width: 50%;
+  
+         
+  
+              .timezone_div {
+                border-radius: 12px;
+                border: 1px solid #66666659;
+                padding: 10px;
+              }
+              .event_label_cont {
+                display: flex;
+                justify-content: space-between;
+              }
+              .css-13cymwt-control {
+                min-height: 47px;
+  
+                border-radius: 12px;
+                border: 1px solid #66666659;
+                color: #777777;
+                .css-1dimb5e-singleValue {
+                  color: #777777;
+                  font-size: 14px;
+                  font-weight: 400;
+                  text-align: left;
+                }
+              }
+              .newevent_check {
+                display: flex;
+                gap: 10px;
+              }
+  
+              .myevent_img {
+                border: 2px dashed #cccccc;
+                border-radius: 3px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px;
+                align-items: center;
+                margin-top: 20px;
+                width: 90%;
+                cursor: pointer;
+                position: relative;
+                .preview_img {
+                  height: 100px;
+                }
+                .logo_get {
+                  img {
+                    height: 100px;
+                  }
+                }
+                .file_input {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  opacity: 0;
+                  cursor: pointer;
+                }
+              }
+            }
+            .newevent_closing_label {
+              display: flex;
+              gap: 20px;
+              width: 50%;
+              .clos_label {
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+  
+                .react-time-picker__wrapper {
+                  border-radius: 12px!important;
+                  border: 1px solid rgba(102, 102, 102, 0.3490196078)!important;
+                  padding: 10px!important;
+              }
+                // .clos_time {
+                //   display: flex;
+                //   gap: 10px;
+                //   align-items: center;
+                //   .time_select {
+                //     width: 38%;
+                //     height: 50px;
+                //   }
+                // }
+                .calender {
+                  border-radius: 12px;
+                  border: 1px solid #66666659;
+                  padding: 12px;
+                }
+              }
+            }
+            .newevent_label_lg {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              width: 100%;
+              .event_label_cont {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .cont_icon {
+                  display: flex;
+                  align-items: center;
+                  svg {
+                    width: 20px;
+                    height: 15px;
+                    color: #777777;
+                  }
+                }
+              }
+            }
+          }
+          .newevent_btndiv {
+            display: flex;
+            gap: 10px;
+          }
+
+          .eventdetails_radio{
+            display: flex;
+            gap: 10px;
+          }
+        }
+      }
+  
+      .error {
+        color: #c32728;
+        text-align: left;
+      }
+    }
+  }
+  
+  @media (max-width: 567px) {
+    .newevent_div {
+      padding: 20px 8px;
+  
+      .newevent_bg .btn_radio {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        .newevent_btn_click {
+          flex-wrap: wrap;
+          button {
+            flex: 1;
+          }
+        }
+      }
+    }
+    .newevent_div .newevent_bg .newevent_content .newevent_form .newevent_row {
+      flex-direction: column;
+      .newevent_label {
+        width: 100%;
+        gap: 5px;
+        .event_label_cont {
+          flex-direction: column;
+          span {
+            text-align: left;
+          }
+        }
+      }
+      .newevent_closing_label {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        flex-direction: column;
+        .clos_label {
+          width: 100%;
+        }
+      }
+      .newevent_label_lg .event_label_cont {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: column;
+        .cont_icon {
+          span {
+            text-align: left;
+            flex: 1;
+          }
+        }
+      }
+  
+      .newevent_label .myevent_img {
+        width: 100%;
+        label {
+          text-align: center;
+        }
+      }
+    }
+  }
+  
+  @media (min-width: 567px) and (max-width: 1024px) {
+    .newevent_div .newevent_bg .btn_radio {
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      .newevent_btn_click {
+        flex-wrap: wrap;
+        button {
+          flex: 1;
+        }
+      }
+    }
+  
+    .newevent_div .newevent_bg .newevent_content .newevent_form .newevent_row {
+      flex-direction: column;
+      .newevent_closing_label {
+        width: 100%;
+      }
+      .newevent_label {
+        width: 100%;
+      }
+      .newevent_label_lg .event_label_cont {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: column;
+        .cont_icon {
+          span {
+            text-align: left;
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+
+
+  .dialogBox {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+  
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+  
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+  
+      label {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+  
+        input[type="checkbox"] {
+          margin-right: 10px;
+          accent-color: #c32728; /* Custom color for checkboxes */
+        }
+      }
+    }
+  
+    .image-upload {
+      margin-top: 20px;
+  
+      h4 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+      }
+  
+      input[type="file"] {
+        padding: 8px;
+        font-size: 16px;
+        color: #333;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: border 0.3s ease;
+  
+        &:hover {
+          border-color: #c32728; /* Change border color on hover */
+        }
+      }
+  
+      .image-preview {
+        display: flex;
+        align-items: center;
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        max-width: 100%;
+        justify-content: space-between;
+  
+        img {
+          max-width: 100px;
+          max-height: 100px;
+          border-radius: 8px;
+          object-fit: cover;
+          margin-right: 10px;
+        }
+  
+        button {
+          background-color: #c32728;
+          color: #fff;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s ease;
+  
+          &:hover {
+            background-color: #a11e21;
+          }
+        }
+      }
+    }
+  }
+  
+  // For when the dialog box is displayed
+  .dialogBox.showDialog {
+    display: block;
+  }
+  
+  // For when the dialog box is hidden (optional, if you want to control visibility with a class)
+  .dialogBox.hideDialog {
+    display: none;
+  }
+  
+
+  
+  .get_data {
+    position: relative; /* Make this container relative for absolute positioning of dropdown */
+  }
+  
+  // .newevent_form {
+  //   /* Your existing form styles */
+  // }
+  
+  // .newevent_label {
+  //   /* Your existing styles */
+  // }
+  
+  .dropdown {
+    position: relative;
+    top: 40px; /* Adjust this value based on where you want the dropdown to appear relative to the input */
+    left: 0;
+    width: 100%; /* Make the dropdown occupy the same width as the input */
+    border: 1px solid #ccc;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 999; /* Ensure it's on top of other UI elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add some shadow for better visibility */
+  }
+  
+  .dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown-option:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .dropdown-option.selected {
+    background-color: #e0e0e0;
+    pointer-events: none; /* Disable selected options */
+  }
+  
+
+  .selected-industries {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .selected-industry-item {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .selected-industry-item span {
+    margin-right: 8px;
+  }
+  
+  .remove-icon {
+    cursor: pointer;
+    color: #c32728;
+    font-size: 16px;
+  }
+  
+  .remove-icon:hover {
+    opacity: 0.7;
+  }
+  

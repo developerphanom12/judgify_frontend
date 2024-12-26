@@ -1,0 +1,117 @@
+.user_topbanner_main {
+  .user_topbanner_top {
+    padding: 20px;
+    background-color: #020202;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+ 
+  }
+
+  .user_topbanner_bg {
+    height: 300px;
+    width: 100%;
+    background-image: url("../../../../Assets/prev.png");
+    background-size: 100% 100%;
+  }
+
+  .user_topbanner_submit_div {
+    padding: 20px 30px;
+    background-color: #c327281a;
+
+    display: flex;
+    justify-content: space-between;
+    .user_topbanner_star_div {
+      display: flex;
+      gap: 40px;
+      .user_topbanner_preview_sub {
+        display: flex;
+        gap: 10px;
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .user_topbanner_main {
+    padding: 8px;
+    .user_topbanner_bg {
+      height: 120px;
+    }
+    .user_topbanner_top {
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px;
+      gap: 10px;
+      img {
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.8;
+        text-align: center;
+      }
+    }
+
+    .user_topbanner_submit_div {
+      flex-wrap: wrap;
+      padding: 20px 10px;
+      gap: 10px;
+      justify-content: center;
+      .user_topbanner_star_div {
+        gap: 10px;
+        .user_topbanner_preview_sub {
+          gap: 5px;
+          align-items: center;
+          p {
+            font-size: 11px;
+
+            line-height: 1.8;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+  .user_topbanner_main {
+    .user_topbanner_bg {
+      height: 220px;
+    }
+
+    .user_topbanner_top {
+      img {
+      }
+
+      p {
+        font-size: 15px;
+        line-height: 1.8;
+        text-align: center;
+      }
+    }
+
+    .user_topbanner_submit_div {
+      flex-wrap: wrap;
+      padding: 20px 10px;
+      gap: 10px;
+      justify-content: center;
+      .user_topbanner_star_div {
+        gap: 10px;
+        .user_topbanner_preview_sub {
+          gap: 5px;
+          align-items: center;
+          // p {
+          //   font-size: 11px;
+
+          //   line-height: 1.8;
+          // }
+        }
+      }
+    }
+  }
+}

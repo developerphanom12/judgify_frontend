@@ -1,0 +1,26 @@
+.usertitlebar_div {
+  display: flex;
+  justify-content: space-between;
+
+
+}
+
+@media (max-width: 567px) {
+  .usertitlebar_div {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    .titlbar_head {
+      flex: 1;
+    }
+
+  
+  }
+}
+
+@media (min-width: 567px) and (max-width: 1024px) {
+  .usertitlebar_div {
+    align-items: center;
+  }
+}
