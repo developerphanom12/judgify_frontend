@@ -68,6 +68,7 @@ import { SuccessfullyCreateJudgeRound } from "./Components/Admin-Flow-While-Exis
 import { EventOverview } from "./Components/Admin-Flow-While-Existing-Event/EventOverview/EventOverview";
 import { AwardCategory } from "./Components/Admin-Flow-While-Existing-Event/ManageEvent/AwardCategory/AwardCategory";
 import UpdateJuryRound from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/UpdateJuryRound/UpdateJuryRound";
+import CreateScoreCard from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/ScoreCard/CreateScoreCard";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -189,6 +190,10 @@ function App() {
             <Route
                   path="/successfully-created-judge-round"
                   element={<SuccessfullyCreateJudgeRound />}
+                />
+                 <Route
+                  path="/create-scorecard"
+                  element={<UpdateJuryRound />}
                 />
                 <Route
                   path="/shortlist-entry-form"

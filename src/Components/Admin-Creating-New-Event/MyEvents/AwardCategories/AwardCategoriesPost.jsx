@@ -245,7 +245,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
             "Prefix for Submission": item.category_prefix,
             "Grouping Title": item.belongs_group,
             "Limit Submission": item.limit_submission,
-            "Closing Date": new Date(item.end_date).toLocaleDateString(),
+            "Closing Date": new Date(item.end_date).toLocaleDateString() || null,
             Actions: (
               <div
                 style={{
@@ -333,58 +333,6 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
     }
   }, [showSecondModal, localAwardId, setLoading]);
 
-  // const handleSave = async (e) => {
-  //   e.preventDefault();
-  //   const formattedStartDate = editaward.is_start_date
-  //     ? new Date(editaward.start_date).toISOString().split("T")[0]
-  //     : null;
-  //   const formattedEndDate = editaward.is_end_date
-  //     ? new Date(editaward.end_date).toISOString().split("T")[0]
-  //     : null;
-  //   try {
-  //     await validationSchema.validate(editaward, { abortEarly: false });
-
-  //     const response = await axios.post(
-  //       `${EXCHNAGE_URL}/updateAwardCategory`,
-  //       {
-  //         awardId: localAwardId,
-  //         category_name: editaward.category_name,
-  //         category_prefix: editaward.category_prefix,
-  //         belongs_group: editaward.belongs_group,
-  //         // limit_submission: editaward.limit_submission,
-  //         limit_submission: editaward.limit_submission.toString(),
-  //         is_start_date: editaward.is_start_date ? 1 : 0,
-  //         start_date: formattedStartDate.toString(),
-  //         is_end_date: editaward.is_end_date ? 1 : 0,
-  //         end_date: formattedEndDate.toString(),
-  //         is_endorsement: editaward.is_endorsement ? 1 : 0,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       toast.success("Category saved successfully!");
-  //       handleCloseSecondModal();
-  //       getApi();
-  //     }
-  //   } catch (error) {
-  //     if (error.name === "ValidationError") {
-  //       const errorMessages = {};
-  //       error.inner.forEach((err) => {
-  //         errorMessages[err.path] = err.message;
-  //       });
-  //       setErrors(errorMessages);
-  //     } else {
-  //       console.error("Error updating profile:", error.message);
-  //       toast.error("Error updating profile");
-  //     }
-  //   }
-  // };
 
 
   const handleSave = async (e) => {
@@ -422,6 +370,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
   
       if (editaward.is_end_date) {
         payload.end_date = formattedEndDate.toString();
+        // payload.end_date = ""
       } else {
         delete payload.end_date; // Remove end_date if is_end_date is 0
       }
@@ -482,28 +431,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
     "Actions",
   ];
 
-  // const exportgetApi = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${EXCHNAGE_URL}/download?eventId=${initialEventId}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
 
-  //     if (response.status === 200) {
-  //       const tableData = response.data.data;
-
-  //       exportToExcel(tableData);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error.message);
-  //   }
-  // };
- 
 
   const exportgetApi = async (eventId) => {
     try {
@@ -530,23 +458,6 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
       console.error('Error downloading file:', error);
     }
   };
-
-
-
-  const exportToExcel = (data) => {
-    // Convert the data into a worksheet
-    const ws = XLSX.utils.json_to_sheet(data);
-
-    // Create a new workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1"); // Append sheet to workbook
-
-    // Generate Excel file and trigger the download
-    XLSX.writeFile(wb, "award_data.xlsx");
-  };
-
- 
-    
 
 
   const navigate = useNavigate();
@@ -576,11 +487,10 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
                 <IoSearchSharp />
               </div>
               <div className="award_table_icon_content">
-                {/* <input type="text" placeholder="Search here..." /> */}
                 <input
                   type="text"
                   placeholder="Search here..."
-                  value={searchTerm} // Bind value to searchTerm state
+                  value={searchTerm} 
                   onChange={handleSearchChange} // Update searchTerm state on input change
                 />
               </div>
@@ -779,7 +689,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
                         <input
                           type="date"
                           name="end_date"
-                          value={awardData.end_date}
+                          value={awardData.end_date ||  null}
                           onChange={handleData}
                         />
                       )}

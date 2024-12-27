@@ -9,6 +9,7 @@ const FormCanvas = ({ fields, updateField, removeField, onGenerateSchema, titleV
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const [categories, setCategories]= useState([])
 
   const openModal = (field) => {
     setCurrentField(field); 
@@ -25,36 +26,9 @@ const FormCanvas = ({ fields, updateField, removeField, onGenerateSchema, titleV
       field.dataName === updatedField.dataName ? updatedField : field
     );
     updateField(updatedFields); 
-
     closeModal();
   };
 
-  const handleDragStart = (e, index) => {
-    setDraggedIndex(index);
-    e.target.style.opacity = "0.5";
-    e.target.style.cursor = "move";
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e, dropIndex) => {
-    e.preventDefault();
-    if (draggedIndex === dropIndex) return;
-
-    const updatedFields = [...fields];
-    const [movedField] = updatedFields.splice(draggedIndex, 1);
-    updatedFields.splice(dropIndex, 0, movedField);
-    updateField(updatedFields);
-    setDraggedIndex(null);
-    e.target.style.opacity = "";
-  };
-
-  const handleDragEnd = (e) => {
-    e.target.style.opacity = "";
-    e.target.style.cursor = "";
-  };
 
   const generateJSONSchema = () => {
     return fields.map((field, index) => {
@@ -100,6 +74,7 @@ const FormCanvas = ({ fields, updateField, removeField, onGenerateSchema, titleV
     onGenerateSchema(schema); // Pass schema to parent component
   };
 
+  // console.log(generateJSONSchema(),"1221212121221")
   return (
     <div className="form-canvass">
       {fields.length > 0 ? (
@@ -110,24 +85,32 @@ const FormCanvas = ({ fields, updateField, removeField, onGenerateSchema, titleV
 
           >
             <div className="field-input-containerr">
-              <InputLabel>{index + 1}</InputLabel>
+              <InputLabel
+              style={{"display":"flex", "flexDirection":"column", "justifyContent":"center", "alingItem":"center"}}
+              >{"Criteria "+(index + 1)}</InputLabel>
               {field.fields ? (
                 <div className="title-description-groupp">
                   {field.fields.map((subField, subIndex) => (
                     <div  key={`${subField.dataName}-${subIndex}`}className="subb-field">
-                      <InputLabel>{subField.label}</InputLabel>
+                      <InputLabel
+                      style={{"textAlign":"center"}}
+                      >{"Criteria "+subField.label}</InputLabel>
                       <InputType
                         type={subField.type}
                         placeholder={subField.placeholder}
-                        value={subField.label === "Title" ? titleValue : descriptionValue} // Ensure dynamic values
-                        onChange={(e) => {
-                          if (subField.label === "Title") {
-                            updateTitleAndDescription(e.target.value, descriptionValue); // Update title value
-                          } else if (subField.label === "Description") {
-                            updateTitleAndDescription(titleValue, e.target.value); // Update description value
-                          }
-                        }}
+                        value={subField.value || ""} // Use the field's value
+          onChange={(e) => {
+            const updatedFields = [...fields];
+            const subFieldIndex = updatedFields[index].fields.findIndex(
+              (field) => field.label === subField.label
+            );
+            updatedFields[index].fields[subFieldIndex].value = e.target.value; // Update only the specific field
+            updateField(updatedFields); // Update the fields state
+          }}
                       />
+                       {subField.required && !subField.value && (
+      <span style={{ color: "red" }}>This field is required.</span>
+    )}
 
                     </div>
                   ))}

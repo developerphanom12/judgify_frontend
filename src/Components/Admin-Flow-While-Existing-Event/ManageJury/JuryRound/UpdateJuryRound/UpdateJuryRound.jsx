@@ -19,6 +19,7 @@ import { EXCHNAGE_URL } from "../../../../../Url/Url";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import ScoreCardData from "../ScoreCard/ScoreCardData";
+import CreateScoreCard from "../ScoreCard/CreateScoreCard";
 const UpdateJuryRound = () => {
 
      const eventIdGet = useSelector((state) => state?.users?.eventIdGet || "");
@@ -444,7 +445,7 @@ const updateRoundData = async () =>{
              )}
    
              {selectedButton === 1 && (
-             <ScoreCardData/>
+             <CreateScoreCard/>
              )}
            </div>
          </div>

@@ -5,10 +5,13 @@ import { TopBar } from "../../../TopBar/TopBar";
 import { SubHeading } from "../../../../Global/GlobalText";
 import { CheckLabel } from "../../../../Global/GlobalFormElement";
 import { CreateButton, GreylessradiusButton } from "../../../../Global/GlobalButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const SuccessfullyCreateJudgeRound = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { rId } = location.state || {}; 
+    console.log("asdd",rId  )
   return (
     <div>
       <div className="create-jury-round_div">
@@ -32,7 +35,7 @@ export const SuccessfullyCreateJudgeRound = () => {
                 No, create Scorecards later
               </GreylessradiusButton>
               <CreateButton  onClick={ () => {
-                navigate(`/create-jury-round`)
+                navigate(`/update-jury-post/${rId}`, { state: { rId } })
               }}>
                 Yes, create Scorecard(s) now
               </CreateButton>

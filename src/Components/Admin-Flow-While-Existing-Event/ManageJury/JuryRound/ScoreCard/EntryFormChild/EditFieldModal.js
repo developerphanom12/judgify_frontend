@@ -75,8 +75,8 @@ const EditFieldModal = ({ field, onSave, onClose }) => {
     }
 
     setError("");
-    onSave(updatedField);  // Pass updated field back to parent
-    onClose();  // Close the modal after saving
+    onSave(updatedField);  
+    onClose();  
   };
 
   const handleClose = () => {

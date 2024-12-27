@@ -91,9 +91,10 @@ export const CreateJuryRoundPost = () => {
       
     })
   };
+  const [roundId, setRoundId] = useState("")
 
   const token = localStorage.getItem('token'); 
-
+  
   const handleSubmit = async () => {
     const dataToSend = requestData.getData();
 
@@ -106,17 +107,22 @@ export const CreateJuryRoundPost = () => {
         }
       });
       console.log('Data successfully submitted:', response.data);
+      setRoundId (response.data.roundId)
+       const rId = response.data.roundId
+
+      localStorage.setItem("roundId",rId)
       toast.success("Event Created SuccessFully")
-      navigate("/successfully-created-judge-round")
+      // navigate("/successfully-created-judge-round")
+      navigate('/successfully-created-judge-round', { state: { rId } });
     } catch (error) {
       console.error('Error submitting data:', error);
       toast.error("Failed to create a Event")
     }
   };
- 
+
   const buttons = [
     { id: 1, label: "General Settings", status: "General Settings" },
-    { id: 2, label: "Scorecards (0)", status: "Scorecards (0)" },
+    // { id: 2, label: "Scorecards (0)", status: "Scorecards (0)" },
   ];
 
   const handleClick = (index) => {
@@ -133,6 +139,8 @@ export const CreateJuryRoundPost = () => {
     },
   ];
 
+  // const RoundId = localStorage.setItem(roundId, "roundId")
+
   return (
     <div>
       <div className="create-jury-round_div">
@@ -143,7 +151,7 @@ export const CreateJuryRoundPost = () => {
             {buttons.map((button, index) => (
               <button
                 key={button.id}
-                onClick={() => handleClick(index)}
+                // onClick={() => handleClick(index)}
                 className={selectedButton === index ? "selected" : ""}
               >
                 {button.label}
@@ -347,14 +355,7 @@ export const CreateJuryRoundPost = () => {
                   This is the calculated overall score of a submission for this
                   round.
                 </CheckLabel>
-                {/* <div className="create_overall">
-                  <InputType 
-                  type="text"
-                  value={overallScore} 
-                  onChange={(e) => setOverallScore(e.target.value)} 
-                  />
-                  <IoMdInformationCircle />
-                </div> */}
+               
                 <div className="create_overall">
                   <select
                     value={submissionLimit}
@@ -382,9 +383,9 @@ export const CreateJuryRoundPost = () => {
             </>
           )}
 
-          {selectedButton === 1 && (
+          {/* {selectedButton === 1 && (
            <CreateScoreCard/>
-          )}
+          )} */}
         </div>
       </div>
     </div>
