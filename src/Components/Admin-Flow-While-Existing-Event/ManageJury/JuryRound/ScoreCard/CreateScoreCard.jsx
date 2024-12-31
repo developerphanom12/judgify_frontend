@@ -22,26 +22,19 @@ import { useSelector } from "react-redux";
 import FormCanvas from './EntryFormChild/FormCanvas';
 import EditFieldModal from './EntryFormChild/EditFieldModal';
 import FormulaValidationField from "./FormulaValidationField";
+import ScoreCardData from "./ScoreCardData";
 
-const CreateScoreCard = () => {
+const CreateScoreCard = ({totalScorecards}) => {
 
-  const [selected, setSelected] = useState([]);
+  // const [scorecardValue, setScorecardValue] = useState("0");
+  const scorecardValue = 1;
+    const [selected, setSelected] = useState([]);
   const [categories, setCategories]= useState([])
   const [loader, setLoader] = useState(false)
   
   const navigate = useNavigate();
       const location = useLocation();
       const { rId } = location.state || {}; 
-  
-  const options = [
-    { label: "BEST B2B ECOMMERCE", value: "grapes" },
-    { label: "BEST DIGITAL AGENCY OF THE YEAR", value: "mango" },
-    { label: "BEST ECOMMERCE TECHNOLOGY INNOVATION", value: "strawberry" },
-    {
-      label: "BEST INNOVATION IN ECOMMERCE DELIVERY/LOGISTICS",
-      value: "strawberry",
-    },
-  ];
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fields, setFields] = useState([]); // Your fields state
@@ -56,6 +49,8 @@ const CreateScoreCard = () => {
   const [formValues, SetFormValues] = useState({
     category:""
   })
+
+  const [scoreCardValue, setScoreCardValue] = useState("")
 
 
 
@@ -84,112 +79,50 @@ const CreateScoreCard = () => {
     setIsModalOpen(false); 
     setCurrentField(null); 
   };
-
-  // const generateValidationPattern = (fieldsCount) => {
-  //   // // Handle the case when fieldsCount is between 1 and 20
-  //   if (fieldsCount >= 1 && fieldsCount <= 20) {
-  //     // If there's only one field, ensure that only {1} is allowed and disallow ending with a number or operator after a parentheses
-  //     if (fieldsCount === 1) {
-  //       const pattern = `^(\\{1\\}[\\+\\-\\*\\/\\d]*)*$`;  // Only allow {1} and arithmetic operations
-  //       return new RegExp(pattern);
-  //     }
-  
-  //     // Create valid placeholders (e.g., {1}, {2}, ..., {fieldsCount})
-  //     const validPlaceholders = Array.from({ length: fieldsCount }, (_, i) => `{${i + 1}}`);
-  //     const placeholderPattern = validPlaceholders.map(p => `\\${p}`).join('[\\+\\-\\*\\/]*');
-  
-  //     // Pattern for handling parentheses: Allow expressions like ({1}+{2}) but not just ({1}+{2})
-  //     const parenthesesPattern = `\\([\\d\\+\\-\\*\\/\\{\\d+\\}]+\\)`;
-  
-  //     // Pattern for trailing operators or numbers after parentheses, e.g., ({1}+{2})/2
-  //     const trailingNumberPattern = `([\\+\\-\\*\\/]*\\d+)$`; // Match trailing operators or numbers after parentheses
-  
-  //     // Final pattern to make sure parentheses are valid only when followed by an operator or number
-  //     const formulaPattern = `^(${parenthesesPattern}|(${placeholderPattern})+)$|^(${parenthesesPattern})*([\\+\\-\\*\\/]*\\d+)$`;
-  
-  //     // This part disallows formulas like '({1}+{2})' by adding a condition that requires operators or numbers after parentheses
-  //     const disallowSimpleParentheses = `\\([\\d\\+\\-\\*\\/\\{\\d+\\}]+\\)`;
-  
-  //     // Now combine everything and make sure parentheses without operations are invalid
-  //     const finalPattern = `^(?!${disallowSimpleParentheses}$)${formulaPattern}`;
-  
-  //     // Ensure that no formula ends with a number after parentheses like ({1}+{2})/2
-  //     const completePattern = `^(${finalPattern})(?!.*\\/${trailingNumberPattern})$`;
-  
-  //     return new RegExp(completePattern);
-  //   }
-  
-  //   // For cases with more than 20 fields, return an invalid pattern (or adjust as needed)
-  //   return /^$/;  // Default: invalid if fieldsCount > 20 (or adjust as needed)
-  // };
-  
-  // const generateValidationPattern = (fieldsCount) => {
-  //   if (fieldsCount >= 1 && fieldsCount <= 20) {
-  //     // Create valid placeholders (e.g., {1}, {2}, ..., {fieldsCount})
-  //     const validPlaceholders = Array.from({ length: fieldsCount }, (_, i) => `{${i + 1}}`);
-  //     const placeholderPattern = validPlaceholders.join('|');
-  
-  //     // Pattern for valid expressions
-  //     const expressionPattern = `(${placeholderPattern})([\\+\\-\\*\\/]*(${placeholderPattern}))*`;
-  
-  //     // Pattern for handling parentheses
-  //     const parenthesesPattern = `\\(${expressionPattern}\\)`; // Match valid expressions inside parentheses
-  
-  //     // Final pattern to ensure valid expressions
-  //     const finalPattern = `^(${expressionPattern}|${parenthesesPattern})$`;
-  
-  //     // Ensure that the formula can end with a number only if preceded by a `/`
-  //     const completePattern = `^(${finalPattern})(?!.*[\\+\\-\\*]$)(?!.*[^/][\\d]$)`;
-  
-  //     return new RegExp(completePattern);
-  //   }
-  
-  //   // For cases with more than 20 fields, return an invalid pattern
-  //   return /^$/;  // Default: invalid if fieldsCount > 20
-  // };
-
   
   const validateFormula = (formula, fieldsCount) => {
     const tokens = formula.match(/(\{[0-9]+\}|[+\-*/()])/g);
     
-    if (!tokens) return false; // If no tokens found, return false
-
+    if (!tokens) return false; 
+  
     let openParentheses = 0;
     let lastToken = null;
-
+  
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-
-      // Check for valid placeholders
+  
       if (token.match(/\{[0-9]+\}/)) {
         const placeholderIndex = parseInt(token.slice(1, -1), 10);
         if (placeholderIndex < 1 || placeholderIndex > fieldsCount) {
-          return false; // Invalid placeholder
+          return false; 
         }
-      } else if (token === '(') {
+      } 
+      else if (token === '(') {
         openParentheses++;
-      } else if (token === ')') {
+      } 
+      else if (token === ')') {
         openParentheses--;
-        if (openParentheses < 0) return false; // Unmatched closing parenthesis
-      } else if (['+', '-', '*', '/'].includes(token)) {
-        // Check for valid operator placement
+        if (openParentheses < 0) return false; 
+      } 
+      else if (['+', '-', '*', '/'].includes(token)) {
         if (!lastToken || ['+', '-', '*', '/'].includes(lastToken) || lastToken === '(') {
-          return false; // Invalid operator placement
+          return false; 
         }
       } else {
-        return false; // Invalid token
+        return false; 
       }
-
+  
       lastToken = token;
     }
+    if (openParentheses !== 0) return false;
 
-    // Check for unmatched parentheses and valid ending
-    if (openParentheses !== 0 || (lastToken === '+' || lastToken === '-' || lastToken === '*' || lastToken === '/')) {
-      return false; // Unmatched parentheses or invalid ending
+    if (lastToken === ')' || lastToken === '(') {
+      return false;
     }
-
-    return true; // Valid formula
+  
+    return true; 
   };
+  
   
  const handleFormulaInput = (e) => {
     const inputValue = e.target.value;
@@ -202,6 +135,7 @@ const CreateScoreCard = () => {
   const addDefaultFields = () => {
     setFields((prevFields) => {
       const updatedFields = [...prevFields, ...defaultFields];
+      setFormula(''); 
       return updatedFields;
     });
   };
@@ -213,49 +147,10 @@ const CreateScoreCard = () => {
     } else {
       const updatedFields = fields.filter((_, i) => i !== index);
       setFields(updatedFields);
+      setFormula('');   
     }
   };
 
-  // const handleFormulaInput = (e) => {
-  //   const inputValue = e.target.value;
-  //   setFormula(inputValue);
-  
-  //   if (inputValue === '') {
-  //     setIsValid(true); // Empty formula is valid
-  //     return;
-  //   }
-  
-  //   const validPattern = generateValidationPattern(numFields);
-  //   const isFormulaValid = validPattern.test(inputValue);
-  //   setIsValid(isFormulaValid); // Button enabled/disabled based on formula validity
-  // };
-  
-  
-
-  // const addDefaultFields = () => {
-  //   setFields((prevFields) => {
-  //     const updatedFields = [...prevFields, ...defaultFields];
-  //     const validPattern = generateValidationPattern(updatedFields.length);
-  //     const isFormulaValid = validPattern.test(formula);
-  //     setIsValid(isFormulaValid); 
-  //     return updatedFields;
-  //   });
-  // };
-
-
-  //   const removeField = (index) => {
-  //   const fieldToRemove = fields[index];
-  //   if (fieldToRemove.isDefault) {
-  //     alert("This field cannot be removed.");
-  //   } else {
-  //     const updatedFields = fields.filter((_, i) => i !== index);
-  //     setFields(updatedFields);
-      
-  //     const validPattern = generateValidationPattern(updatedFields.length);
-  //     const isFormulaValid = validPattern.test(formula);
-  //     setIsValid(isFormulaValid);  
-  //   }
-  // };
 
   const defaultFields = [
     {
@@ -296,9 +191,9 @@ const CreateScoreCard = () => {
     return fields.every(field => {
       return field.fields.every(subField => {
         if (subField.required) {
-          return subField.value.trim() !== ""; // Check if required fields are not empty
+          return subField.value.trim() !== ""; 
         }
-        return true; // If not required, return true
+        return true; 
       });
     });
   };
@@ -306,45 +201,32 @@ const CreateScoreCard = () => {
   
   const handelSubmit =  async(e) =>{
     e.preventDefault();
-
     if (!validateFields()) {
       toast.error("Please fill in all required fields."); // Show error message
       return; 
     }
-
-    // if (currentField) {
-    //   const hasEmptyFields = currentField.fields.some(field => 
-    //     !field.minValue || !field.maxValue
-    //   );
-  
-    //   if (hasEmptyFields) {
-    //     toast.error("Please fill in all required fields in the modal.");
-    //     setIsModalOpen(true);
-    //     return; 
-    //   }
-    // } else {
-    //   toast.error("Click on action button to fill in all required fields. ");
-    //   return; 
-    // }
-  
-
+    if(!isValid){
+      toast.error("Please Enter a valid Formula in Overall value");
+      return;
+    }
     const formData = {
       eventId: initialEventId,
       roundId: roundId, 
-      // form_schema: fields.map(field => ({
-      //   [field.fields[0].dataName]: field.fields[0].value,
-      //   [field.fields[1].dataName]: field.fields[1].value
-      // })),
       form_schema: generatedSchema || fields,
-      scorecard_categories: formValues.category ? [formValues.category] : [], // Use the selected category
+      scorecard_categories: formValues.category ? [formValues.category] : [],
+      overall_value: formula ? formula : "",
     };
-
-    console.log(formData.form_schema,"hihihhihi")
-    console.log(formData,"1111111111111")
-
     try {
-      const response = await axios.post(`${EXCHNAGE_URL}/scorecard`, formData);
+      const response = await axios.post(`${EXCHNAGE_URL}/scorecard`, formData,{
+        headers: {
+          "Content-Type": "application/json",  // Content type for the request
+          "Authorization": `Bearer ${token}`, // Authentication token
+        },
+      });
       toast.success("Scorecard created successfully!");
+      // const data = response.data;
+      setScoreCardValue(response.data.data.scoreFormId)
+      console.log(response.data.data.scoreFormId,"999999999999")
       navigate("/jury-round"); 
     } catch (error) {
       console.error(error);
@@ -383,112 +265,125 @@ const CreateScoreCard = () => {
 };
 
 
-  useEffect(() => {
-    setFields([...defaultFields]); 
-    getCategories();
-  }, [initialEventId, searchTerm, sortOrder]);
+
+useEffect(() => {
+  setFields([...defaultFields]); 
+  getCategories();
+}, [initialEventId, searchTerm, sortOrder, scoreCardValue]);
 
   return (
     <>
-      <div className="create_jury_content_two">
-        <div className="create_jury_heading">
-          <RedMainHeading>Scorecard 1</RedMainHeading>
-        </div>
-
-        <div className="create_jury_select_div">
-          <InputLabel> Scorecard criteria </InputLabel>
-
-          
-          <div>
-      <div className="formappp">
-        <div className="canvas-savee">
-          <FormCanvas
-             fields={fields}
-             updateField={updateField}
-             removeField={removeField}
-             onGenerateSchema={setGeneratedSchema}
-             titleValue={titleValue} 
-             descriptionValue={descriptionValue} 
-             updateTitleAndDescription={updateTitleAndDescription} 
-          />
-          <div className="registratation_button">
-            <RedBackgroundButton onClick={addDefaultFields}>Add New Fields</RedBackgroundButton>
-          </div>
-        </div>
+    {totalScorecards === 0 ?
+  (
+    <>
+    <div className="create_jury_content_two">
+      <div className="create_jury_heading">
+        <RedMainHeading>Scorecard 1</RedMainHeading>
       </div>
 
-      {/* Modal for editing fields */}
-      {currentField && (
-        <EditFieldModal
-          field={currentField}
-          onSave={(updatedField) => {
-            const updatedFields = fields.map((field) =>
-              field.dataName === updatedField.dataName ? updatedField : field
-            );
-            setFields(updatedFields);
-            setCurrentField(null);
-          }}
-          onClose={() => setCurrentField(null)}
+      <div className="create_jury_select_div">
+        <InputLabel> Scorecard criteria </InputLabel>
+
+        
+        <div>
+    <div className="formappp">
+      <div className="canvas-savee">
+        <FormCanvas
+           fields={fields}
+           updateField={updateField}
+           removeField={removeField}
+           onGenerateSchema={setGeneratedSchema}
+           titleValue={titleValue} 
+           descriptionValue={descriptionValue} 
+           updateTitleAndDescription={updateTitleAndDescription} 
         />
-      )}
-    </div> 
+        <div className="registratation_button">
+          <RedBackgroundButton onClick={addDefaultFields}>Add New Fields</RedBackgroundButton>
         </div>
-
-        <div className="create_jury_select_div">
-          <div className="create_jury_overall">
-            <div className="create_juryoverall_head">
-              <InputLabel> Overall Scorecard Value </InputLabel>
-              <CheckLabel>
-                This is the calculated overall Scorecard value of a
-                submission
-              </CheckLabel>
-            </div>
-            <InputType type="text" 
-             value={formula}
-             placeholder={`Enter formula using placeholders {1}, {2}, ...`}
-             onChange={handleFormulaInput}
-            />
-          </div>
-
-          <div className="create_jury_overall">
-            <InputLabel>
-              Use this scorecard for the following Categories
-            </InputLabel>
-             <SelectBorder 
-                            name="category"
-                            value={formValues.category}
-                            onChange={handleChange}>
-                            <option value="">Select a Category</option>
-                            {categories.map((category) => (
-                        <option key={category.awardId} value={category.category_name}>
-                          {category.category_name}
-                        </option>
-                      ))}
-                            </SelectBorder>
-          </div>
-        </div>
-
-
-
-
       </div>
+    </div>
 
-      <div className="create_jury_btndiv">
-        <GreyBorderButton>Cancel</GreyBorderButton>
-        <RedBackgroundButton
-          onClick={handelSubmit}
-          disabled={!isValid}
-        >
-          Create
-        </RedBackgroundButton>
-        <GreyBackgroundButton onClick={() => {
-          navigate("/jury-round");
+    {/* Modal for editing fields */}
+    {currentField && (
+      <EditFieldModal
+        field={currentField}
+        onSave={(updatedField) => {
+          const updatedFields = fields.map((field) =>
+            field.dataName === updatedField.dataName ? updatedField : field
+          );
+          setFields(updatedFields);
+          setCurrentField(null);
         }}
-        disabled={!isValid}
-        >Create & Add New</GreyBackgroundButton>
+        onClose={() => setCurrentField(null)}
+      />
+    )}
+  </div> 
       </div>
 
+      <div className="create_jury_select_div">
+        <div className="create_jury_overall">
+          <div className="create_juryoverall_head">
+            <InputLabel> Overall Scorecard Value </InputLabel>
+            <CheckLabel>
+              This is the calculated overall Scorecard value of a
+              submission
+            </CheckLabel>
+          </div>
+          <InputType type="text" 
+           value={formula}
+           placeholder={`Enter formula using placeholders {1}, {2}, ...`}
+           onChange={handleFormulaInput}
+          />
+        </div>
+
+        <div className="create_jury_overall">
+          <InputLabel>
+            Use this scorecard for the following Categories
+          </InputLabel>
+           <SelectBorder 
+                          name="category"
+                          value={formValues.category}
+                          onChange={handleChange}>
+                          <option value="">Select a Category</option>
+                          {categories.map((category) => (
+                      <option key={category.awardId} value={category.category_name}>
+                        {category.category_name}
+                      </option>
+                    ))}
+                          </SelectBorder>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <div className="create_jury_btndiv">
+      <GreyBorderButton>Cancel</GreyBorderButton>
+      <RedBackgroundButton
+        onClick={handelSubmit}
+        >
+        Create
+      </RedBackgroundButton>
+      <GreyBackgroundButton onClick={() => {
+        navigate("/jury-round");
+      }}
+      >Create & Add New
+      </GreyBackgroundButton>
+    </div>
+
+  </>
+  ) 
+:
+(
+  <ScoreCardData scoreCardValue={scoreCardValue}/>
+)
+  }
+ 
     </>
+    
+    
   )
 }
 

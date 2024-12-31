@@ -59,6 +59,8 @@ export const Sidebar = () => {
           <Sidemenu>Admin Profile</Sidemenu>
         </span>
       </Link>
+
+      
     </div>
     </div>
   );

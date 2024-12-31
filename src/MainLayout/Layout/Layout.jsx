@@ -19,6 +19,7 @@ import {
   userFlowDataAction,
 } from "../../Components/Redux/Users/action";
 import { IoIosArrowForward } from "react-icons/io";
+import { matchPath } from "react-router-dom";
 
 export const Layout = ({ children }) => {
   const dispatch = useDispatch();
@@ -87,6 +88,58 @@ export const Layout = ({ children }) => {
     dispatch(userFlowDataAction(""));
     navigate("/user-login");
   };
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (matchPath({ path: "/update-jury-post/:roundId", exact: true }, path)) {
+      console.log("Matched update-jury-post path");
+      setSelectedLink("juryrounds");
+    }
+    else if (path === "/event-overview") {
+      setSelectedLink("eventoverview");
+    } else if (path === "/event-details") {
+      setSelectedLink("eventdetails");
+    } else if (path === "/award-category") {
+      setSelectedLink("awardcategory");
+    } else if (path === "/forms") {
+      setSelectedLink("forms");
+    } else if (path === "/jury-round") {
+      setSelectedLink("juryrounds");
+    } else if (path === "/jury-assignment") {
+      setSelectedLink("juryassignment");
+    } else if (path === "/customise-allocation") {
+      setSelectedLink("customiseallocation");
+    } else if (path === "/nominee-listing") {
+      setSelectedLink("nominee");
+    } else if (path === "/order-list") {
+      setSelectedLink("orders");
+    } else if (path === "/finance-report") {
+      setSelectedLink("financereport");
+    } else if (path === "/jury-score-report") {
+      setSelectedLink("juryscorereport");
+    } else if (path === "/entry-form-report") {
+      setSelectedLink("entryformreport");
+      
+    } 
+    
+
+    else if (path === "/create-jury-round-post") {
+      setSelectedLink("juryrounds");
+      
+    }
+    else if (path === "/successfully-created-judge-round") {
+      setSelectedLink("juryrounds");
+      
+    }
+    
+    else if (path === "/coupans") {
+      setSelectedLink("coupans");
+    } else {
+      setSelectedLink("dashboard");  // Default to dashboard if no match
+    }
+    console.log("Current Path:", location.pathname);
+
+  }, [location.pathname]);  //
 
   return (
     <>

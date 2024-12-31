@@ -39,8 +39,8 @@ export const CreateNewEventPost = () => {
   );
   const [time, setTime] = useState("00:00");
 
-      const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
 
   const dispatch = useDispatch();
 
@@ -70,7 +70,6 @@ export const CreateNewEventPost = () => {
     "Start up",
     "Educations",
     "Health",
-    "Others"
   ]
 
   const toggleDropdown = () => {
@@ -159,14 +158,11 @@ export const CreateNewEventPost = () => {
     const validationErrors = validateForm();
     setErrors(validationErrors);
 
-    // if (Object.keys(validationErrors).length > 0) {
-    //   return; // Stop the form submission if there are errors
-    // }
 
     if (Object.keys(validationErrors).length > 0) {
-      setLoading(false); // Hide loader when there are validation errors
-      return; // Stop the form submission
-    }
+      setLoading(false); 
+      return; 
+        }
 
     const form = new FormData();
     form.append("event_name", formData.event_name);
@@ -179,7 +175,6 @@ export const CreateNewEventPost = () => {
     form.append("is_withdrawal", formData.is_withdrawal ? 1 : 0);
     form.append("is_ediit_entry", formData.is_ediit_entry ? 1 : 0);
     form.append("limit_submission", formData.limit_submission ? 1 : 0);
-    // form.append("submission_limit", formData.submission_limit );
 
     const submissionLimit = formData.submission_limit
       ? formData.submission_limit
@@ -189,16 +184,13 @@ export const CreateNewEventPost = () => {
     form.append("event_description", formData.event_description || null);
 
     formData.industry_type.forEach((type) =>
-      form.append("industry_type[]", type)
+      form.append("industry_type[]", type || null)
     );
-    // formData.additional_email.forEach((email) =>
-    //   form.append("additional_email", email || null)
-    // );
-    if (formData.additional_email.length > 0) {
-      formData.additional_email.forEach((email) =>
-        form.append("additional_email[]", JSON.stringify(formData.additional_email) || null)
-      );
-    }
+
+    formData.additional_email.forEach(email => {
+      form.append("additional_email[]", email);
+    });
+
     if (files.event_logo) form.append("event_logo", files.event_logo);
     if (files.event_banner) form.append("event_banner", files.event_banner);
 
@@ -347,28 +339,28 @@ export const CreateNewEventPost = () => {
                           Industry type{" "}
                           <span style={{ color: "#c32728" }}></span>
                         </InputLabel>
-                        
+
 
                         <InputType
-                                                 placeholder="Select Industry Types"
-                                                 value={formData.industry_type.join(", ")}
-                       
-                                                 readOnly
-                                                 onClick={toggleDropdown} // Show dropdown on click
-                                                 style={{ cursor: "pointer" }}
-                                               />
-                                       <div className="selected-industries">
-                                                                {formData.industry_type.map((industry, index) => (
-                                                                  <div key={index} className="selected-industry-item">
-                                                                    <span>{industry}</span> {/* Display the name of the industry */}
-                                                                    <IoMdClose
-                                                                      className="remove-icon"
-                                                                      onClick={() => handleRemoveIndustry(industry)} // Remove industry on click
-                                                                    />
-                                                                  </div>
-                                                                ))}
-                                                              </div>    
-                                                              {isDropdownVisible && (
+                          placeholder="Select Industry Types"
+                          value={formData.industry_type.join(", ")}
+
+                          readOnly
+                          onClick={toggleDropdown} 
+                          style={{ cursor: "pointer" }}
+                        />
+                        <div className="selected-industries">
+                          {formData.industry_type.map((industry, index) => (
+                            <div key={index} className="selected-industry-item">
+                              <span>{industry}</span> {/* Display the name of the industry */}
+                              <IoMdClose
+                                className="remove-icon"
+                                onClick={() => handleRemoveIndustry(industry)} // Remove industry on click
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        {isDropdownVisible && (
                           <div className="dropdown">
                             {IndustryTypes.map((industry, index) => (
                               <div
@@ -385,7 +377,7 @@ export const CreateNewEventPost = () => {
                               </div>
                             ))}
                           </div>
-                        )}               
+                        )}
 
                         {errors.industry_type && (
                           <span className="error">{errors.industry_type}</span>
@@ -487,9 +479,7 @@ export const CreateNewEventPost = () => {
                           onChange={setSelectedTimezone}
                         />
 
-                        {/* {errors.time_zone && (
-                          <span className="error">{errors.time_zone}</span>
-                        )}{" "}  */}
+            
                       </div>
                     </div>
 
@@ -513,12 +503,13 @@ export const CreateNewEventPost = () => {
                           name="additional_email"
                           value={formData.additional_email.join(", ")} // Convert the array to a comma-separated string for display
                           onChange={(e) => {
+                            const inputValue = e.target.value;
+                        
                             // Split the input string by comma or semicolon and update the `additional_email` array
-                            const emails = e.target.value
-                              .split(/[,;]\s*/)  // Split by comma or semicolon followed by optional spaces
-                              .map(email => email.trim())  // Trim any surrounding whitespace
-                              .filter(email => email);
-
+                            const emails = inputValue
+                              .split(/[,;]\s*/)  
+                              .map(email => email.trim())  
+                        
                             setFormData({
                               ...formData,
                               additional_email: emails,

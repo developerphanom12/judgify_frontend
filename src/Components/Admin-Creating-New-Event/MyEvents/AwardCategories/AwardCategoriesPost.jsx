@@ -108,6 +108,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
 
   const handleData = (e) => {
     const { name, value, type, checked } = e.target;
+    
     if (type === "checkbox") {
       // Handle the checkbox logic: if checked, set to '1', else '0'
       setAwardData({
@@ -115,15 +116,18 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
         [name]: checked ? "1" : "0", // Store '1' if checked, '0' if unchecked
       });
     } else if (name === "start_date" || name === "end_date") {
-
+      // If the value is empty, set it to null (to prevent default 01/01/1970)
       setAwardData({
         ...awardData,
-        [name]: value, // Store the date value
+        [name]: value ? value : null, // If value is an empty string, set it to null
       });
     } else {
+      // For other inputs
       setAwardData({ ...awardData, [name]: value.trim() });
     }
   };
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -236,6 +240,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
       if (response.status === 200) {
 
         const transformedData = response.data.data?.map((item) => {
+          const endDate = item.end_date ? new Date(item.end_date).toLocaleDateString() : "No Date Selected";
 
           dispatch(setAwardId(item.awardId));
 
@@ -245,7 +250,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
             "Prefix for Submission": item.category_prefix,
             "Grouping Title": item.belongs_group,
             "Limit Submission": item.limit_submission,
-            "Closing Date": new Date(item.end_date).toLocaleDateString() || null,
+            "Closing Date": endDate,
             Actions: (
               <div
                 style={{
@@ -368,11 +373,10 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
         delete payload.start_date; // Remove start_date if is_start_date is 0
       }
   
-      if (editaward.is_end_date) {
-        payload.end_date = formattedEndDate.toString();
-        // payload.end_date = ""
+      if (editaward.is_end_date && formattedEndDate !== null) {
+        payload.end_date = formattedEndDate;
       } else {
-        delete payload.end_date; // Remove end_date if is_end_date is 0
+        delete payload.end_date; // Remove if not required
       }
   
       const response = await axios.post(`${EXCHNAGE_URL}/updateAwardCategory`, payload, {
@@ -458,6 +462,9 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
       console.error('Error downloading file:', error);
     }
   };
+
+  console.log("awardData.end_date:", awardData.end_date);
+
 
 
   const navigate = useNavigate();
@@ -689,7 +696,7 @@ export const AwardCategoriesPost = ({ setSelectedButton }) => {
                         <input
                           type="date"
                           name="end_date"
-                          value={awardData.end_date ||  null}
+                          value={awardData.end_date ? awardData.end_date : ""}
                           onChange={handleData}
                         />
                       )}

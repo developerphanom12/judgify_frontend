@@ -30,6 +30,7 @@ const UpdateJuryRound = () => {
       const [time, setTime] = useState("00:00");
       const [selected, setSelected] = useState([]);
       const navigate = useNavigate();
+      const [totalScorecards, setTotalScoreCards] = useState("0");
     
     
       const [startDate, setStartDate] = useState('');
@@ -142,10 +143,16 @@ const updateRoundData = async () =>{
           }); 
           const data = response.data.data;
           console.log(data, "daadaddadadadd")
-    
-          setStartDate(data.start_date);
+
+          const startingDate = response.data.data.start_date
+          const formattedDate = startingDate.split('T')[0];
+          const closingDate = response.data.data.end_date
+          const formattedClosingDate = closingDate.split('T')[0];
+          const totalNumberOfScorecards = response.data.data.TotalScorecards;
+          setTotalScoreCards(totalNumberOfScorecards);
+          setStartDate(formattedDate);
           setStartTime(data.start_time);
-          setEndDate(data.end_date);
+          setEndDate(formattedClosingDate);
           setEndTime(data.end_time);
     
           setCheckboxValues({
@@ -190,6 +197,7 @@ const updateRoundData = async () =>{
           value: "strawberry",
         },
       ];
+      console.log(totalScorecards,"oppoppoppoppoppop")
 
   return (
     <div>
@@ -445,7 +453,7 @@ const updateRoundData = async () =>{
              )}
    
              {selectedButton === 1 && (
-             <CreateScoreCard/>
+             <CreateScoreCard totalScorecards = {totalScorecards}/>
              )}
            </div>
          </div>
