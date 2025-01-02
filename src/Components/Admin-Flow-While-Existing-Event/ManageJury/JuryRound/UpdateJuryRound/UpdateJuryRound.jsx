@@ -63,29 +63,7 @@ const UpdateJuryRound = () => {
     }));
   };
 
-//   const requestData = {
-//     getData: () => ({
-//       eventId:initialEventId,
-//       start_date: startDate,
-//       roundId: roundId,
-//       start_time: startTime,
-//       end_date: endDate,
-//       end_time: endTime,
-//       is_active: checkboxValues.isActive ? 1 : 0,
-//       is_one_at_a_time: checkboxValues.isOneAtATime ? 1 : 0,
-//       is_individual_category_assigned: checkboxValues.isIndividualCategoryAssigned ? 1 : 0,
-//       is_Completed_Submission: checkboxValues.isCompletedSubmission ? 1 : 0,
-//       is_jury_print_send_all: checkboxValues.isJuryPrintSendAll ? 1 : 0,
-//       is_scoring_dropdown: checkboxValues.isScoringDropdown ? 1 : 0,
-//       is_comments_box_judging: checkboxValues.isCommentsBoxJudging ? 1 : 0,
-//       is_data_single_page: checkboxValues.isDataSinglePage ? 1 : 0,
-//       is_total: checkboxValues.isTotal ? 1 : 0,
-//       is_jury_others_score: checkboxValues.isJuryOthersScore ? 1 : 0,
-//       is_abstain: checkboxValues.isAbstain ? 1 : 0,
-//       overall_score: submissionLimit === '0' ? 0 : submissionLimit,
-      
-//     })
-//   };
+
 
   const token = localStorage.getItem('token'); 
 
@@ -169,7 +147,6 @@ const updateRoundData = async () =>{
             isAbstain: data.is_abstain === 1
           });
     
-          // setOverallScore(data.overall_score);
           setSubmissionLimit(data.overall_score || '0'); 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -181,24 +158,13 @@ const updateRoundData = async () =>{
 
     const buttons = [
         { id: 1, label: "General Settings", status: "General Settings" },
-        { id: 2, label: "Scorecards (0)", status: "Scorecards (0)" },
+        { id: 2, label: `Scorecards (${totalScorecards})`, status: `Scorecards (${totalScorecards})`},
       ];
     
       const handleClick = (index) => {
         setSelectedButton(index);
       };
     
-      const options = [
-        { label: "BEST B2B ECOMMERCE", value: "grapes" },
-        { label: "BEST DIGITAL AGENCY OF THE YEAR", value: "mango" },
-        { label: "BEST ECOMMERCE TECHNOLOGY INNOVATION", value: "strawberry" },
-        {
-          label: "BEST INNOVATION IN ECOMMERCE DELIVERY/LOGISTICS",
-          value: "strawberry",
-        },
-      ];
-      console.log(totalScorecards,"oppoppoppoppoppop")
-
   return (
     <div>
          <div className="create-jury-round_div">

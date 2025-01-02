@@ -18,6 +18,8 @@
         display: flex;
         padding: 5px;
         width: 30%;
+        justify-content: space-between;
+        align-items: center;
         button {
           font-family: Poppins;
           font-size: 16px;
@@ -344,3 +346,22 @@
     }
   }
   
+  .addNewButton{
+    background: #C32728;
+font-family: Poppins;
+font-size: 17px;
+font-weight: 500;
+color: #FFFFFF;
+padding: 10px 20px;
+cursor: pointer;
+border-radius: 20px;
+border: 1px solid transparent;
+width: 20%;
+
+  }
+
+  .create_new_jury_button{
+   margin: 1rem 0px 5px 0px;
+   display: flex;
+   
+  }

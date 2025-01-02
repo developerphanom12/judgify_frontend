@@ -64,12 +64,12 @@ export const JuryRoundExistingData = ({ roundData }) => {
     setSelectedRows((prevSelected) => {
       console.log("Previous Selected Rows:", prevSelected);
       return isChecked
-        ? [...prevSelected, rowIndex] // Add index
-        : prevSelected.filter((index) => index !== rowIndex); // Remove index
+        ? [...prevSelected, rowIndex]
+        : prevSelected.filter((index) => index !== rowIndex); 
     });
   };
   const setSelectedRow = (row) => {
-    console.log("Selected row:", row); // You can replace this with your desired logic
+    console.log("Selected row:", row); 
   };
 
   const handleClick = (index) => {
@@ -78,7 +78,6 @@ export const JuryRoundExistingData = ({ roundData }) => {
   console.log(roundData, "qwqqwwqqwqqww ")
 
   const handleNavigate = (roundId) => {
-    // Navigate to the update-jury-post page with the roundId
     navigate(`/update-jury-post/${roundId}`);
   };
 
@@ -175,8 +174,10 @@ export const JuryRoundExistingData = ({ roundData }) => {
               </EventHeading>
 
               <div className="jury_existing_btn_div">
-                <RedContent className="jury_existing_icon">
-                  <PiPlusCircleBold />
+                <RedContent className="jury_existing_icon"
+                 onClick={()=> navigate("/create-jury-group")}
+                >
+                  <PiPlusCircleBold/>
                   Create New Jury Group(s)
                 </RedContent>
 

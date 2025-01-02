@@ -26,9 +26,8 @@ import ScoreCardData from "./ScoreCardData";
 
 const CreateScoreCard = ({totalScorecards}) => {
 
-  // const [scorecardValue, setScorecardValue] = useState("0");
-  const scorecardValue = 1;
-    const [selected, setSelected] = useState([]);
+  
+  const [selected, setSelected] = useState([]);
   const [categories, setCategories]= useState([])
   const [loader, setLoader] = useState(false)
   
@@ -219,8 +218,8 @@ const CreateScoreCard = ({totalScorecards}) => {
     try {
       const response = await axios.post(`${EXCHNAGE_URL}/scorecard`, formData,{
         headers: {
-          "Content-Type": "application/json",  // Content type for the request
-          "Authorization": `Bearer ${token}`, // Authentication token
+          "Content-Type": "application/json",  
+          "Authorization": `Bearer ${token}`, 
         },
       });
       toast.success("Scorecard created successfully!");
@@ -278,7 +277,7 @@ useEffect(() => {
     <>
     <div className="create_jury_content_two">
       <div className="create_jury_heading">
-        <RedMainHeading>Scorecard 1</RedMainHeading>
+        <RedMainHeading>ScoreCard {totalScorecards+1}</RedMainHeading>
       </div>
 
       <div className="create_jury_select_div">
@@ -303,7 +302,6 @@ useEffect(() => {
       </div>
     </div>
 
-    {/* Modal for editing fields */}
     {currentField && (
       <EditFieldModal
         field={currentField}
@@ -377,7 +375,7 @@ useEffect(() => {
   ) 
 :
 (
-  <ScoreCardData scoreCardValue={scoreCardValue}/>
+  <ScoreCardData scoreCardValue={scoreCardValue} totalScorecards={totalScorecards}/>
 )
   }
  

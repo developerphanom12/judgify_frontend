@@ -70,6 +70,7 @@ import { AwardCategory } from "./Components/Admin-Flow-While-Existing-Event/Mana
 import UpdateJuryRound from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/UpdateJuryRound/UpdateJuryRound";
 import CreateScoreCard from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/ScoreCard/CreateScoreCard";
 import ScoreCardData from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/ScoreCard/ScoreCardData";
+import { CreateJuryGroup } from "./Components/Admin-Flow-While-Existing-Event/ManageJury/JuryRound/CreateJuryGroup/CreateJuryGroup";
 // import Formapp from "./Components/Admin-Creating-New-Event/MyEvents/RegistrationForm/ParentRegistrationForm/Formapp";
 
 function App() {
@@ -199,6 +200,10 @@ function App() {
                  <Route
                   path="/create-scorecard"
                   element={<UpdateJuryRound />}
+                />
+                <Route
+                  path="/create-jury-group"
+                  element={<CreateJuryGroup />}
                 />
                 <Route
                   path="/shortlist-entry-form"
