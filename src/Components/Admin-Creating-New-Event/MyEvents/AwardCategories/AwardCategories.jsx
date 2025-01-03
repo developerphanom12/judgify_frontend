@@ -4,7 +4,6 @@ import {
   CreateButton,
   GreyBorderButton,
   GreyfilterButton,
-
   ViewMoreButton,
 } from "../../../Global/GlobalButton";
 import "./AwardCategories.scss";
@@ -42,7 +41,6 @@ const validationSchema = Yup.object({
   category_prefix: Yup.string().required("Category Prefix is required"),
   belongs_group: Yup.string().required("Belongs to Group is required"),
   limit_submission: Yup.string().required("Limit Submission is required"),
-
 });
 
 export const AwardCategories = ({ setSelectedButton }) => {
@@ -73,8 +71,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
-  const { setLoading } = useLoading();  //Loader
-
+  const { setLoading } = useLoading(); //Loader
 
   const [showSecondModal, setShowSecondModal] = useState(false);
 
@@ -208,13 +205,13 @@ export const AwardCategories = ({ setSelectedButton }) => {
         }
         console.error("API Error:", error);
       }
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
 
   const getApi = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       let apiUrl = `${EXCHNAGE_URL}/allAwards?eventId=${initialEventId}&sortOrder=${sortOrder}`;
       if (searchTerm) {
@@ -229,7 +226,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
 
       if (response.status === 200) {
         const transformedData = response.data.data?.map((item) => {
-          dispatch(setAwardId(item.awardId)); 
+          dispatch(setAwardId(item.awardId));
           return {
             eventId: initialEventId,
             "Category Name": item.category_name,
@@ -260,14 +257,14 @@ export const AwardCategories = ({ setSelectedButton }) => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
 
   useEffect(() => {
     getApi();
-  }, [searchTerm, sortOrder,setLoading]);
+  }, [searchTerm, sortOrder, setLoading]);
 
   const deleteAward = async (awardId) => {
     console.log("Award ID to delete:", awardId);
@@ -292,7 +289,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
         error.response?.data?.message || error.message
       );
       toast.error("Error occurred while deleting");
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
@@ -313,7 +310,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
       }
     } catch (error) {
       console.error("Error fetching data:", error.message);
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
@@ -328,17 +325,17 @@ export const AwardCategories = ({ setSelectedButton }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true); //Loader
-    
+
     const formattedStartDate = editaward.is_start_date
       ? new Date(editaward.start_date).toISOString().split("T")[0]
       : null;
     const formattedEndDate = editaward.is_end_date
       ? new Date(editaward.end_date).toISOString().split("T")[0]
       : null;
-  
+
     try {
       await validationSchema.validate(editaward, { abortEarly: false });
-  
+
       // Construct the payload dynamically
       const payload = {
         awardId: localAwardId,
@@ -350,27 +347,31 @@ export const AwardCategories = ({ setSelectedButton }) => {
         is_end_date: editaward.is_end_date ? 1 : 0,
         is_endorsement: editaward.is_endorsement ? 1 : 0,
       };
-  
+
       // Add or remove dates based on conditions
       if (editaward.is_start_date) {
         payload.start_date = formattedStartDate.toString();
       } else {
         delete payload.start_date; // Remove start_date if is_start_date is 0
       }
-  
+
       if (editaward.is_end_date) {
         payload.end_date = formattedEndDate.toString();
       } else {
         delete payload.end_date; // Remove end_date if is_end_date is 0
       }
-  
-      const response = await axios.post(`${EXCHNAGE_URL}/updateAwardCategory`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
+
+      const response = await axios.post(
+        `${EXCHNAGE_URL}/updateAwardCategory`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       if (response.status === 200) {
         toast.success("Category saved successfully!");
         handleCloseSecondModal();
@@ -387,11 +388,11 @@ export const AwardCategories = ({ setSelectedButton }) => {
         console.error("Error updating profile:", error.message);
         toast.error("Error updating profile");
       }
-    }finally {
+    } finally {
       setLoading(false); //Loader
     }
   };
-  
+
   const handleCloseSecondModal = () => {
     setShowSecondModal(false);
     setAwardId(null); // Reset awardId when closing modal
@@ -443,26 +444,27 @@ export const AwardCategories = ({ setSelectedButton }) => {
   const exportgetApi = async (eventId) => {
     try {
       // Ensure eventId is passed correctly into the API URL
-      const response = await axios.get(`${EXCHNAGE_URL}/download?eventId=${initialEventId}`, {
-        responseType: 'blob', // Handle the response as a binary blob
-        headers: {
-          "Content-Type": "application/json",  // Content type for the request
-          "Authorization": `Bearer ${localStorage.getItem("token")}`, // Authentication token
-        },
-      });
-  
+      const response = await axios.get(
+        `${EXCHNAGE_URL}/download?eventId=${initialEventId}`,
+        {
+          responseType: "blob", // Handle the response as a binary blob
+          headers: {
+            "Content-Type": "application/json", // Content type for the request
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Authentication token
+          },
+        }
+      );
+
       // Create a URL for the binary blob (Excel file)
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', 'products.xlsx'); // Filename for download
-      document.body.appendChild(link)
-;
+      link.setAttribute("download", "products.xlsx"); // Filename for download
+      document.body.appendChild(link);
       link.click(); // Trigger the download
-      document.body.removeChild(link)
-; // Clean up the DOM element
+      document.body.removeChild(link); // Clean up the DOM element
     } catch (error) {
-      console.error('Error downloading file:', error);
+      console.error("Error downloading file:", error);
     }
   };
 
@@ -511,6 +513,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
             </div>
           </div>
           <div className="award_filter_btn">
+            
             <CreateButton onClick={handleShow}>New Category</CreateButton>
 
             <ViewMoreButton style={{ color: "#333333" }} onClick={exportgetApi}>
@@ -530,6 +533,7 @@ export const AwardCategories = ({ setSelectedButton }) => {
               <LuFilter />
               Filter
             </GreyfilterButton>
+
           </div>
         </div>
 
@@ -578,7 +582,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   Category Name <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
                 <InputType
-              
                   name="category_name"
                   value={awardData.category_name}
                   onChange={handleData}
@@ -732,7 +735,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
             </div>
 
             <form className="award_form" onSubmit={handleSave}>
-
               <div className="award_row">
                 <InputLabel>
                   Category Name <span style={{ color: "#c32728" }}>*</span>
@@ -800,8 +802,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
                   <span style={{ color: "#c32728" }}>*</span>
                 </InputLabel>
 
-                
-
                 <InputType
                   type="number"
                   name="limit_submission"
@@ -848,8 +848,9 @@ export const AwardCategories = ({ setSelectedButton }) => {
                             })
                           }
                         />
-                      ):""}
-                    
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                   <div className="award_label">
@@ -876,12 +877,12 @@ export const AwardCategories = ({ setSelectedButton }) => {
                             seteditaward({
                               ...editaward,
                               end_date: e.target.value.toString(),
-                             
                             })
                           }
                         />
-                      ):""}
-                    
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>
@@ -910,7 +911,6 @@ export const AwardCategories = ({ setSelectedButton }) => {
               <div className="award_btn">
                 <button className="award_modal_close">Save & Close</button>
               </div>
-
             </form>
           </div>
         </Modal.Body>

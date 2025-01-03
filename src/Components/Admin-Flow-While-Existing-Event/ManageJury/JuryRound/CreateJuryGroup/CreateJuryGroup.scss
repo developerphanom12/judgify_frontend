@@ -1,21 +1,73 @@
 .create_jury_group_data_div {
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-    padding:20px;
-    .create_jury_group_data_white_bg{
-      background-color:#fff;
-      padding:20px;
-      border-radius:12px;
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  .create_jury_group_data_white_bg {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 
-    .shortlist_butt {
+    .create_jury_group_column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .create_jury_group_select {
         display: flex;
-        gap: 20px;
+        gap: 10px;
+        align-items: center;
+        .group_select_one {
+          width: 40%;
+        }
+        .group_select_two {
+          width: 15%;
+        }
+        .create_jury_group_remove {
+          width: 20px;
+          height: 20px;
+          color: #c32728;
+          cursor: pointer;
+        }
+      }
+
+      .create_jury_group_btn {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 5px;
+        .create_jury_group_pluscontent {
+          display: flex;
+          gap: 5px;
+          align-items: center;
+          svg {
+            width: 15px;
+            height: 15px;
+          }
+        }
+      }
+
+      .create_jury_group_pattern {
+        border-radius:12px;
+        border:1px solid #66666659;
+        width:100%;
+        padding:10px;   
+        .create_jury_group_pattern_sub{
+          display: flex;
+          gap:5px;
+        }   
+      }
     }
 
-    
+    .width_column {
+      width: 50%;
     }
+  }
+
+  .shortlist_butt {
+    display: flex;
+    gap: 20px;
+  }
+}

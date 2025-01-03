@@ -64,6 +64,11 @@
               flex-direction: column;
               gap: 5px;
               width: 50%;
+
+              .event_details_multiselect_option{
+                display: absolute;
+              }
+
   
          
   
@@ -417,10 +422,26 @@
   // }
   
   .dropdown {
-    position: relative;
-    top: 40px; /* Adjust this value based on where you want the dropdown to appear relative to the input */
-    left: 0;
-    width: 100%; /* Make the dropdown occupy the same width as the input */
+    position: absolute!important;
+    width:auto;
+    top: 80px; /* Adjust this value based on where you want the dropdown to appear relative to the input */
+    // left: 0;
+    
+    border: 1px solid #ccc;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 999; /* Ensure it's on top of other UI elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add some shadow for better visibility */
+  }
+
+
+  .dropdown_list {
+    position: absolute!important;
+    width:auto;
+    top: 28%; /* Adjust this value based on where you want the dropdown to appear relative to the input */
+    // left: 0;
+    
     border: 1px solid #ccc;
     background-color: white;
     max-height: 200px;

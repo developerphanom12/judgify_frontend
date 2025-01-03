@@ -17,7 +17,10 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { MdInfo } from "react-icons/md";
 import { Description, EventHeading } from "../../../../Global/GlobalText";
-import { GreyBorderButton, RedBackgroundButton } from "../../../../Global/GlobalButton";
+import {
+  GreyBorderButton,
+  RedBackgroundButton,
+} from "../../../../Global/GlobalButton";
 import { IoMdClose } from "react-icons/io";
 
 export const EventDetails = () => {
@@ -34,9 +37,8 @@ export const EventDetails = () => {
   const [image, setImage] = useState(null);
   const [socialImage, setSocialImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
 
   const IndustryTypes = [
     "MICE(Meetings, incentives, conferencing, exhibitions)",
@@ -48,8 +50,8 @@ export const EventDetails = () => {
     "Start up",
     "Educations",
     "Health",
-    "Others"
-  ]
+    "Others",
+  ];
 
   const handleSocialMediaChange = (e) => {
     const { name, checked } = e.target;
@@ -63,7 +65,7 @@ export const EventDetails = () => {
       );
       setEditableEventData((prevData) => ({
         ...prevData,
-        social: selectedSocialMedia, 
+        social: selectedSocialMedia,
       }));
 
       return updatedSocialMedia;
@@ -134,7 +136,7 @@ export const EventDetails = () => {
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setLogoFile(file)
+      setLogoFile(file);
       setEditableEventData({
         ...editableEventData,
         event_logo: file,
@@ -154,7 +156,7 @@ export const EventDetails = () => {
   const handleBannerChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setBannerFile(file)
+      setBannerFile(file);
       setEditableEventData({
         ...editableEventData,
         event_banner: file,
@@ -171,24 +173,35 @@ export const EventDetails = () => {
     }
   };
 
-  console.log(editableEventData.social, "sdffdfdfdf")
+  console.log(editableEventData.social, "sdffdfdfdf");
   const updateEventData = async () => {
     try {
       const formData = new FormData();
       if (editableEventData.is_social === "1") {
-        formData.append('social_image', image || null);
+        formData.append("social_image", image || null);
         editableEventData.social.forEach((platform) => {
-          formData.append('social[]', platform);
+          formData.append("social[]", platform);
         });
       }
-      formData.append('is_social', editableEventData.is_social);
-      formData.append("event_logo", editableEventData.event_logo || eventData.event_logo);
-      formData.append("event_banner", editableEventData.event_banner || eventData.event_banner);
+      formData.append("is_social", editableEventData.is_social);
+      formData.append(
+        "event_logo",
+        editableEventData.event_logo || eventData.event_logo
+      );
+      formData.append(
+        "event_banner",
+        editableEventData.event_banner || eventData.event_banner
+      );
       formData.append("event_description", eventData.event_description);
-      formData.append("closing_messsage", editableEventData.closing_messsage || null);
-      formData.append("jury_welcm_messsage", editableEventData.jury_welcm_messsage || null);
-      formData.append("eventId", eventIdGet)
-
+      formData.append(
+        "closing_messsage",
+        editableEventData.closing_messsage || null
+      );
+      formData.append(
+        "jury_welcm_messsage",
+        editableEventData.jury_welcm_messsage || null
+      );
+      formData.append("eventId", eventIdGet);
 
       const response = await axios.post(
         `${EXCHNAGE_URL}/updateEventSocial`,
@@ -196,8 +209,8 @@ export const EventDetails = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 
@@ -210,8 +223,6 @@ export const EventDetails = () => {
       console.error("Error updating event:", error.message);
     }
   };
-
-
 
   useEffect(() => {
     const getApi = async () => {
@@ -258,7 +269,6 @@ export const EventDetails = () => {
   }, []);
 
   const updateFirstFormData = async () => {
-
     const payload = {
       eventId: eventIdGet,
       event_name: eventData.event_name,
@@ -277,22 +287,22 @@ export const EventDetails = () => {
     };
     try {
       const eventId = eventIdGet;
-      const response = await axios.post(`${EXCHNAGE_URL}/updateCreateEvent`, payload,
+      const response = await axios.post(
+        `${EXCHNAGE_URL}/updateCreateEvent`,
+        payload,
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      const data = response.data
-      console.log('Event updated successfully:', data);
-
+      const data = response.data;
+      console.log("Event updated successfully:", data);
     } catch (error) {
-      console.error('Error updating event:', error);
+      console.error("Error updating event:", error);
     }
-
-  }
+  };
   const handleCheckboxChange = (field) => (e) => {
     setEventData({
       ...eventData,
@@ -306,13 +316,13 @@ export const EventDetails = () => {
 
   const handleIndustryChange = (industry) => {
     if (eventData.industry_type.includes(industry)) {
-
       setEventData({
         ...eventData,
-        industry_type: eventData.industry_type.filter((item) => item !== industry),
+        industry_type: eventData.industry_type.filter(
+          (item) => item !== industry
+        ),
       });
     } else {
-
       setEventData({
         ...eventData,
         industry_type: [...eventData.industry_type, industry],
@@ -324,12 +334,13 @@ export const EventDetails = () => {
     // Remove the selected industry from the list
     setEventData({
       ...eventData,
-      industry_type: eventData.industry_type.filter((item) => item !== industry),
+      industry_type: eventData.industry_type.filter(
+        (item) => item !== industry
+      ),
     });
   };
 
-
-  console.log(editableEventData.social, "hhhhhhhhh")
+  console.log(editableEventData.social, "hhhhhhhhh");
 
   const navigate = useNavigate();
 
@@ -388,7 +399,6 @@ export const EventDetails = () => {
                             })
                           }
                         />
-
                       </div>
 
                       <div className="newevent_label">
@@ -397,20 +407,20 @@ export const EventDetails = () => {
                           <span style={{ color: "#c32728" }}>*</span>
                         </InputLabel>
 
-                        
                         <InputType
                           placeholder="Select Industry Types"
                           value={eventData.industry_type.join(", ")}
-                         
                           readOnly
                           onClick={toggleDropdown} // Show dropdown on click
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer"}}
+                          className="event_details_multiselect_option"
                         />
 
                         <div className="selected-industries">
                           {eventData.industry_type.map((industry, index) => (
                             <div key={index} className="selected-industry-item">
-                              <span>{industry}</span> {/* Display the name of the industry */}
+                              <span>{industry}</span>{" "}
+                              {/* Display the name of the industry */}
                               <IoMdClose
                                 className="remove-icon"
                                 onClick={() => handleRemoveIndustry(industry)} // Remove industry on click
@@ -420,23 +430,33 @@ export const EventDetails = () => {
                         </div>
 
                         {isDropdownVisible && (
-  <div className="dropdown">
-    {IndustryTypes.map((industry, index) => (
-      <div
-        key={index}
-        className={`dropdown-option ${eventData.industry_type.includes(industry) ? "selected" : ""}`}
-        onClick={() => handleIndustryChange(industry)}
-        style={{
-          cursor: "pointer",
-          backgroundColor: eventData.industry_type.includes(industry) ? "#e0e0e0" : "white",
-          pointerEvents: eventData.industry_type.includes(industry) ? "none" : "auto",
-        }}
-      >
-        {industry}
-      </div>
-    ))}
-  </div>
-)}
+                          <div className="dropdown">
+                            {IndustryTypes.map((industry, index) => (
+                              <div
+                                key={index}
+                                className={`dropdown-option ${
+                                  eventData.industry_type.includes(industry)
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() => handleIndustryChange(industry)}
+                                style={{
+                                  cursor: "pointer",
+                                  backgroundColor:
+                                    eventData.industry_type.includes(industry)
+                                      ? "#e0e0e0"
+                                      : "white",
+                                  pointerEvents:
+                                    eventData.industry_type.includes(industry)
+                                      ? "none"
+                                      : "auto",
+                                }}
+                              >
+                                {industry}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -452,8 +472,8 @@ export const EventDetails = () => {
                             value={
                               eventData.closing_date
                                 ? new Date(eventData.closing_date)
-                                  .toISOString()
-                                  .split("T")[0] // Convert to yyyy-mm-dd format
+                                    .toISOString()
+                                    .split("T")[0] // Convert to yyyy-mm-dd format
                                 : ""
                             }
                             onChange={(e) =>
@@ -594,7 +614,7 @@ export const EventDetails = () => {
                           <CheckboxInput
                             type="checkbox"
                             checked={eventData.is_endorsement === 1}
-                            onChange={handleCheckboxChange('is_endorsement')}
+                            onChange={handleCheckboxChange("is_endorsement")}
                           />
                           <InputLabel>Require Endorsement </InputLabel>
                         </div>
@@ -612,7 +632,7 @@ export const EventDetails = () => {
                           <CheckboxInput
                             type="checkbox"
                             checked={eventData.is_withdrawal === 1}
-                            onChange={handleCheckboxChange('is_withdrawal')}
+                            onChange={handleCheckboxChange("is_withdrawal")}
                           />
                           <InputLabel>Allow Submission Withdrawal</InputLabel>
                         </div>
@@ -630,7 +650,7 @@ export const EventDetails = () => {
                           <CheckboxInput
                             type="checkbox"
                             checked={eventData.is_ediit_entry === 1}
-                            onChange={handleCheckboxChange('is_ediit_entry')}
+                            onChange={handleCheckboxChange("is_ediit_entry")}
                           />
                           <InputLabel>Allow Editing to Entries</InputLabel>
                         </div>
@@ -646,7 +666,7 @@ export const EventDetails = () => {
                           <CheckboxInput
                             type="checkbox"
                             checked={eventData.limit_submission === 1}
-                            onChange={handleCheckboxChange('limit_submission')}
+                            onChange={handleCheckboxChange("limit_submission")}
                           />
                           <InputLabel>Limit number of submissions</InputLabel>
                         </div>
@@ -656,22 +676,23 @@ export const EventDetails = () => {
                         </CheckboxLabel>
                       </div>
 
-                      {eventData.limit_submission === 1 ?
-                    (<div className="newevent_label">
-                      <InputLabel>Submission Limit</InputLabel>
-                      <InputType
-                        type="number"
-                        value={eventData.submission_limit}
-                        onChange={(e) =>
-                          setEventData({
-                            ...eventData,
-                            submission_limit: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    ):("")  
-                    }
+                      {eventData.limit_submission === 1 ? (
+                        <div className="newevent_label">
+                          <InputLabel>Submission Limit</InputLabel>
+                          <InputType
+                            type="number"
+                            value={eventData.submission_limit}
+                            onChange={(e) =>
+                              setEventData({
+                                ...eventData,
+                                submission_limit: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
 
                     <div className="newevent_btndiv">
@@ -706,9 +727,17 @@ export const EventDetails = () => {
                       <div className="myevent_img">
                         <div className="logo_get">
                           <img
-                            src={logoFile ? URL.createObjectURL(logoFile) : `${IMAGES_URL}${eventData.event_logo}`}
+                            src={
+                              logoFile
+                                ? URL.createObjectURL(logoFile)
+                                : `${IMAGES_URL}${eventData.event_logo}`
+                            }
                             alt="Event Logo"
-                            style={{ width: "120px", height: "75px", objectFit: "contain" }}
+                            style={{
+                              width: "120px",
+                              height: "75px",
+                              objectFit: "contain",
+                            }}
                           />
                         </div>
                         <input
@@ -718,7 +747,10 @@ export const EventDetails = () => {
                           style={{ display: "none" }}
                           id="logo-upload"
                         />
-                        <label htmlFor="logo-upload" style={{ cursor: "pointer" }}>
+                        <label
+                          htmlFor="logo-upload"
+                          style={{ cursor: "pointer" }}
+                        >
                           <Description>Browse File</Description>
                         </label>
 
@@ -735,9 +767,17 @@ export const EventDetails = () => {
                       <div className="myevent_img">
                         <div className="logo_get">
                           <img
-                            src={bannerFile ? URL.createObjectURL(bannerFile) : `${IMAGES_URL}${eventData.event_banner}`}
+                            src={
+                              bannerFile
+                                ? URL.createObjectURL(bannerFile)
+                                : `${IMAGES_URL}${eventData.event_banner}`
+                            }
                             alt="Event Banner"
-                            style={{ width: "120px", height: "75px", objectFit: "contain" }}
+                            style={{
+                              width: "120px",
+                              height: "75px",
+                              objectFit: "contain",
+                            }}
                           />
                         </div>
                         <input
@@ -747,7 +787,10 @@ export const EventDetails = () => {
                           style={{ display: "none" }}
                           id="banner-upload"
                         />
-                        <label htmlFor="banner-upload" style={{ cursor: "pointer" }}>
+                        <label
+                          htmlFor="banner-upload"
+                          style={{ cursor: "pointer" }}
+                        >
                           <Description>Browse File</Description>
                         </label>
                         <CheckboxLabel style={{ textAlign: "center" }}>
@@ -808,7 +851,8 @@ export const EventDetails = () => {
                             ...editableEventData,
                             jury_welcm_messsage: e.target.value,
                           })
-                        } />
+                        }
+                      />
                     </div>
                   </div>
                   <InputLabel>Option to select Media Links </InputLabel>
@@ -875,17 +919,15 @@ export const EventDetails = () => {
                         />
                         {imagePreview && (
                           <div className="image-preview">
-                            <img
-                              src={imagePreview}
-                              alt="Preview"
-                            />
-                            <button onClick={handleRemoveImage}>Remove Image</button>
+                            <img src={imagePreview} alt="Preview" />
+                            <button onClick={handleRemoveImage}>
+                              Remove Image
+                            </button>
                           </div>
                         )}
                       </div>
                     </div>
                   )}
-
 
                   <div className="newevent_btndiv">
                     <GreyBorderButton
@@ -908,9 +950,15 @@ export const EventDetails = () => {
                 </form>
               </>
             )}
-            {selectedButton === 3 && <SubmissionId setSelectedButton={setSelectedButton} />}
-            {selectedButton === 4 && <BackdoorAccess setSelectedButton={setSelectedButton} />}
-            {selectedButton === 5 && <AwardDirectory setSelectedButton={setSelectedButton} />}
+            {selectedButton === 3 && (
+              <SubmissionId setSelectedButton={setSelectedButton} />
+            )}
+            {selectedButton === 4 && (
+              <BackdoorAccess setSelectedButton={setSelectedButton} />
+            )}
+            {selectedButton === 5 && (
+              <AwardDirectory setSelectedButton={setSelectedButton} />
+            )}
           </div>
         </div>
       </div>

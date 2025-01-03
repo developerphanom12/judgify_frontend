@@ -33,11 +33,11 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export const JuryAssignment = () => {
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [show, setShow] = useState(false);
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet || "");
   const initialEventId = String(eventIdGet);
-
   const columns = ["Name", "Email", "Assignment Group", "Status", "Actions"];
 
   const data = [
@@ -208,6 +208,7 @@ export const JuryAssignment = () => {
 
   return (
     <div>
+      
       <div className="jury_assignment_data_div">
         <TitleBar title="Jury Assignment" />
         <div className="jury_assignment_white_bg">

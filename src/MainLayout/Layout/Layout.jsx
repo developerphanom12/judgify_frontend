@@ -63,6 +63,8 @@ export const Layout = ({ children }) => {
     "/finance-report",
     "/jury-score-report",
     "/entry-form-report",
+    "/create-jury-group",
+    "/entry-form-listing",
   ].includes(location.pathname);
 
   const handleLinkClick = (link) => {

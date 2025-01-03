@@ -361,7 +361,7 @@ export const CreateNewEventPost = () => {
                           ))}
                         </div>
                         {isDropdownVisible && (
-                          <div className="dropdown">
+                          <div className="dropdown_list">
                             {IndustryTypes.map((industry, index) => (
                               <div
                                 key={index}

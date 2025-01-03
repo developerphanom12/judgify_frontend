@@ -95,7 +95,7 @@ export const Nominee = () => {
   return (
     <div>
       <div className="nominee_data_div">
-        <TitleBar title="Nominee Listing" />
+        <TitleBar title="Nominee Listing"/>
         <div className="nominee_white_bg">
           <TopBar titleheading="Nominee Listing" />
 
