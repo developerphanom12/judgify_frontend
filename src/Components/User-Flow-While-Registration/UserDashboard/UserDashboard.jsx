@@ -1,6 +1,6 @@
 import React from "react";
 import "./UserDashboard.scss";
-import { LuFileEdit } from "react-icons/lu";
+// import { LuFileEdit } from "react-icons/lu";
 import { RedMainHeading, SubHeading } from "../../Global/GlobalText";
 import { HiMiniCurrencyDollar } from "react-icons/hi2";
 import { RedBackgroundButton } from "../../Global/GlobalButton";
@@ -16,7 +16,7 @@ export const UserDashboard = () => {
         <div className="user_dashboard_bg">
           <div className="user_price_div">
             <div className="user_dashboard_sub sub_details">
-              <LuFileEdit/>
+              {/* <LuFileEdit/> */}
               <RedMainHeading>SUBMISSION DETAILS</RedMainHeading>
               <SubHeading style={{ fontWeight: 600 }}>15</SubHeading>
             </div>

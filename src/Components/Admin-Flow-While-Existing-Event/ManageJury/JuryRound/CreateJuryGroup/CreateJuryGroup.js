@@ -10,18 +10,19 @@ import {
 import { useNavigate } from "react-router-dom";
 
 export const CreateJuryGroup = () => {
+  
   const navigate = useNavigate();
 
   return (
     <div>
-      <div className="jury_existing_data_div">
+      <div className="create_jury_group_data_div">
         <TitleBar title="Jury Round" />
-        <div className="jury_existing_data_white_bg">
+        <div className="create_jury_group_data_white_bg">
           <TopBar titleheading="Create A Jury Group For Selected Round"/>
             <div className="judging-group-main-div">
             <div className="judging-group-name-header">
                 Hello Brooo
-                </div>
+            </div>
             </div>
           <div className="shortlist_butt">
             <GreyBorderButton
@@ -46,4 +47,5 @@ export const CreateJuryGroup = () => {
       </div>
     </div>
   );
+
 };
