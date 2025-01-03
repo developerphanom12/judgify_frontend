@@ -6,7 +6,7 @@ import { InputLabel, InputType, SelectBorder } from "../../../../Global/GlobalFo
 import { GreyBorderButton, RedBackgroundButton } from "../../../../Global/GlobalButton";
 import { RiDeleteBin4Fill } from "react-icons/ri";
 
-const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setFormData, dataNames }) => {
+const EditFieldModal = ({ fieldType, field, onSave, onClose, fieldLabels, formData, setFormData, dataNames }) => {
   const [selectedFieldLabel, setSelectedFieldLabel] = useState(field.label);
   const [selectedDataName, setSelectedDataName] = useState(field.dataName);
   const [updatedField, setUpdatedField] = useState({
@@ -22,7 +22,7 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
     isRequiredIf: field.isRequiredIf || false,
     requiredFieldValue: field.requiredFieldValue || "",
     conditionType: field.requiredCondition || "Equals (Default)",
-    conditionValue: field.requiredConditionValue || "", // Ensure this gets initialized
+    conditionValue: field.requiredConditionValue || "", 
     isVisibleChecked: field.visible ?? true,
     isVisibleIfChecked: field.isVisibleIf || false,
     visibleFieldValue: field.visibleFieldValue || "",
@@ -34,8 +34,9 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
 
   const [errors, setErrors] = useState({});
 
+  const isAddedField = fieldType === 'added';
+
   useEffect(() => {
-    // Ensure that the modal state gets updated when the `field` prop changes
     setUpdatedField({
       ...field,
       options: field.options || [],
@@ -47,7 +48,7 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
       isRequiredIf: field.isRequiredIf || false,
       requiredFieldValue: field.requiredFieldValue || "",
       conditionType: field.requiredCondition || "Equals (Default)",
-      conditionValue: field.requiredConditionValue || "", // Set conditionValue based on the field prop
+      conditionValue: field.requiredConditionValue || "", 
       isVisibleChecked: field.visible ?? true,
       isVisibleIfChecked: field.isVisibleIf || false,
       visibleFieldValue: field.visibleFieldValue || "",
@@ -57,7 +58,6 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
     });
     setSelectedFieldLabel(field.label);
     setSelectedDataName(field.dataName);
-    // console.log("label",dataNames)
   }, [field]);
 
   const handleChange = useCallback((e) => {
@@ -70,10 +70,10 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
 
   const handleFieldLabelChange = (e) => { 
     const selectedLabel = e.target.value;
-    const index = fieldLabels.indexOf(selectedLabel); // Find the index of the selected label
+    const index = fieldLabels.indexOf(selectedLabel);
     if (index !== -1) {
-      setSelectedFieldLabel(selectedLabel); // Update the selected label
-      setSelectedDataName(dataNames[index]); // Update the selected dataName based on the label index, NOT the label
+      setSelectedFieldLabel(selectedLabel); 
+      setSelectedDataName(dataNames[index]); 
     }
   };
   
@@ -81,7 +81,7 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
     const { name, value } = e.target;
     setConditions((prev) => ({
       ...prev,
-      [name]: value, // Dynamically update the specific field in the conditions state
+      [name]: value, 
     }));
   }, []);
 
@@ -114,7 +114,6 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
     if (!updatedField.dataName) newErrors.dataName = "Data name is required.";
     if (!updatedField.label) newErrors.label = "Label is required.";
   
-    // Validation for Required Field Conditions
     if (conditions.isRequiredChecked && !conditions.isRequiredIf) {
       newErrors.requiredFieldValue = "Please select a condition for Required If.";
     } else if (conditions.isRequiredIf && !conditions.requiredFieldValue) {
@@ -122,46 +121,41 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
     }
   
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;  // Ensure that errors are cleared for save to proceed
+    return Object.keys(newErrors).length === 0; 
   }, [updatedField, conditions]);
   
   const handleSave = useCallback(() => {
     console.log("Attempting to save...");
   
-    // Validate the form before saving
     if (!validateForm()) {
       console.log("Validation failed.");
       return;
     }
   
-    // Construct the field payload
     const fieldPayload = {
-      type: updatedField.type, // Field type (e.g., text, radio, checkbox)
-      dataName: updatedField.dataName,  // Main data name
-      label: updatedField.label,  // Field label
-      hoverHint: updatedField.hoverHint, // Hover hint if any
-      options: updatedField.options, // Options for select/radio/checkbox
-      includeOther: updatedField.includeOther, // Option for additional input
-      isRequired: conditions.isRequiredChecked, // Whether the field is required
-      isRequiredIf: conditions.isRequiredIf, // Condition for being required
-      requiredFieldValue: conditions.requiredFieldValue, // Related field value for required condition
-      requiredCondition: conditions.conditionType, // Type of condition for required status
-      requiredConditionValue: conditions.conditionValue, // Condition value for required status
-      visible: conditions.isVisibleChecked, // Whether the field is visible
-      isVisibleIf: conditions.isVisibleIfChecked, // Visibility condition
-      visibleFieldValue: conditions.visibleFieldValue, // Related field value for visibility condition
-      visibleCondition: conditions.visibleCondition, // Type of condition for visibility
-      visibleConditionValue: conditions.visibleConditionValue, // Condition value for visibility
-      renderlabel: selectedFieldLabel,  // Selected label for the field (used in the preview)
-      renderDataName: selectedDataName,  // Selected data name for the field (used in the preview)
+      type: updatedField.type, 
+      dataName: updatedField.dataName, 
+      label: updatedField.label, 
+      hoverHint: updatedField.hoverHint, 
+      options: updatedField.options, 
+      includeOther: updatedField.includeOther, 
+      isRequiredIf: conditions.isRequiredIf, 
+      requiredFieldValue: conditions.requiredFieldValue, 
+      requiredCondition: conditions.conditionType, 
+      requiredConditionValue: conditions.conditionValue, 
+      visible: conditions.isVisibleChecked, 
+      isVisibleIf: conditions.isVisibleIfChecked, 
+      visibleFieldValue: conditions.visibleFieldValue, 
+      visibleCondition: conditions.visibleCondition, 
+      visibleConditionValue: conditions.visibleConditionValue,
+      renderlabel: selectedFieldLabel, 
+      renderDataName: selectedDataName, 
     };
   
-    console.log("Field Payload before save:", fieldPayload);  // Debug the payload
+    console.log("Field Payload before save:", fieldPayload); 
   
-    // Trigger the onSave function from the parent component with the field payload
     onSave(fieldPayload);
   
-    // Close the modal after saving
     onClose();
   }, [
     validateForm,
@@ -206,8 +200,7 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
               <InputType
                 type="text"
                 name="label"
-                // value={updatedField.label || ""}
-                onChange={handleChange} // Update label in JSON only
+                onChange={handleChange} 
               />
               {errors.label && <div className="error">{errors.label}</div>}
             </div>
@@ -250,7 +243,10 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
               </div>
             )}
 
-            {/* Required If Section */}
+          {
+            isAddedField &&(
+              <>
+                {/* Required If Section */}
             <div className="required-field">
               <label>
                 <input
@@ -401,6 +397,9 @@ const EditFieldModal = ({ field, onSave, onClose, fieldLabels, formData, setForm
                 </div>
               )}
             </div>
+              </>
+            )
+          }
 
           </form>
         </div>

@@ -10,12 +10,17 @@ const FormCanvas = ({
   updateField,
   removeField,
   disableRequiredCheckbox,
+  addedFields,
+  // copyField,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState(null);
   const [conditionFieldName, setConditionFieldName] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
-  const [copiedField, setCopiedField] = useState(null); // State to hold the copied field
+  const [copiedFields, setCopiedFields] = useState([]); // State to hold the copied field
+  const [fieldType, setFieldType] = useState(""); // Track field type
+
+
 
   // List of countries for the dropdown
   const countries = useMemo(() => [
@@ -25,6 +30,9 @@ const FormCanvas = ({
     "Switzerland", "Belgium"
   ], []);
 
+ 
+
+
   // List of field labels and their corresponding data names
   const fieldLabels = useMemo(() => fields.map(field => field.label), [fields]);
 
@@ -32,8 +40,10 @@ const FormCanvas = ({
   const dataNames = useMemo(() => fields.map(field => field.dataName), [fields]);
 
   // Opens modal and sets the current field for editing
-  const openModal = useCallback((field) => {
+  const openModal = useCallback((field, type) => {
     setCurrentField(field);
+    setFieldType(type); // Set type as "normal" or "added"
+
     let conditionFieldName = null;
 
     // For required condition
@@ -185,22 +195,18 @@ const FormCanvas = ({
 
   const copyField = (index) => {
     const fieldToCopy = fields[index];
+  
     const copiedField = {
       ...fieldToCopy,
-      dataName: `${fieldToCopy.dataName}_copy`, // Ensure unique dataName for the copied field
-      value: "", // Reset the value for the copied field
+      dataName: `${fieldToCopy.dataName}_copy_${Date.now()}`,
+      label: `${fieldToCopy.label} (Copy)`,
+      value: "",  
     };
-    setCopiedField(copiedField); // Save the copied field in state
+  
+    setCopiedFields(prevCopiedFields => [...prevCopiedFields, copiedField]);
+    console.log("Copied Field:", copiedField);
   };
-
-  const pasteCopiedField = () => {
-    if (copiedField) {
-      const updatedFields = [...fields, copiedField]; // Append copied field below
-      updateField(updatedFields);
-      setCopiedField(null); // Clear copied field after pasting
-    }
-  };
-
+  
   const TextField = ({ field, index, handleFieldChange }) => (
     <InputType type="text" placeholder={field.label} value={field.value || ""} onChange={(e) => handleFieldChange(index, e.target.value)} />
   );
@@ -280,74 +286,183 @@ const FormCanvas = ({
     }
   };
 
+  const removeFieldByDataName = (dataName) => {
+    // Remove from original fields
+    const afterRemovedFields = fields.filter(field => field.dataName !== dataName);
+    updateField(afterRemovedFields); // Update the fields in parent state
+  
+    // Remove from copied fields
+    const updatedCopiedFields = copiedFields.filter(field => field.dataName !== dataName);
+    setCopiedFields(updatedCopiedFields); // Update the copied fields in local state
+  };
+
+
   return (
     <div className="form-canvas">
-      {fields.map((field, index) => (
-        <div
-          key={field.dataName}
-          className="field-container"
-          draggable
-          onDragStart={(e) => handleDragStart(e, index)}
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, index)}
-          onDragEnd={handleDragEnd}
-          style={{
-            opacity: draggedIndex === index ? "0.5" : "1",
-            transition: "opacity 0.3s ease",
-            filter: draggedIndex !== null && draggedIndex !== index ? "blur(2px)" : "none",
-          }}
-          aria-grabbed={draggedIndex === index}
-        >
-          <div className="field-input-container">
-            <InputLabel>
-              {field.label} 
-              {(field.required || field.isRequired) && <span style={{ color: "red" }}> *</span>}
-              {field.hoverHint && <span className="hover-hint-icon" title={field.hoverHint}>?</span>}
-            </InputLabel>
-            {renderField(field, index)}
+    {fields.map((field, index) => (
+      <div
+        key={field.dataName}
+        className="field-container"
+        draggable
+        onDragStart={(e) => handleDragStart(e, index)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, index)}
+        onDragEnd={handleDragEnd}
+        style={{
+          opacity: draggedIndex === index ? "0.5" : "1",
+          transition: "opacity 0.3s ease",
+          filter: draggedIndex !== null && draggedIndex !== index ? "blur(2px)" : "none",
+        }}
+        aria-grabbed={draggedIndex === index}
+      >
+        <div className="field-input-container">
+          <InputLabel>
+            {field.label}
+            {(field.required || field.isRequired) && <span style={{ color: "red" }}> *</span>}
+            {field.hoverHint && <span className="hover-hint-icon" title={field.hoverHint}>?</span>}
+          </InputLabel>
+          {renderField(field, index)}
+        </div>
+        <div className="field-options-container">
+          <div className="field-actions">
+            <MdEditSquare className="form_canvas_icon" onClick={() => openModal(field, "normal")} />
+            {/* <RiDeleteBin4Fill className="form_canvas_icon" onClick={() => removeField(index)} /> */}
+            {/* <FiCopy className="form_canvas_icon" onClick={() => copyField(index)} /> */}
           </div>
-          <div className="field-options-container">
-            <div className="field-actions">
-              <MdEditSquare className="form_canvas_icon" onClick={() => openModal(field)} />
-              <RiDeleteBin4Fill className="form_canvas_icon" onClick={() => removeField(index)} />
-              <FiCopy className="form_canvas_icon" onClick={() => copyField(index)} />
-            </div>
-            <div className="required_checkbox">
-              <label>Required</label>
-              <input
-                type="checkbox"
-                checked={field.required || field.isRequired}
-                onChange={() => handleRequiredToggle(index)}
-                disabled={disableRequiredCheckbox && field.isDefault}
-              />
-            </div>
-            <div className="visible_checkbox">
-              <label>Visible</label>
-              <input
-                type="checkbox"
-                checked={field.visible}
-                onChange={() => handleVisibleToggle(index)}
-                disabled={field.isDefault}
-              />
-            </div>
+          <div className="required_checkbox">
+            <label>Required</label>
+            <input
+              type="checkbox"
+              checked={field.required || field.isRequired}
+              onChange={() => handleRequiredToggle(index)}
+              disabled={disableRequiredCheckbox && field.isDefault}
+            />
+          </div>
+          <div className="visible_checkbox">
+            <label>Visible</label>
+            <input
+              type="checkbox"
+              checked={field.visible}
+              onChange={() => handleVisibleToggle(index)}
+              disabled={field.isDefault}
+            />
           </div>
         </div>
-      ))}
-      {copiedField && (
-        <div className="paste-button-container">
-          <button onClick={pasteCopiedField}>Paste Copied Field</button>
+      </div>
+    ))}
+
+{copiedFields.map((copiedField, index) => (
+    <div key={copiedField.dataName} className="field-container"
+    draggable
+    onDragStart={(e) => handleDragStart(e, index)}
+    onDragOver={handleDragOver}
+    onDrop={(e) => handleDrop(e, index)}
+    onDragEnd={handleDragEnd}
+    style={{
+      opacity: draggedIndex === index ? "0.5" : "1",
+      transition: "opacity 0.3s ease",
+      filter: draggedIndex !== null && draggedIndex !== index ? "blur(2px)" : "none",
+    }}
+    >
+      <div className="field-input-container">
+        <InputLabel>
+          {copiedField.label}
+          {(copiedField.required || copiedField.isRequired) && <span style={{ color: "red" }}> *</span>}
+        </InputLabel>
+        {renderField(copiedField, index)} 
+      </div>
+      <div className="field-options-container">
+          <div className="field-actions">
+            <MdEditSquare className="form_canvas_icon" onClick={() => openModal(copiedField, "added")} />
+            <RiDeleteBin4Fill className="form_canvas_icon" onClick={() => removeFieldByDataName(copiedField.dataName)} />
+            <FiCopy className="form_canvas_icon" onClick={() => copyField(index)} />
+          </div>
+          <div className="required_checkbox">
+            <label>Required</label>
+            <input
+              type="checkbox"
+              checked={copiedField.required || copiedField.isRequired}
+              onChange={() => handleRequiredToggle(index)}
+              disabled={disableRequiredCheckbox && copiedField.isDefault}
+            />
+          </div>
+          <div className="visible_checkbox">
+            <label>Visible</label>
+            <input
+              type="checkbox"
+              checked={copiedField.visible}
+              onChange={() => handleVisibleToggle(index)}
+              disabled={copiedField.isDefault}
+            />
+          </div>
         </div>
-      )}
-      {isModalOpen && currentField && (
-        <EditFieldModal
-          field={currentField}
-          onSave={handleSave}
-          onClose={closeModal}
-          fieldLabels={fieldLabels}
-          dataNames={dataNames} // Provide dataNames to EditFieldModal
-          conditionFieldName={conditionFieldName} // Pass condition-related data
-        />
-      )}
+    </div>
+  ))}
+    
+
+    {addedFields?.map((field, index)=>(
+      <div
+        key={field.dataName}
+        className="field-container"
+        draggable
+        onDragStart={(e) => handleDragStart(e, index)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, index)}
+        onDragEnd={handleDragEnd}
+        style={{
+          opacity: draggedIndex === index ? "0.5" : "1",
+          transition: "opacity 0.3s ease",
+          filter: draggedIndex !== null && draggedIndex !== index ? "blur(2px)" : "none",
+        }}
+        aria-grabbed={draggedIndex === index}
+      >
+        <div className="field-input-container">
+          <InputLabel>
+            {field.label}
+            {(field.required || field.isRequired) && <span style={{ color: "red" }}> *</span>}
+            {field.hoverHint && <span className="hover-hint-icon" title={field.hoverHint}>?</span>}
+          </InputLabel>
+          {renderField(field, index)}
+        </div>
+        <div className="field-options-container">
+          <div className="field-actions">
+            <MdEditSquare className="form_canvas_icon" onClick={() => openModal(field, "added")} />
+            <RiDeleteBin4Fill className="form_canvas_icon" onClick={() => removeField(index)} />
+            <FiCopy className="form_canvas_icon" onClick={() => copyField(index)} />
+          </div>
+          <div className="required_checkbox">
+            <label>Required</label>
+            <input
+              type="checkbox"
+              checked={field.required || field.isRequired}
+              onChange={() => handleRequiredToggle(index)}
+              disabled={disableRequiredCheckbox && field.isDefault}
+            />
+          </div>
+          <div className="visible_checkbox">
+            <label>Visible</label>
+            <input
+              type="checkbox"
+              checked={field.visible}
+              onChange={() => handleVisibleToggle(index)}
+              disabled={field.isDefault}
+            />
+          </div>
+        </div>
+      </div>
+    ))}
+
+    {isModalOpen && currentField && (
+      <EditFieldModal
+        field={currentField}
+        onSave={handleSave}
+        onClose={closeModal}
+        fieldType={fieldType}  
+        fieldLabels={fieldLabels}
+        dataNames={dataNames}
+        conditionFieldName={conditionFieldName}
+      />
+    )}
     </div>
   );
 };

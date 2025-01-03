@@ -16,6 +16,10 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
   const [showModal, setShowModal] = useState(false); // State for controlling modal visibility
   const [showSavedForm, setShowSavedForm] = useState(false); // State for showing saved form
   const [savedFormId, setSavedFormId] = useState(null); // State to hold the ID of the saved form
+  const [addedFields, setAddedFields] = useState([])
+  const [formSchema, setFormSchema] = useState([]); // Holds the combined fields
+  const [copiedFields, setCopiedFields] = useState([]); // Fields copied (from FormCanvas)
+
 
   const dispatch = useDispatch(); // Initialize dispatch
   const eventIdGet = useSelector((state) => state?.users?.eventIdGet);
@@ -44,7 +48,40 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
       file: { type: "file", label: "File Upload", dataName: `file-${Date.now()}` },
     };
 
-    setFields([...fields, newField[type]]);
+  
+
+    if (newField[type]) {
+      console.log("Before setting, addedFields is:", addedFields);  // Debugging log
+      // Ensure addedFields is always an array
+      setAddedFields((prevFields) => {
+        console.log("Inside setAddedFields, prevFields:", prevFields); // Debugging log
+        if (Array.isArray(prevFields)) {
+          const updatedFields = [...prevFields, newField[type]];
+          console.log("Updated addedFields:", updatedFields);  // Debugging log
+          return updatedFields;  // Add new field to the array
+        } else {
+          console.error("addedFields is not an array", prevFields);
+          return [newField[type]]; // Reset to an array if it's not
+        }
+      });
+    } else {
+      console.error("Invalid field type:", type);
+    }
+  };
+
+  const copyField = (index) => {
+    const fieldToCopy = fields[index]; // Get the field to copy
+    
+    const copiedField = {
+      ...fieldToCopy,
+      dataName: `${fieldToCopy.dataName}_copy_${Date.now()}`, // Create a unique dataName
+      label: `${fieldToCopy.label} (Copy)`, // Update the label to indicate it's a copy
+      value: "",  // Reset the value (assuming you're tracking field values)
+    };
+
+    // Add the copied field to the copiedFields state
+    setCopiedFields(prevCopiedFields => [...prevCopiedFields, copiedField]);
+    console.log("Copied Field:", copiedField);
   };
 
   const updateField = (updatedFields) => {
@@ -60,12 +97,12 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
   };
 
   const removeField = (index) => {
-    const fieldToRemove = fields[index];
-    if (fieldToRemove.isDefault) {
-      alert("This field cannot be removed.");
-    } else {
-      setFields(fields.filter((_, i) => i !== index));
-    }
+    // const fieldToRemove = fields[index];
+    // if (fieldToRemove.isDefault) {
+    //   alert("This field cannot be removed.");
+    // } else {
+      setAddedFields(addedFields.filter((_, i) => i !== index));
+    // }
   };
 
   const saveForm = () => {
@@ -104,9 +141,16 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
   };
 
   useEffect(() => {
-    setFields([...defaultFields]);
+    setFields([...defaultFields])
+    setAddedFields();
   }, []);
 
+ // Merge fields, addedFields, and copiedFields into formSchema
+ useEffect(() => {
+  if (Array.isArray(fields) && Array.isArray(addedFields) && Array.isArray(copiedFields)) {
+    setFormSchema([...fields, ...addedFields, ...copiedFields]); // Combine all three
+  }
+}, [fields, addedFields, copiedFields]);
   return (
     <div>
       <div className="formapp">
@@ -114,10 +158,12 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
         <div className="canvas-save">
           <FormCanvas
             fields={fields}
+            addedFields= {addedFields}
             updateField={updateField}
             updatedField={updatedField}
             removeField={removeField}
-            disableRequiredCheckbox={true} // Disable "required" checkbox for default fields
+          copyField={copyField}
+            disableRequiredCheckbox={true}
           />
           <div className="registratation_button">
             <GreyBackgroundButton onClick={() => setShowModal(true)}>Preview</GreyBackgroundButton>
@@ -130,7 +176,7 @@ export const RegistrationForm = ({ setSelectedButton, updatedField }) => {
 
       {/* Form Preview Modal */}
       <FormPreview
-        formSchema={fields}
+        formSchema={formSchema}
         showModal={showModal}
         handleClose={() => setShowModal(false)} // Close modal
       />

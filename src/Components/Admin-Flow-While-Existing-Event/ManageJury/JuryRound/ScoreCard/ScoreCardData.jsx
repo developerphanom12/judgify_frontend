@@ -237,6 +237,7 @@ const handleUpdate = async () => {
       form_schema: generatedSchema || fields,
       scorecard_categories: formValues.category ? [formValues.category] : [],
       overall_value: formula ? formula : "",
+      roundId : roundId,
     };
     console.log(updatedData,"adsdsdadasdasdasdasd")
     const scoreFormId = selectedScorecard.scoreFormId;
